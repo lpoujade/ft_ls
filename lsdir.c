@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/03 13:04:52 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/03 14:54:21 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/03 19:28:09 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,10 @@ int		main(int ac, char **av)
 	{
 		struct	stat			*dstat = malloc(sizeof(struct stat));
 		struct	passwd		*dpwd = NULL;
-		char				*xatr_buff = NULL;
-		int	s;
 		while ((dfile = readdir(ddir)))
 		{
 			stat(dfile->d_name, dstat); // error
 			dpwd = getpwuid(dstat->st_uid);
-			if (xatr_buff)
-				ft_memdel((void *)&xatr_buff);
-			s = listxattr(dfile->d_name, NULL, 0, XATTR_NOFOLLOW);
-			xatr_buff = malloc(s);
-			listxattr(dfile->d_name, xatr_buff, s, XATTR_NOFOLLOW);
-			if (*xatr_buff)
-				ft_putendl(xatr_buff);
 			ft_putnbr(dstat->st_size);ft_putchar('\t');
 			ft_putstr(dpwd->pw_name);ft_putchar(':');
 			ft_putnbr(dstat->st_gid);ft_putchar('\t');
