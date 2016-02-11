@@ -6,38 +6,48 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/11 14:35:33 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/11 17:23:29 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int		lsdir(char *dirname, t_params opts)
+t_fileinfo		*lsdir(char *dname)
 {
-	DIR				*ddir = NULL;
-	struct dirent	*dfile = NULL;
-	struct	stat		*dstat = malloc(sizeof(struct stat));
-	struct	passwd		*dpwd = NULL;
+	DIR					*ddir = NULL;
+	struct dirent		*dfile = NULL;
+	struct stat			*dstat = NULL;
+	t_fileinfo			*finfo;
 
-	if ((ddir = opendir(dirname)))
+	finfo = malloc(sizeof(t_fileinfo));
+	finfo->prev = NULL;
+	if ((ddir = opendir(dname)))
 	{
+		dstat = malloc(sizeof(struct stat));
 		while ((dfile = readdir(ddir)))
 		{
-			// if (opt->l) -> save all infos / else save dfile->filename
 			stat(dfile->d_name, dstat); // error
-			dpwd = getpwuid(dstat->st_uid);
-			ft_putnbr(dstat->st_size);ft_putchar('\t');
-			ft_putstr(dpwd->pw_name);ft_putchar(':');
-			ft_putnbr(dstat->st_gid);ft_putchar('\t');
-			ft_putnbr(dstat->st_birthtime);ft_putchar(' ');
-			ft_putendl(dfile->d_name);
-			// if (opt->r && file == dir) -> add dirname to dirs name's list; will be used after
+			finfo->infos = ft_strdup(dfile->d_name);
+			finfo->next = malloc(sizeof(t_fileinfo));
+			finfo->next->prev = finfo;
+			finfo = finfo->next;
 		}
 		if ((closedir(ddir) != 0))
 			perror("ls: ");
 		ft_memdel((void *)&dstat);
 	}
 	else
-		perror(ft_strjoin("ls: ", av[1]));
-	return (0);
+		perror(ft_strjoin("ls: ", dname));
+	return (finfo);
+}
+
+void	lsprint(t_fileinfo *flist)
+{
+	while (flist)
+	{
+		if (!flist->infos)
+			flist = flist->prev;
+		ft_putstr(flist->infos); ft_putchar('\t');
+		flist = flist->prev;
+	}
 }
