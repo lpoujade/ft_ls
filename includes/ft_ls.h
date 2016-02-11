@@ -34,11 +34,14 @@ typedef struct			s_fileinfo
 
 typedef struct		s_params
 {
-	unsigned int	r : 1;
-	unsigned int	l : 1;
-	unsigned int	t : 1;
-	unsigned int	a : 1;
-}					t_params;
+	unsigned int	reverse : 1;
+	unsigned int	recursive : 1;
+	unsigned int	long_listing : 1;
+	unsigned int	time_sort : 1;
+	unsigned int	allshow : 1;
+}					to_params;
+
+typedef unsigned int	t_params;
 
 typedef struct			s_dirlist
 {
@@ -48,5 +51,6 @@ typedef struct			s_dirlist
 
 t_fileinfo				*lsdir(char *dname); // params
 void					lsprint(t_fileinfo *flist);
+t_params				parse_args(char **av, int ac);
 
 #endif

@@ -41,7 +41,7 @@ t_fileinfo		*lsdir(char *dname)
 	return (finfo);
 }
 
-void	lsprint(t_fileinfo *flist)
+void	lsprint(t_fileinfo *flist, bool)
 {
 	while (flist)
 	{

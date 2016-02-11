@@ -15,15 +15,11 @@
 int		main(int ac, char **av)
 {
 	t_fileinfo	*f;
+	t_params	opts;
 
-	//if (av[1][0] == '-');
-		//parse arg struct
+	opts = (av[1][0] == '-') ? parse_args(av, ac) : 0;
+
 	
-	if (ac == 2)
-	{
-		f = lsdir(av[ac - 1]);
-		lsprint(f);
-	}
 
 	// from **av[1/2] -> av[ac -1] : parse dirlist
 
@@ -37,8 +33,15 @@ int		main(int ac, char **av)
 	// then ( in same loop ) print & del actual file list
 	// 		- if not first dirname (?)
 	// 		-r will cause to print the list from end to start ( so double-chained list ? )
-	
+
 	// free dirlist
 	// exit
+	//
+	//
+	// --- or --
+	//
+	// list arguments and for each :
+	// 		- if -x or --that-x, add to t_params opts,
+	// 		- if file or folder name, get and prints infos with actuals opts.
 	return (0);
 }

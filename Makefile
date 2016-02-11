@@ -11,9 +11,11 @@
 # **************************************************************************** #
 
 NAME=ft_ls
+CPPFLAGS=
 CFLAGS=-Wall -Werror -Wextra
 INCLUDEDIR=./includes
 SRCDIR=./src
+OBJDIR=./obj
 CC=clang
 
 SRCS= $(SRCDIR)/ft_ls.c $(SRCDIR)/lsdir.c
