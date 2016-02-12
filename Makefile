@@ -6,43 +6,48 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/02/12 16:05:52 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/02/12 21:40:36 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME=ft_ls
-CPPFLAGS=-Iincludes/
-CFLAGS=-Wall -Werror -Wextra
+SRCDIR=./src
+OBJDIR=./.obj
+
+CC=clang
+CFLAGS=-Wall -Werror -Wextra -g
+CPPFLAGS=-Iincludes/ -Ilibft/includes
+
 LDFLAGS=-Llibft/
 LDLIBS=-lft
-SRCDIR=./src
-OBJDIR=./obj
-CC=clang
 
-SRCS= ft_ls.c lsdir.c paramss.c
-OBJS=$(SRCS:.c=.o)
+LIB=libft/libft.a
 
-OBJS:= $(addprefix $(OBJDIR)/,$(OBJS))
-SRCS:= $(addprefix $(SRCDIR)/,$(SRCS))
+SRC=ft_ls.c paramss.c lsdir.c
+OBJ=$(SRC:.c=.o)
 
-all: $(NAME)
+SRCS=$(addprefix $(SRCDIR)/,$(SRC))
+OBJS=$(addprefix $(OBJDIR)/,$(OBJ))
+
+all: $(NAME) $(LIB)
 
 $(NAME): $(OBJS)
-	$(CC) $(LDFLAGS) $(LDLIBS) $^ -o $@
+	@$(CC) $(LDFLAGS) $(LDLIBS) $^ -o $@
+	@echo "linking to" $@
 
-$(OBJS): $(SRCS) $(LIB)
-	@mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -Ilibft/includes/ -o $@ -c $<
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+	@echo "compiling" $@
 
 $(LIB):
-	-make -C $(LIB)
+	-make -C libft/
 
 clean:
-	-rm -r $(OBJDIR)
-	make -C libft/ clean
+	-rm $(OBJS)
 
 fclean: clean
 	-rm $(NAME)
-	-rm libft/libft.a
 
-re: fclean $(NAME)
+re: fclean all
+
+.PHONY: all, clean, fclean, re
