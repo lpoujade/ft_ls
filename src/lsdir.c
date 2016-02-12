@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/12 19:14:13 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/12 22:16:22 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ t_fileinfo		*lsdir(char *dname, t_params opts)
 	DIR					*ddir = NULL;
 	struct dirent		*dfile = NULL;
 	struct stat			*dstat = NULL;
-	t_fileinfo			*o_finfo;
-	t_fileinfo			*finfo;
+	t_fileinfo			*o_finfo = NULL;
+	t_fileinfo			*finfo = NULL;
 
-	finfo = malloc(sizeof(t_fileinfo));
-	o_finfo = finfo;
-	finfo->prev = NULL;
 	if ((ddir = opendir(dname)))
 	{
-		dstat = malloc(sizeof(struct stat));
+		finfo = malloc(sizeof(t_fileinfo));
+		o_finfo = finfo;
+		finfo->next = NULL; finfo->prev = NULL;
+		dstat = malloc(sizeof(struct stat)); // error
 		while ((dfile = readdir(ddir)))
 		{
 			stat(dfile->d_name, dstat); // error
@@ -33,11 +33,13 @@ t_fileinfo		*lsdir(char *dname, t_params opts)
 			{
 				finfo->infos = ft_strdup(dfile->d_name);
 
-				if ((opts & 1))
+				if ((opts & 1)) // -l
 					finfo->infos = ft_strjoin(finfo->infos, "\n");
+
 				finfo->next = malloc(sizeof(t_fileinfo));
 				finfo->next->prev = finfo;
 				finfo = finfo->next;
+				// void node
 			}
 		}
 		finfo->next = o_finfo;
@@ -53,18 +55,24 @@ t_fileinfo		*lsdir(char *dname, t_params opts)
 
 void	ls_out(t_fileinfo *flist, int rev)
 {
-	while (flist)
+	t_fileinfo *mark;
+
+	mark = flist;
+	flist = (rev) ? flist->prev : flist->next;
+	if (rev)
+		ft_strdel(&flist->next->infos);
+	else
+		ft_strdel(&flist->prev->infos);
+	while (flist != mark)
 	{
-		if (!flist->infos)
-			flist = (rev) ? flist->prev : flist->next;
-		ft_putstr(flist->infos); ft_putchar('\t');
+		ft_putstr(flist->infos);
 		flist = (rev) ? flist->prev : flist->next;
 		if (flist)
 		{
 			if (rev)
-				ft_memdel((void**)&flist->next);
+				ft_strdel(&flist->next->infos);
 			else
-				ft_memdel((void**)&flist->prev);
+				ft_strdel(&flist->prev->infos);
 		}
 	}
 }

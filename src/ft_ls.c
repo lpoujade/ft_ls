@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/12 19:12:44 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/12 22:12:38 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,19 @@ int		main(int ac, char **av)
 
 	opts = 0;
 	ac--;
-	while (ac--)
+	while (ac)
 	{
 		av++;
 		if (**av != '-')
 		{
-			f = lsdir(*av, opts);
-			ls_out(f, opts&10);
-			ft_putchar('\n');
-			if (ac)
-				ft_putendl(ft_strjoin("\n", ft_strjoin(*(av+1), ":")));
+			if ((f = lsdir(*av, opts)))
+				ls_out(f, opts&10);
+			if (ac && *(av + 1))
+				ft_putendl(ft_strjoin("\n\n", ft_strjoin(*(av+1), ":")));
 		}
 		else
 			opts = opts | parse_args(*av);
+		ac--;
 	}
 	//
 	// from **av[1/2] -> av[ac -1] : parse dirlist
