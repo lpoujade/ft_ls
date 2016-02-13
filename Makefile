@@ -6,7 +6,7 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/02/12 21:40:36 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/02/13 14:32:56 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ LDLIBS=-lft
 
 LIB=libft/libft.a
 
-SRC=ft_ls.c paramss.c lsdir.c
+SRC=ft_ls.c paramss.c lsdir.c lists.c
 OBJ=$(SRC:.c=.o)
 
 SRCS=$(addprefix $(SRCDIR)/,$(SRC))
@@ -33,11 +33,11 @@ all: $(NAME) $(LIB)
 
 $(NAME): $(OBJS)
 	@$(CC) $(LDFLAGS) $(LDLIBS) $^ -o $@
-	@echo "linking to" $@
+	@echo "linking to\033[32m" $@ "\033[0m("`stat -f "%z" $@` "bytes)"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
-	@echo "compiling" $@
+	@echo "compiling\033[36m" $@ "\033[0m("`stat -f "%z" $@` "bytes)"
 
 $(LIB):
 	-make -C libft/

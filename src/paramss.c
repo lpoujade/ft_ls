@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 23:37:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/12 19:14:06 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/13 11:41:18 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@ t_params	parse_args(char *av)
 	while (*av)
 	{
 		if (*av == 'l')
-			opts |= 0001;
+			opts |= 0x01;
 		else if (*av == 'r')
-			opts |= 0010;
+			opts |= 0x02;
 		else if (*av == 'R')
-			opts |= 0100;
+			opts |= 0x04;
 		else if (*av == 'a')
-			opts |= 1000;
+			opts |= 0x08;
 		else if (*av == 't')
-			opts |= 10000;
+			opts |= 0x10;
 		av++;
 	}
 	return (opts);
