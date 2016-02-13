@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/13 11:59:59 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/13 18:23:54 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		main(int ac, char **av)
 		av++;
 		if (**av != '-')
 		{
-			ls_out(lsdir(*av, opts), 0);
+			ls_out(lsdir(*av, opts), opts&0x02);
 			if (ac && *(av + 1))
 				ft_putendl(ft_strjoin("\n\n", ft_strjoin(*(av+1), ":")));
 		}

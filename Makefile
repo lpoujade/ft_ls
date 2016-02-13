@@ -6,7 +6,7 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/02/13 14:32:56 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/02/13 18:28:59 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,8 @@ SRCDIR=./src
 OBJDIR=./.obj
 
 CC=clang
-CFLAGS=-Wall -Werror -Wextra -g
-CPPFLAGS=-Iincludes/ -Ilibft/includes
+CFLAGS=-Wall -Werror -Wextra
+CPPFLAGS=-Iincludes/
 
 LDFLAGS=-Llibft/
 LDLIBS=-lft
@@ -29,7 +29,7 @@ OBJ=$(SRC:.c=.o)
 SRCS=$(addprefix $(SRCDIR)/,$(SRC))
 OBJS=$(addprefix $(OBJDIR)/,$(OBJ))
 
-all: $(NAME) $(LIB)
+all: $(NAME)
 
 $(NAME): $(OBJS)
 	@$(CC) $(LDFLAGS) $(LDLIBS) $^ -o $@
@@ -40,13 +40,13 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@echo "compiling\033[36m" $@ "\033[0m("`stat -f "%z" $@` "bytes)"
 
 $(LIB):
-	-make -C libft/
+	make -C libft/
 
 clean:
-	-rm $(OBJS)
+	-@rm $(OBJS) && echo "deleting" $(OBJS)
 
 fclean: clean
-	-rm $(NAME)
+	-@rm $(NAME) && echo "deleting" $(NAME)
 
 re: fclean all
 
