@@ -32,21 +32,19 @@ OBJS=$(addprefix $(OBJDIR)/,$(OBJ))
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(CC) $(LDFLAGS) $(LDLIBS) $^ -o $@
-	@echo "linking to\033[32m" $@ "\033[0m("`stat -f "%z" $@` "bytes)"
+	@$(CC) $^ -o $@ $(LDFLAGS) $(LDLIBS) && echo -e "linking to\033[32m" $@ "\033[0m("`stat -c "%s" $@` "bytes)"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
-	@echo "compiling\033[36m" $@ "\033[0m("`stat -f "%z" $@` "bytes)"
+	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@ && echo -e "compiling\033[36m" $@ "\033[0m("`stat -c "%s" $@` "bytes)"
 
 $(LIB):
 	make -C libft/
 
 clean:
-	-@rm $(OBJS) && echo "deleting" $(OBJS)
+	-@rm $(OBJS) && echo -e "deleting" $(OBJS)
 
 fclean: clean
-	-@rm $(NAME) && echo "deleting" $(NAME)
+	-@rm $(NAME) && echo -e "deleting" $(NAME)
 
 re: fclean all
 
