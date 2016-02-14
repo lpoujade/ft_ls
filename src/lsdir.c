@@ -27,11 +27,12 @@ t_fileinfo		*lsdir(char *dname, t_params opts)
 			if (*dfile->d_name != '.' || opts&0x08) // -a
 			{
 				to_print = ft_strdup(dfile->d_name);
-				if (opts&1) // -l
-					to_print = ft_strjoin(to_print, "\n");
+				//if (opts&1) // -l
+				//	to_print = ft_strjoin(to_print, "\n");
 				//if (opts&0x10) // -t time
 
 				lst_newn(to_print, 0, &finfo);
+				free(to_print);
 			}
 		}
 		if ((closedir(ddir) != 0))
@@ -46,7 +47,10 @@ t_fileinfo		*lsdir(char *dname, t_params opts)
 
 void	ls_out(t_fileinfo *flist, int rev)
 {
-	t_fileinfo *prev = flist;
+	t_fileinfo *prev;
+	if (!rev)
+		flist = flist->next;
+	prev = flist;
 	while (flist && 42)
 	{
 		ft_putstr(flist->infos);

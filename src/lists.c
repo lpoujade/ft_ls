@@ -33,7 +33,7 @@ void		lst_newn(char *infos, unsigned int atime, t_fileinfo **onode)
 		(*onode)->prev = new;
 	}
 
-	//ft_putendl(ft_strjoin(" integrated ", ft_strjoin(new->infos, ft_strjoin(" between ", ft_strjoin(new->prev->infos, ft_strjoin(" and ", new->next->infos))))));
+	ft_putendl(ft_strjoin(" integrated ", ft_strjoin(new->infos, ft_strjoin(" between ", ft_strjoin(new->prev->infos, ft_strjoin(" and ", new->next->infos))))));
 }
 
 /*
