@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/13 19:53:56 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/14 19:44:50 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ typedef struct			s_fileinfo
 	struct s_fileinfo	*prev;
 }						t_fileinfo;
 
-typedef short int		t_params;
-
 typedef struct			s_dirlist
 {
 	char				*dirname;
 	struct s_listdir	*next;
 }						t_dirlist;
 
-t_fileinfo				*lsdir(char *dname, t_params opts); // params
+typedef short int		t_params;
+
+t_fileinfo				*lsfile(char *dname, t_params opts);
 void					lst_newn(char *infos, unsigned int atime, t_fileinfo **onode);
 t_params				parse_args(char *av);
 void					ls_out(t_fileinfo *flist, int rev);

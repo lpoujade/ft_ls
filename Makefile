@@ -6,7 +6,7 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/02/13 18:28:59 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/02/14 19:45:04 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ LDLIBS=-lft
 
 LIB=libft/libft.a
 
-SRC=ft_ls.c paramss.c lsdir.c lists.c
+SRC=ft_ls.c paramss.c lsfile.c lists.c
 OBJ=$(SRC:.c=.o)
 
 SRCS=$(addprefix $(SRCDIR)/,$(SRC))
@@ -32,10 +32,10 @@ OBJS=$(addprefix $(OBJDIR)/,$(OBJ))
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(CC) $^ -o $@ $(LDFLAGS) $(LDLIBS) && echo -e "linking to\033[32m" $@ "\033[0m("`stat -c "%s" $@` "bytes)"
+	@$(CC) $^ -o $@ $(LDFLAGS) $(LDLIBS) && echo -e "linking to\033[32m" $@ "\033[0m"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@ && echo -e "compiling\033[36m" $@ "\033[0m("`stat -c "%s" $@` "bytes)"
+	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@ && echo -e "compiling\033[36m" $@ "\033[0m"
 
 $(LIB):
 	make -C libft/
