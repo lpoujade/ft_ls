@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/15 17:19:01 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/15 23:01:47 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,28 @@
 int		main(int ac, char **av)
 {
 	t_params	opts;
+	int			ap;
 
 	opts = 0;
-	ac--;
-	while (ac)
+	ap = 1;
+	while (ap <= ac - 1 && *av[ap] == '-')
 	{
-		av++;
-		if (**av != '-')
-		{
-			ls_out(lsfile(*av, opts), opts&0x02);
-			if (ac && *(av + 1))
-				ft_putendl(ft_strjoin("\n\n", ft_strjoin(*(av+1), ":")));
-		}
-		else
-			opts = opts | parse_args(*av);
-		ac--;
+		if (*(av[ap] + 1) == '-' && ap++)
+			break ;
+		opts |= parse_args(av[ap]);
+		ap++;
+	}
+	if (ap >= ac)
+	{
+		ls_out(lsfile(".", opts), opts&0x02);
+		return (0);
+	}
+	while (ap <= ac - 1)
+	{
+		ls_out(lsfile(av[ap], opts), opts&0x02);
+		if (ap != ac - 1)
+			ft_putendl(ft_strjoin("\n\n", ft_strjoin(av[ap + 1], ":")));
+		ap++;
 	}
 	return (0);
 }

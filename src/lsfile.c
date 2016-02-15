@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/15 17:22:42 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/15 23:13:32 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ t_fileinfo		*lsfile(char *dname, t_params opts)
 	char *to_print = NULL;
 
 	if (stat(dname, &dstat) == -1)
-		perror("ls: stat");
+		perror(ft_strjoin("ls: ", dname));
 	if (dstat.st_mode&S_IFDIR && (ddir = opendir(dname)))
 	{
 		while ((dfile = readdir(ddir))) // error ?
-			if (*dfile->d_name != '.' || opts&0x08) // -a
+			if (*dfile->d_name != '.' || opts&0x08 || // -a
+					(opts&0x20 && (ft_strcmp(dfile->d_name, ".") // -A
+								   && ft_strcmp(dfile->d_name, "..")))) 
 			{
 				to_print = ft_strdup(dfile->d_name);
 				if (opts&1) // -l
@@ -59,6 +61,6 @@ void	ls_out(t_fileinfo *flist, int rev)
 		flist = (rev) ? flist->prev : flist->next;
 		prev->next = NULL;
 		prev->prev = NULL;
-		ft_strclr(&prev->infos);
+		ft_strclr(prev->infos);
 	}
 }
