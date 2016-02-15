@@ -42,7 +42,7 @@ typedef struct			s_dirlist
 typedef short int		t_params;
 
 t_fileinfo				*lsfile(char *dname, t_params opts);
-void					lst_newn(char *infos, unsigned int atime, t_fileinfo **onode);
+void					new_filelist(char *infos, unsigned int atime, t_fileinfo **onode);
 t_params				parse_args(char *av);
 void					ls_out(t_fileinfo *flist, int rev);
 

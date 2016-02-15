@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/14 20:33:24 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/15 17:22:42 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ t_fileinfo		*lsfile(char *dname, t_params opts)
 				if (opts&1) // -l
 					to_print = ft_strjoin(to_print, "\n");
 //				if (opts&0x10) // -t time
-//					lst_newn(to_print, !!->time, &finfo);
+//					new_filelist(to_print, !!->time, &finfo);
 //				else
-					lst_newn(to_print, 0, &finfo);
+					new_filelist(to_print, 0, &finfo);
 				free(to_print);
 			}
 		if ((closedir(ddir) != 0))
@@ -43,19 +43,22 @@ t_fileinfo		*lsfile(char *dname, t_params opts)
 	else if (dstat.st_mode == S_IFDIR)
 		perror(ft_strjoin("ls: ", dname));
 	else
-		lst_newn(dname, 0, &finfo);
+		new_filelist(dname, 0, &finfo);
 	return (finfo);
 }
 
 void	ls_out(t_fileinfo *flist, int rev)
 {
 	t_fileinfo *prev;
+	if (rev)
+		flist = flist->prev;
 	prev = flist;
-	while (flist && 42)
+	while (flist)
 	{
 		ft_putstr(flist->infos);
 		flist = (rev) ? flist->prev : flist->next;
-		if (prev == flist)
-			break ;
+		prev->next = NULL;
+		prev->prev = NULL;
+		ft_strclr(&prev->infos);
 	}
 }

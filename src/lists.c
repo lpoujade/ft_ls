@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-void		lst_newn(char *infos, unsigned int atime, t_fileinfo **onode)
+void		new_filelist(char *infos, unsigned int atime, t_fileinfo **onode)
 {
 	t_fileinfo	*new;
 

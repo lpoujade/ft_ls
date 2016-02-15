@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/14 20:06:02 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/15 17:19:01 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,4 @@ int		main(int ac, char **av)
 	//
 	// list arguments and for each :
 	// 		- if actual char begin with '-', add to t_params opts,
-	// 		- else file or folder name, get and prints infos with actuals opts.
+	// 		- else file or folder name, get and prints infos with actuals opts. ( here if file = folder AND -R option -> add each sub-folders to *dirlist)
