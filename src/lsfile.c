@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/15 23:13:32 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/02/15 23:22:42 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_fileinfo		*lsfile(char *dname, t_params opts)
 
 	char *to_print = NULL;
 
-	if (stat(dname, &dstat) == -1)
+	if (lstat(dname, &dstat) == -1)
 		perror(ft_strjoin("ls: ", dname));
 	if (dstat.st_mode&S_IFDIR && (ddir = opendir(dname)))
 	{
@@ -45,7 +45,7 @@ t_fileinfo		*lsfile(char *dname, t_params opts)
 	else if (dstat.st_mode == S_IFDIR)
 		perror(ft_strjoin("ls: ", dname));
 	else
-		new_filelist(dname, 0, &finfo);
+		new_filelist((opts&1) ? ft_strjoin(ft_itoa(dstat.st_uid), ft_strjoin(ft_itoa(dstat.st_gid), dname)):dfile->d_name, 0, &finfo);
 	return (finfo);
 }
 
