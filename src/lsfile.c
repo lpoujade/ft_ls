@@ -23,12 +23,12 @@ t_fileinfo		*lsfile(char *dname, t_params opts)
 
 	if (lstat(dname, &dstat) == -1)
 		perror(ft_strjoin("ls: ", dname));
-	if (dstat.st_mode&S_IFDIR && (ddir = opendir(dname)))
+	else if (dstat.st_mode&S_IFDIR && (ddir = opendir(dname)))
 	{
 		while ((dfile = readdir(ddir))) // error ?
 			if (*dfile->d_name != '.' || opts&0x08 || // -a
 					(opts&0x20 && (ft_strcmp(dfile->d_name, ".") // -A
-								   && ft_strcmp(dfile->d_name, "..")))) 
+								   && ft_strcmp(dfile->d_name, ".."))))
 			{
 				to_print = ft_strdup(dfile->d_name);
 				if (opts&1) // -l
@@ -45,7 +45,7 @@ t_fileinfo		*lsfile(char *dname, t_params opts)
 	else if (dstat.st_mode == S_IFDIR)
 		perror(ft_strjoin("ls: ", dname));
 	else
-		new_filelist((opts&1) ? ft_strjoin(ft_itoa(dstat.st_uid), ft_strjoin(ft_itoa(dstat.st_gid), dname)):dfile->d_name, 0, &finfo);
+		new_filelist((opts&1) ? ft_strjoin(ft_itoa(dstat.st_uid), ft_strjoin(ft_itoa(dstat.st_gid), dname)):dname, 0, &finfo);
 	return (finfo);
 }
 
