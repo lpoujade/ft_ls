@@ -6,7 +6,7 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/02/14 19:45:04 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/03/02 13:07:24 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,22 +29,22 @@ OBJ=$(SRC:.c=.o)
 SRCS=$(addprefix $(SRCDIR)/,$(SRC))
 OBJS=$(addprefix $(OBJDIR)/,$(OBJ))
 
-all: $(NAME)
+all: $(LIB) $(NAME)
 
 $(NAME): $(OBJS)
-	@$(CC) $^ -o $@ $(LDFLAGS) $(LDLIBS) && echo -e "linking to\033[32m" $@ "\033[0m"
+	@$(CC) $^ -o $@ $(LDFLAGS) $(LDLIBS) && echo "linking to\033[32m" $@ "\033[0m"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@ && echo -e "compiling\033[36m" $@ "\033[0m"
+	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@ && echo "compiling\033[36m" $@ "\033[0m"
 
 $(LIB):
 	make -C libft/
 
 clean:
-	-@rm $(OBJS) && echo -e "deleting" $(OBJS)
+	-@rm $(OBJS) && echo "deleting" $(OBJS)
 
 fclean: clean
-	-@rm $(NAME) && echo -e "deleting" $(NAME)
+	-@rm $(NAME) && echo "deleting" $(NAME)
 
 re: fclean all
 
