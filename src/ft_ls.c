@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/15 23:01:47 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/02 10:51:02 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int		main(int ac, char **av)
 	while (ap <= ac - 1)
 	{
 		ls_out(lsfile(av[ap], opts), opts&0x02);
-		if (ap != ac - 1)
+		if (ap != ac - 1) // && if FOLDER
 			ft_putendl(ft_strjoin("\n\n", ft_strjoin(av[ap + 1], ":")));
 		ap++;
 	}
