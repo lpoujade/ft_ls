@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/02 10:51:02 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/03 15:28:23 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,27 @@ int		main(int ac, char **av)
 {
 	t_params	opts;
 	int			ap;
+	int			end_args;
 
+	end_args = 0;
 	opts = 0;
-	ap = 1;
-	while (ap <= ac - 1 && *av[ap] == '-')
+	ap = 0;
+	while (++ap < ac)
 	{
-		if (*(av[ap] + 1) == '-' && ap++)
-			break ;
-		opts |= parse_args(av[ap]);
-		ap++;
+		if (*av[ap] == '-' && !end_args)
+		{
+			if (*(av[ap] + 1) == '-')
+			{
+				ft_putendl("END ARGS");
+				end_args = 1;
+			}
+			else
+				opts |= parse_args(av[ap]);
+		}
+		else
+			ls_out(lsfile(av[ap], opts), opts&0x02);
 	}
-	if (ap >= ac)
-	{
-		ls_out(lsfile(".", opts), opts&0x02);
-		return (0);
-	}
-	while (ap <= ac - 1)
-	{
-		ls_out(lsfile(av[ap], opts), opts&0x02);
-		if (ap != ac - 1) // && if FOLDER
-			ft_putendl(ft_strjoin("\n\n", ft_strjoin(av[ap + 1], ":")));
-		ap++;
-	}
+
 	return (0);
 }
 
@@ -63,3 +62,12 @@ int		main(int ac, char **av)
 	// list arguments and for each :
 	// 		- if actual char begin with '-', add to t_params opts,
 	// 		- else file or folder name, get and prints infos with actuals opts. ( here if file = folder AND -R option -> add each sub-folders to *dirlist)
+	//
+	//
+	// FINAL (?)
+	// - eval CLI arguments
+	// 		- parse args
+	// 		- fill a list : simple files first, folders last ( alphanum sorting, or time if -t )
+	// - then : 
+	// 		- print files infos
+	// 		- in folder list : launch lsdir
