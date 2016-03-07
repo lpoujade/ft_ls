@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/07 11:22:12 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/07 14:40:49 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ int		main(int ac, char **av)
 	// complete file list using folder list (? -R)
 	// eval file list if needed (? -laAt)
 
-	//ls_out(flist, opts&0x02);
 
 	// print file list (? -r)
+	//ls_out(flist, opts&0x02);
 
 	return (0);
 }
