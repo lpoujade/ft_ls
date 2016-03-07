@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/03 16:18:58 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/07 11:22:12 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@ int		main(int ac, char **av)
 	t_params	opts;
 	int			ap;
 	int			end_args;
+	t_list		*file_list;
 
+	file_list = NULL;
 	end_args = 0;
 	opts = 0;
 	ap = 0;
+	// args list parsing ( opts & files )
 	while (++ap < ac)
 	{
 		if (*av[ap] == '-' && !end_args)
@@ -30,34 +33,27 @@ int		main(int ac, char **av)
 			else
 				opts |= parse_args(av[ap]);
 		}
-		else // lstat
-			ls_out(lsfile(av[ap], opts), opts&0x02);
+		else
+			fflist_add(&file_list, av[ap]);
 	}
+	while (file_list)
+	{
+		ls_out(lsfile(file_list->content, opts), opts&0x02);
+		file_list = file_list->next;
+	}
+
+	// complete file list using folder list (? -R)
+	// eval file list if needed (? -laAt)
+
+	//ls_out(flist, opts&0x02);
+
+	// print file list (? -r)
 
 	return (0);
 }
 
-	// from **av[1/2] -> av[ac -1] : parse dirlist
-
-	// apply lsdir(char dirname, t_params opts) on each dir in dirlist.
-	// 		- this function return a s_fileinfo within folder in s_dirlist
-	// 				-R will add listed folder's name after actual dir in dirlist
-	// 				-t will change sorting condition : access time in place of alphabetical order
-	// 				-l will save more info in fileinfo->infos (-R: permissions, ?, user, group, size, date) filename
-	// 				-a will cause to not exclude '.'-begining files
-	//
-	// then ( in same loop ) print & del actual file list
-	// 		- if not first dirname (?)
-	// 		-r will cause to print the list from end to start ( so double-chained list ? )
-
-	// free dirlist
-	// exit
-	//
-	//
-	// --- or --
-	//
 	// list arguments and for each :
-	// 		- if actual char begin with '-', add to t_params opts,
+	// 		- if actual char begin with '-', add to t_params opts, till -- was encoutered
 	// 		- else file or folder name, get and prints infos with actuals opts. ( here if file = folder AND -R option -> add each sub-folders to *dirlist)
 	//
 	//

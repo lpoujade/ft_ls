@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/02/14 19:15:59 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/07 11:19:44 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,3 +52,15 @@ void		new_filelist(char *infos, unsigned int atime, t_fileinfo **onode)
 			}
 		}
 */
+
+void		fflist_add(t_list **file_list, char *fname)
+{
+	if (!*file_list)
+		*file_list = ft_lstnew(fname, ft_strlen(fname));
+	else
+	{
+		while (*fname < (char)(*file_list)->content && (*file_list)->next)
+			*file_list = (*file_list)->next;
+		ft_lstadd(file_list, ft_lstnew(fname, ft_strlen(fname)));
+	}
+}
