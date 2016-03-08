@@ -18,6 +18,7 @@ int		main(int ac, char **av)
 	int			ap;
 	int			end_args;
 	t_list		*file_list;
+	t_list		*prev_file_list;
 
 	file_list = NULL;
 	end_args = 0;
@@ -31,16 +32,27 @@ int		main(int ac, char **av)
 			if (*(av[ap] + 1) == '-')
 				end_args = 1;
 			else
-				opts |= parse_args(av[ap]);
+				if (!(opts |= parse_args(av[ap])))
+				{
+					perror(ft_strjoin("ls: ", av[ap]));
+					return (errno);
+				}
 		}
 		else
 			fflist_add(&file_list, av[ap]);
 	}
-	while (file_list)
-	{
-		ls_out(lsfile(file_list->content, opts), opts&0x02);
-		file_list = file_list->next;
-	}
+	if (file_list)
+		while (file_list)
+		{
+			ls_out(lsfile(file_list->content, opts), opts&0x02);
+			prev_file_list = file_list;
+			file_list = file_list->next;
+			ft_memdel((void**)&prev_file_list);
+			if (prev_file_list)
+				ft_putendl("FAIL");
+		}
+	else
+		ls_out(lsfile(".", opts), opts&0x02);
 
 	// complete file list using folder list (? -R)
 	// eval file list if needed (? -laAt)

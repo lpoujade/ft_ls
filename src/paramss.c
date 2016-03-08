@@ -31,6 +31,11 @@ t_params	parse_args(char *av)
 			opts |= 0x10;
 		else if (*av == 'A')
 			opts |= 0x20;
+		else
+		{
+			errno = 22;
+			opts = 0;
+		}
 		av++;
 	}
 	return (opts);
