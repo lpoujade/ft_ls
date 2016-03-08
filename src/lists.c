@@ -59,7 +59,7 @@ void		fflist_add(t_list **file_list, char *fname)
 		*file_list = ft_lstnew(fname, ft_strlen(fname));
 	else
 	{
-		while (*fname < (char)(*file_list)->content && (*file_list)->next)
+		while (*fname < (char)(*file_list)->content && (*file_list)->next) // TODO: better sorting
 			*file_list = (*file_list)->next;
 		ft_lstadd(file_list, ft_lstnew(fname, ft_strlen(fname)));
 	}

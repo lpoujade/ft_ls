@@ -19,6 +19,8 @@ t_fileinfo		*lsfile(char *dname, t_params opts)
 	struct stat			dstat;
 	t_fileinfo			*finfo = NULL;
 
+	errno = 0;
+
 	if (lstat(dname, &dstat) == -1)
 		perror(ft_strjoin("ls: ", dname));
 	else if (dstat.st_mode&S_IFDIR && (ddir = opendir(dname)))

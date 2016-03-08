@@ -34,7 +34,7 @@ t_params	parse_args(char *av)
 		else
 		{
 			errno = 22;
-			opts = 0;
+			return (0);
 		}
 		av++;
 	}
