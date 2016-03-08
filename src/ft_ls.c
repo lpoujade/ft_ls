@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/07 14:40:49 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/08 19:44:11 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,12 @@ int		main(int ac, char **av)
 				end_args = 1;
 			else
 			{
-				if (!parse_args(av[ap]))
+				opts |= parse_args(av[ap]);
+				if (errno)
 				{
-					//perror(ft_strjoin("ls: ", av[ap]));
-					ft_putendl(ft_strjoin("ls: ", ft_strjoin(av[ap], strerror(errno))));
+					perror(ft_strjoin("ls: ", av[ap]));
 					return (2);
 				}
-				else
-					opts |= parse_args(av[ap]);
 			}
 		}
 		else
@@ -65,7 +63,7 @@ int		main(int ac, char **av)
 }
 
 	// list arguments and for each :
-	// 		- if actual char begin with '-', add to t_params opts, till -- was encoutered
+	// 		- if actual char begin with '-', add to t_params opts, till -- was encoutered ( ? --word options ? POSIX ? )
 	// 		- else file or folder name, get and prints infos with actuals opts. ( here if file = folder AND -R option -> add each sub-folders to *dirlist)
 	//
 	//
