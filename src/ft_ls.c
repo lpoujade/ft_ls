@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/09 12:26:38 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/09 12:57:03 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		main(int ac, char **av)
 	t_params	opts;
 	int			ap;
 	int			end_args;
-	t_list		*file_list;
+	t_fileinfo	*file_list;
 
 	file_list = NULL;
 	end_args = 0;
@@ -39,7 +39,7 @@ int		main(int ac, char **av)
 	if (file_list)
 		while (file_list)
 		{
-			ls_out(lsfile(file_list->content, opts), opts&0x02);
+			ls_out(lsfile(file_list->infos, opts), opts&0x02);
 			file_list = file_list->next;
 		}
 	else
