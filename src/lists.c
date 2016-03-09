@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/09 13:03:04 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/09 14:43:18 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,9 @@ void		fflist_add(t_fileinfo **file_list, char *fname)
 			perror(ft_strjoin("ls: ", fname));
 			exit(3);
 		}
-		
+		(*file_list)->infos = ft_strdup(fname);
+		(*file_list)->prev = NULL;
+		(*file_list)->next = NULL;
 	}
 	else
 	{
@@ -73,12 +75,10 @@ void		fflist_add(t_fileinfo **file_list, char *fname)
 			perror(ft_strjoin("ls: ", fname));
 			exit(3);
 		}
-		ft_strcpy(tmp->infos, fname);
-		while (*fname > (char)(*file_list)->infos && (*file_list)->next) // TODO: better sorting
-			*file_list = (*file_list)->next;
+		tmp->infos = ft_strdup(fname);
 		tmp->next = *file_list;
-		tmp->prev = (*file_list)->prev;
-		((*file_list)->prev)->next = tmp;
 		(*file_list)->prev = tmp;
+		tmp->prev = NULL;
+		*file_list = tmp;
 	}
 }

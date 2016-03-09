@@ -6,13 +6,13 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/07 19:35:13 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/09 14:52:47 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-t_fileinfo		*lsfile(char *dname, t_params opts)
+t_fileinfo		*old_lsfile(char *dname, t_params opts)
 {
 	DIR					*ddir = NULL;
 	struct dirent		*dfile = NULL;
@@ -50,13 +50,13 @@ void	ls_out(t_fileinfo *flist, int rev)
 	t_fileinfo *prev;
 	if (rev)
 		flist = flist->prev;
-	prev = flist;
 	while (flist)
 	{
 		ft_putstr(flist->infos);
+		prev = flist;
 		flist = (rev) ? flist->prev : flist->next;
 		prev->next = NULL;
 		prev->prev = NULL;
-		ft_strclr(prev->infos);
+		prev = NULL;
 	}
 }
