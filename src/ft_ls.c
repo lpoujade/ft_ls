@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/08 19:44:11 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/09 12:26:38 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,7 @@ int		main(int ac, char **av)
 			if (*(av[ap] + 1) == '-')
 				end_args = 1;
 			else
-			{
 				opts |= parse_args(av[ap]);
-				if (errno)
-				{
-					perror(ft_strjoin("ls: ", av[ap]));
-					return (2);
-				}
-			}
 		}
 		else
 			fflist_add(&file_list, av[ap]);
