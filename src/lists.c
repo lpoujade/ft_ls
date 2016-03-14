@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/09 14:43:18 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/14 19:54:34 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,25 @@ void		new_filelist(char *infos, unsigned int atime, t_fileinfo **onode)
 			}
 		}
 */
+void		fflist_add_end(t_fileinfo **file_list, char *fname)
+{
+	t_fileinfo	*tmp;
+	t_fileinfo	*new;
+
+	tmp = *file_list;
+	if (!(new = malloc(sizeof(t_fileinfo))))
+	{
+		perror(ft_strjoin("ls: ", fname));
+		exit(3);
+	}
+	while (tmp->next)
+		tmp = tmp->next;
+	
+	new->infos = ft_strdup(fname);
+	new->prev = tmp;
+	tmp->next = new;
+	new->next = NULL;
+}
 
 void		fflist_add(t_fileinfo **file_list, char *fname)
 {
