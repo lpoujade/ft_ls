@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/14 19:55:27 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/15 11:21:21 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <sys/types.h>
 # include <uuid/uuid.h>
 # include <sys/xattr.h>
+#include <grp.h>
 # include <pwd.h>
 # include <stdlib.h>
 # include <stdio.h>
