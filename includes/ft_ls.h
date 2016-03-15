@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/15 11:21:21 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/15 12:34:22 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <sys/types.h>
 # include <uuid/uuid.h>
 # include <sys/xattr.h>
-#include <grp.h>
+# include <grp.h>
 # include <pwd.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -34,17 +34,11 @@ typedef struct			s_fileinfo
 	struct s_fileinfo	*prev;
 }						t_fileinfo;
 
-typedef struct			s_dirlist
-{
-	char				*dirname;
-	struct s_listdir	*next;
-}						t_dirlist;
-
 typedef short int		t_params;
 
-void					old_lsfile(char *dname, t_params opts);
+void					fold_list(t_fileinfo **fflist, char *dname, t_params opts);
 t_fileinfo				*eval(t_fileinfo **fflist, t_params opts);
-void					new_filelist(char *infos, unsigned int atime, t_fileinfo **onode);
+void					parse_file_infos(char **fname, struct stat *details);
 t_params				parse_args(char *av);
 void					ls_out(t_fileinfo *flist, int rev);
 void					fflist_add(t_fileinfo **file_list, char *fname);

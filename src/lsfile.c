@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/15 11:27:55 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/15 12:42:40 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void			fold_list(t_fileinfo **fflist, char *dname, t_params opts)
 			if (*dfile->d_name != '.' || opts & 0x08 || // -a
 					(opts & 0x20 && (ft_strcmp(dfile->d_name, ".") // -A
 									&& ft_strcmp(dfile->d_name, ".."))))
-				fflist_add_end(fflist, dfile->d_name);
+				fflist_add_end(fflist, ft_strjoin(dname, ft_strjoin("/", dfile->d_name)));
 		if ((closedir(ddir) != 0))
 			perror("ls: ");
 	}
@@ -36,8 +36,6 @@ t_fileinfo	*eval(t_fileinfo **fflist, t_params opts)
 {
 	t_fileinfo		*tmp;
 	struct stat		stated_file;
-	struct passwd	*user_infos;
-	struct group	*gr_infos;
 
 	tmp = *fflist;
 	while (tmp)
@@ -47,30 +45,33 @@ t_fileinfo	*eval(t_fileinfo **fflist, t_params opts)
 			fold_list(fflist, tmp->infos, opts);
 		else
 			if (opts & 0x01)
-			{
-				user_infos = getpwuid(stated_file.st_uid);
-				gr_infos = getgrgid(stated_file.st_gid);
-				tmp->infos = ft_strdup(ft_strjoin(ft_strjoin(user_infos->pw_name, ft_strjoin(gr_infos->gr_name, tmp->infos)), "\n"));
-			}
+				parse_file_infos(&tmp->infos, &stated_file);
 		tmp = tmp->next;
 		ft_bzero((void**)&stated_file, sizeof(struct stat));
 	}
 	return (*fflist);
 }
 
-void		ls_out(t_fileinfo *flist, int rev)
+void		parse_file_infos(char **fname, struct stat *details)
 {
-	t_fileinfo *prev;
+	char			*infos;
+	struct passwd	*user_infos;
+	struct group	*gr_infos;
 
-	if (rev)
-		flist = flist->prev;
-	while (flist)
-	{
-		ft_putstr(flist->infos);
-		prev = flist;
-		flist = (rev) ? flist->prev : flist->next;
-		prev->next = NULL;
-		prev->prev = NULL;
-		prev = NULL;
-	}
+	infos = malloc(55 + ft_strlen(*fname));
+	ft_memset((void*)infos, ' ', 54 + ft_strlen(*fname));
+	infos[55 + ft_strlen(*fname)] = 0;
+
+	user_infos = getpwuid(details->st_uid);
+	gr_infos = getgrgid(details->st_gid);
+
+	if (details->st_mode & S_IFDIR)
+		*infos = 'd';
+	else if (details->st_mode & S_IFREG)
+		*infos = '-';
+	ft_strcat(infos, "(rights)");
+	ft_strcat(infos + 8, ft_strjoin(user_infos->pw_name, gr_infos->gr_name));
+	ft_putendl(infos);
+	ft_strdel(fname);
+	*fname = infos;
 }
