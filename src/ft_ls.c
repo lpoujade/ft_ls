@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/16 09:32:20 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/16 11:47:17 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ int		main(int ac, char **av)
 				opts |= parse_args(av[ap]);
 		}
 		else
-			fflist_add(&file_list, av[ap]);
+			fflist_add(&file_list, av[ap]);		// TODO sorting method
 	}
 	if (!file_list)
 		fflist_add(&file_list, ".");
-	ls_out(eval(&file_list, opts), opts & 0x02);
+	ls_out(eval(&file_list, opts), opts & 0x02);	// TODO output format : like file/file/file \n folder:\n(num)\n files/files/files
 	return (errno ? 1 : 0);
 }
