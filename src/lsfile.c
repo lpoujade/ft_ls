@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/15 12:42:40 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/16 10:39:56 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,7 @@ void		parse_file_infos(char **fname, struct stat *details)
 	struct passwd	*user_infos;
 	struct group	*gr_infos;
 
-	infos = malloc(55 + ft_strlen(*fname));
-	ft_memset((void*)infos, ' ', 54 + ft_strlen(*fname));
-	infos[55 + ft_strlen(*fname)] = 0;
+	infos = ft_strnew(55 + ft_strlen(*fname));
 
 	user_infos = getpwuid(details->st_uid);
 	gr_infos = getgrgid(details->st_gid);
@@ -69,9 +67,12 @@ void		parse_file_infos(char **fname, struct stat *details)
 		*infos = 'd';
 	else if (details->st_mode & S_IFREG)
 		*infos = '-';
-	ft_strcat(infos, "(rights)");
-	ft_strcat(infos + 8, ft_strjoin(user_infos->pw_name, gr_infos->gr_name));
-	ft_putendl(infos);
+	ft_strcpy(infos + 1, "(riights)");
+	ft_strcpy(infos + 10, "  N ");
+	ft_strcpy(infos + 14, user_infos->pw_name);
+	ft_strcpy(infos + 24, gr_infos->gr_name);
+	ft_strcpy(infos + 31, *fname);
+	infos[ft_strlen(infos)] = '\n';
 	ft_strdel(fname);
 	*fname = infos;
 }
