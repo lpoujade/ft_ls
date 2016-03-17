@@ -6,30 +6,33 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/15 12:06:15 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/17 14:13:47 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void		ls_out(t_fileinfo *flist, int rev)
+void		ls_out(t_fileinfo *flist, t_params opts) // TODO output format
 {
 	t_fileinfo *prev;
 
-	if (rev)
+	if (opts & 0x02)
 		flist = flist->prev;
 	while (flist)
 	{
+		//ft_putstr(ft_strrchr(flist->infos, '/'));
 		ft_putstr(flist->infos);
+		if (!(opts & 0x01)) // replace with termcaps ?
+			ft_putchar('\t');
 		prev = flist;
-		flist = (rev) ? flist->prev : flist->next;
+		flist = (opts & 0x02) ? flist->prev : flist->next;
 		prev->next = NULL;
 		prev->prev = NULL;
 		prev = NULL;
 	}
 }
 
-void		fflist_add(t_fileinfo **file_list, char *fname)
+void		fflist_add(t_fileinfo **file_list, char *fname) // TODO sorting method
 {
 	t_fileinfo	*tmp;
 
@@ -59,7 +62,7 @@ void		fflist_add(t_fileinfo **file_list, char *fname)
 	}
 }
 
-void		fflist_add_end(t_fileinfo **file_list, char *fname)
+void		fflist_add_end(t_fileinfo **file_list, char *fname) // TEMPORARY ( while no sorting method choice in upper function )
 {
 	t_fileinfo	*tmp;
 	t_fileinfo	*new;
