@@ -6,34 +6,16 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/17 14:13:47 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/17 22:38:13 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void		ls_out(t_fileinfo *flist, t_params opts) // TODO output format
-{
-	t_fileinfo *prev;
-
-	if (opts & 0x02)
-		flist = flist->prev;
-	while (flist)
-	{
-		//ft_putstr(ft_strrchr(flist->infos, '/'));
-		ft_putstr(flist->infos);
-		if (!(opts & 0x01)) // replace with termcaps ?
-			ft_putchar('\t');
-		prev = flist;
-		flist = (opts & 0x02) ? flist->prev : flist->next;
-		prev->next = NULL;
-		prev->prev = NULL;
-		prev = NULL;
-	}
-}
-
 void		fflist_add(t_fileinfo **file_list, char *fname) // TODO sorting method
+															// default alphabetically
 {
+	t_fileinfo	*new;
 	t_fileinfo	*tmp;
 
 	if (!*file_list)
@@ -43,42 +25,45 @@ void		fflist_add(t_fileinfo **file_list, char *fname) // TODO sorting method
 			perror(ft_strjoin("ls: ", fname));
 			exit(3);
 		}
-		(*file_list)->infos = ft_strdup(fname);
 		(*file_list)->prev = NULL;
 		(*file_list)->next = NULL;
+		(*file_list)->infos = fname;
 	}
 	else
 	{
-		if (!(tmp = malloc(sizeof(t_fileinfo))))
+		if (!(new = malloc(sizeof(t_fileinfo))))
 		{
 			perror(ft_strjoin("ls: ", fname));
 			exit(3);
 		}
-		tmp->infos = ft_strdup(fname);
-		tmp->next = *file_list;
-		(*file_list)->prev = tmp;
-		tmp->prev = NULL;
-		*file_list = tmp;
+		tmp = (*file_list);
+		new->infos = fname;
+		while (ft_strcmp(fname, tmp->infos) > 0 && tmp->next)
+			tmp = tmp->next;
+		if (ft_strcmp(fname, tmp->infos) > 0)
+		{
+			new->next = tmp->next;
+			tmp->next = new;
+			new->prev = tmp;
+		}
+		else
+		{
+			tmp->prev->next = new;
+			new->next = tmp;
+			new->prev = tmp->prev;
+			tmp->prev = new;
+		}
 	}
 }
 
-void		fflist_add_end(t_fileinfo **file_list, char *fname) // TEMPORARY ( while no sorting method choice in upper function )
+void		ls_out(t_fileinfo *flist, t_params opts) // TODO output format
 {
-	t_fileinfo	*tmp;
-	t_fileinfo	*new;
-
-	tmp = *file_list;
-	if (!(new = malloc(sizeof(t_fileinfo))))
+	(void)opts;
+	while (flist)
 	{
-		perror(ft_strjoin("ls: ", fname));
-		exit(3);
+		ft_putstr(flist->infos); ft_putchar('\t');
+		flist = flist->next;
 	}
-	while (tmp->next)
-		tmp = tmp->next;
-	new->infos = ft_strdup(fname);
-	new->prev = tmp;
-	tmp->next = new;
-	new->next = NULL;
 }
 
 /*

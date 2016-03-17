@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/17 16:53:07 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/17 23:28:00 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,5 @@ void					parse_file_infos(char **fname, struct stat *details);
 t_params				parse_args(char *av);
 void					ls_out(t_fileinfo *flist, t_params opts);
 void					fflist_add(t_fileinfo **file_list, char *fname);
-void					fflist_add_end(t_fileinfo **file_list, char *fname);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/17 17:00:22 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/17 23:13:52 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ t_fileinfo	*eval(t_fileinfo **fflist, t_params opts)
 			print_file_infos(stated_file, tmp->infos);
 		else
 		{
-			ft_putstr(tmp->infos);
-			ft_putchar('\t');
+			ft_putstr(ft_strrchr(tmp->infos, '/') + 1);
+			if (tmp->next)
+				ft_putchar('\t');
 		}
 		ft_bzero((void**)&stated_file, sizeof(struct stat));
 		tmp = tmp->next;
@@ -48,7 +49,7 @@ void			fold_list(t_fileinfo **fflist, char *dname, t_params opts)
 			if (*dfile->d_name != '.' || opts & 0x08 || // -a
 					(opts & 0x20 && (ft_strcmp(dfile->d_name, ".") // -A
 									&& ft_strcmp(dfile->d_name, ".."))))
-				fflist_add_end(fflist, ft_strjoin(dname, ft_strjoin("/", dfile->d_name)));
+				fflist_add(fflist, ft_strjoin(dname, ft_strjoin("/", dfile->d_name)));
 		if ((closedir(ddir) != 0))
 			perror("ls: ");
 	}
@@ -97,8 +98,9 @@ void		print_file_infos(struct stat details, char *fname)
 	ft_putstr(ft_strjoin(gr_infos->gr_name, "  "));
 	ft_putnbr(details.st_size); ft_putstr("\t");
 	ft_putstr(ft_strjoin(last_access, "  "));
-	ft_putendl(fname);
+	ft_putendl(ft_strrchr(fname, '/') + 1);
 }
+
 void		parse_file_infos(char **fname, struct stat *details)
 {
 	char			*infos;

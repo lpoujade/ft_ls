@@ -6,7 +6,7 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/03/15 11:42:26 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/03/17 22:11:27 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,11 @@ OBJ=$(SRC:.c=.o)
 SRCS=$(addprefix $(SRCDIR)/,$(SRC))
 OBJS=$(addprefix $(OBJDIR)/,$(OBJ))
 
+# llvm specific
+# CFLAGS+=-g -fprofile-arcs -ftest-coverage
+# LDFLAGS+=--coverage
+
+
 all: $(LIB) $(NAME)
 
 $(NAME): $(OBJS)
@@ -42,6 +47,10 @@ $(LIB):
 
 clean:
 	-@rm $(OBJS) && echo "deleting" $(OBJS)
+
+covclean:
+	-@rm $(OBJS:.o=.gcno) && echo "deleting" $(OBJS:.o=.gcno)
+	-@rm $(OBJS:.o=.gcda) && echo "deleting" $(OBJS:.o=.gcda)
 
 fclean: clean
 	-@rm $(NAME) && echo "deleting" $(NAME)
