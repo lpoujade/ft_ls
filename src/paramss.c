@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 23:37:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/16 11:29:11 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/19 16:16:23 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ t_params	parse_args(char *av)
 		else
 		{
 			ft_putstr("ls : -");
-			ft_putchar(*av); ft_putstr(": ");
+			ft_putchar(*av);
+			ft_putstr(": ");
 			ft_putendl(strerror(22));
 			exit(1);
 		}

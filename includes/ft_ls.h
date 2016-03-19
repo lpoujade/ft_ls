@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/17 23:28:00 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/19 16:21:46 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef short int		t_params;
 void					fold_list(t_fileinfo **fflist, char *dname, t_params opts);
 t_fileinfo				*eval(t_fileinfo **fflist, t_params opts);
 void					print_file_infos(struct stat details, char *fname);
-void					parse_file_infos(char **fname, struct stat *details);
 t_params				parse_args(char *av);
 void					ls_out(t_fileinfo *flist, t_params opts);
 void					fflist_add(t_fileinfo **file_list, char *fname);
