@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/19 17:26:25 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/19 20:08:21 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,25 @@ static void	node_insert_strcmp(t_fileinfo **fflist, t_fileinfo *node)
 	}
 	else
 	{
-		tmp->prev->next = node;
+		tmp->prev ? tmp->prev->next = node : (void)0;
 		node->next = tmp;
 		node->prev = tmp->prev;
 		tmp->prev = node;
 	}
 }
 
-static void	node_add(t_fileinfo **fflist, t_fileinfo *new)
+void	node_add(t_fileinfo **fflist, t_fileinfo *new)
 {
 	t_fileinfo tmp;
 
 	tmp = **fflist;
 	while (tmp.next)
 		tmp = *tmp.next;
-	tmp.next->next = new;
-	new->prev = tmp.next;
+	tmp.next = new;
+	new->prev = &tmp;
 }
 
-void		fflist_add(t_fileinfo **file_list, char *fname, int method)
+void		fflist_add(t_fileinfo **file_list, char *fname)
 {
 	t_fileinfo	*new;
 
@@ -61,7 +61,8 @@ void		fflist_add(t_fileinfo **file_list, char *fname, int method)
 	if (!*file_list)
 		*file_list = new;
 	else
-		method ? node_insert_strcmp(file_list, new) : node_add(file_list, new);
+		node_insert_strcmp(file_list, new);
+		//method ? node_insert_strcmp(file_list, new) : node_add(file_list, new);
 }
 
 void		ls_out(t_fileinfo *flist, t_params opts)

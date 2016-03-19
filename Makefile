@@ -6,7 +6,7 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/03/17 22:11:27 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/03/19 20:08:39 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ SRCDIR=./src
 OBJDIR=./.obj
 
 CC=clang
-CFLAGS=-Wall -Werror -Wextra
+CFLAGS=-Wall -Werror -Wextra -g
 CPPFLAGS=-Iincludes/ -Ilibft/includes
 
 LDFLAGS=-Llibft/

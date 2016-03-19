@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/19 18:12:52 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/19 19:37:00 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,11 @@ t_fileinfo	*eval(t_fileinfo **fflist, t_params opts, int c)
 		if (lstat(tmp->infos, &stated_file) == -1)
 		{
 			perror(ft_strjoin("ls: ", tmp->infos));
-			exit (3);
+			exit(3);
 		}
-		if (stated_file.st_mode & S_IFDIR && (c || opts & 0x04) &&
-				ft_strcmp(tmp->infos, "..") && ft_strcmp(tmp->infos, "."))
-			fold_list(fflist, tmp->infos, opts);
-		if (opts & 0x01)
-			print_file_infos(stated_file, tmp->infos);
-		else
-		{
-			ft_putstr(ft_strrchr(tmp->infos, '/') + 1);
-			if (tmp->next)
-				ft_putchar('\t');
-		}
+		if (stated_file.st_mode & S_IFDIR && (c || opts & 0x04))
+			node_add(fflist, fold_list(tmp->infos, opts));
+		print_file_infos(stated_file, tmp->infos, opts);
 		ft_bzero((void**)&stated_file, sizeof(struct stat));
 		tmp = tmp->next;
 		c--;
@@ -43,11 +35,13 @@ t_fileinfo	*eval(t_fileinfo **fflist, t_params opts, int c)
 	return (*fflist);
 }
 
-void		fold_list(t_fileinfo **fflist, char *dname, t_params opts)
+t_fileinfo		*fold_list(char *dname, t_params opts)
 {
 	DIR					*ddir;
 	struct dirent		*dfile;
+	t_fileinfo			*fflist;
 
+	fflist = NULL;
 	errno = 0;
 	if ((ddir = opendir(dname)))
 	{
@@ -55,13 +49,14 @@ void		fold_list(t_fileinfo **fflist, char *dname, t_params opts)
 			if (*dfile->d_name != '.' || opts & 0x08 ||
 					(opts & 0x20 && (ft_strcmp(dfile->d_name, ".")
 									&& ft_strcmp(dfile->d_name, ".."))))
-				fflist_add(fflist,
-						ft_strjoin(dname, ft_strjoin("/", dfile->d_name)), 1);
+				fflist_add(&fflist,
+						ft_strjoin(dname, ft_strjoin("/", dfile->d_name)));
 		if ((closedir(ddir) != 0))
 			perror("ls: ");
 	}
 	else
 		perror(ft_strjoin("ls: ", dname));
+	return (fflist);
 }
 
 static char	file_mode(mode_t f)
@@ -92,7 +87,7 @@ static void	ft_print_fmode(mode_t details)
 	details & S_IRUSR ? ft_putchar('r') : ft_putchar('-');
 	details & S_IWUSR ? ft_putchar('w') : ft_putchar('-');
 	if (details & S_IXUSR && details & S_ISUID)
-		ft_putchar ('s');
+		ft_putchar('s');
 	else if (!details & S_IXUSR && details & S_ISUID)
 		ft_putchar('S');
 	else if (details & S_IXUSR & !details & S_ISUID)
@@ -102,7 +97,7 @@ static void	ft_print_fmode(mode_t details)
 	details & S_IRGRP ? ft_putchar('r') : ft_putchar('-');
 	details & S_IWGRP ? ft_putchar('w') : ft_putchar('-');
 	if (details & S_IXGRP && details & S_ISUID)
-		ft_putchar ('s');
+		ft_putchar('s');
 	else if (!details & S_IXGRP && details & S_ISUID)
 		ft_putchar('S');
 	else if (details & S_IXGRP & details & S_ISUID)
@@ -115,12 +110,18 @@ static void	ft_print_fmode(mode_t details)
 	ft_putstr("  ");
 }
 
-void		print_file_infos(struct stat details, char *fname)
+void		print_file_infos(struct stat details, char *fname, t_params opts)
 {
 	struct passwd	*user_infos;
 	struct group	*gr_infos;
 	char			*last_access;
 
+	if (!opts & 0x02)
+	{
+		ft_putstr(fname);
+		ft_putchar('\t');
+		return ;
+	}
 	last_access = ctime(&details.st_atime);
 	last_access[24] = 0;
 	user_infos = getpwuid(details.st_uid);
@@ -134,29 +135,29 @@ void		print_file_infos(struct stat details, char *fname)
 	ft_putnbr(details.st_size);
 	ft_putstr("\t");
 	ft_putstr(ft_strjoin(last_access, "  "));
-	ft_putendl(ft_strrchr(fname, '/') + 1);
+	ft_putendl(fname);
 }
 
 /*
-void		parse_file_infos(char **fname, struct stat *details)
-{
-	char			*infos;
-	struct passwd	*user_infos;
-	struct group	*gr_infos;
-
-	infos = ft_strnew(55 + ft_strlen(*fname));
-	user_infos = getpwuid(details->st_uid);
-	gr_infos = getgrgid(details->st_gid);
-	*infos = file_mode(details->st_mode);
-	ft_strcat(infos, "(riights)"); ft_strcat(infos, "  ");
-	ft_strcat(infos, ft_itoa(details->st_nlink)); ft_strcat(infos, "   ");
-	ft_strcat(infos, user_infos->pw_name); ft_strcat(infos, "   ");
-	ft_strcat(infos, gr_infos->gr_name); ft_strcat(infos, "   ");
-	ft_strcat(infos, ctime(&details->st_atime));
-	infos[ft_strlen(infos) - 1] = 0; ft_strcat(infos, "   ");
-	ft_strcat(infos, *fname);
-	ft_strcat(infos, "\n");
-	ft_strdel(fname);
-	*fname = infos;
-}
+** void		parse_file_infos(char **fname, struct stat *details)
+** {
+** 	char			*infos;
+** 	struct passwd	*user_infos;
+** 	struct group	*gr_infos;
+**
+** 	infos = ft_strnew(55 + ft_strlen(*fname));
+** 	user_infos = getpwuid(details->st_uid);
+** 	gr_infos = getgrgid(details->st_gid);
+** 	*infos = file_mode(details->st_mode);
+** 	ft_strcat(infos, "(riights)"); ft_strcat(infos, "  ");
+** 	ft_strcat(infos, ft_itoa(details->st_nlink)); ft_strcat(infos, "   ");
+** 	ft_strcat(infos, user_infos->pw_name); ft_strcat(infos, "   ");
+** 	ft_strcat(infos, gr_infos->gr_name); ft_strcat(infos, "   ");
+** 	ft_strcat(infos, ctime(&details->st_atime));
+** 	infos[ft_strlen(infos) - 1] = 0; ft_strcat(infos, "   ");
+** 	ft_strcat(infos, *fname);
+** 	ft_strcat(infos, "\n");
+** 	ft_strdel(fname);
+** 	*fname = infos;
+** }
 */
