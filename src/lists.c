@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/20 15:38:31 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/20 19:05:00 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ static void	node_insert_strcmp(t_fileinfo **fflist, t_fileinfo *node)
 	tmp = (*fflist);
 	while ((comp = ft_strcmp(node->infos, tmp->infos)) > 0 && tmp->next)
 		tmp = tmp->next;
-	if (comp > 0 || 1)
+	if (comp > 0)
 	{
+		if (tmp->next)
+			tmp->next->prev = node;
 		node->next = tmp->next;
 		tmp->next = node;
 		node->prev = tmp;
@@ -30,8 +32,11 @@ static void	node_insert_strcmp(t_fileinfo **fflist, t_fileinfo *node)
 	{
 		node->next = tmp;
 		node->prev = tmp->prev;
+		if (tmp->prev)
+			tmp->prev->next = node;
+		else
+			*fflist = node;
 		tmp->prev = node;
-		tmp = node;
 	}
 }
 
