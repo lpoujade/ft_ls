@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 23:37:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/19 16:16:23 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/20 16:34:52 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ t_params	parse_args(char *av)
 			opts |= 0x10;
 		else if (*av == 'A')
 			opts |= 0x20;
+		else if (*av == 'h')
+			opts |= 0x40;
+		else if (*av == 'g')
+			opts |= 0x80;
 		else
 		{
 			ft_putstr("ls : -");

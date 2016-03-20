@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/19 19:36:18 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/20 16:54:44 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 typedef struct			s_fileinfo
 {
 	char				*infos;
-	unsigned int		epoch;
 	struct s_fileinfo	*next;
 	struct s_fileinfo	*prev;
 }						t_fileinfo;

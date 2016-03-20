@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/19 19:37:00 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/20 16:55:13 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,21 @@ t_fileinfo	*eval(t_fileinfo **fflist, t_params opts, int c)
 	tmp = *fflist;
 	while (tmp)
 	{
+		if (!ft_strcmp(tmp->infos, "    "))
+		{
+			ft_putchar('\n');
+			ft_putstr(tmp->next->infos); ft_putstr(":\n");
+			tmp = tmp->next->next;
+		}
 		if (lstat(tmp->infos, &stated_file) == -1)
 		{
 			perror(ft_strjoin("ls: ", tmp->infos));
 			exit(3);
 		}
-		if (stated_file.st_mode & S_IFDIR && (c || opts & 0x04))
+		if (stated_file.st_mode & S_IFDIR && (opts & 0x04 || c > 0))
 			node_add(fflist, fold_list(tmp->infos, opts));
-		print_file_infos(stated_file, tmp->infos, opts);
+		else
+			print_file_infos(stated_file, tmp->infos, opts); (!tmp->next && !(opts&0x01))? ft_putchar('\n') : (void)0;
 		ft_bzero((void**)&stated_file, sizeof(struct stat));
 		tmp = tmp->next;
 		c--;
@@ -45,6 +52,7 @@ t_fileinfo		*fold_list(char *dname, t_params opts)
 	errno = 0;
 	if ((ddir = opendir(dname)))
 	{
+		fflist_add(&fflist, "    "); fflist_add(&fflist, dname);
 		while ((dfile = readdir(ddir)))
 			if (*dfile->d_name != '.' || opts & 0x08 ||
 					(opts & 0x20 && (ft_strcmp(dfile->d_name, ".")
@@ -110,32 +118,51 @@ static void	ft_print_fmode(mode_t details)
 	ft_putstr("  ");
 }
 
+static void	putfsize(off_t bytes, int hreadable)
+{
+	if (!hreadable)
+		ft_putnbr(bytes);
+	else
+	{
+		if (bytes < 1024)
+			ft_putstr(ft_strjoin(ft_itoa(bytes), "B"));
+		else if (bytes < 1024 * 1024)
+		{
+			while ((bytes /= 1024) > 1024)
+				;
+			ft_putnbr(bytes); ft_putchar('K');
+		}
+	}
+}
+
 void		print_file_infos(struct stat details, char *fname, t_params opts)
 {
 	struct passwd	*user_infos;
 	struct group	*gr_infos;
 	char			*last_access;
+	char			*slash;
 
-	if (!opts & 0x02)
+	slash = ft_strrchr(fname, '/');
+	if (!(opts & 0x01))
 	{
-		ft_putstr(fname);
+		ft_putstr(slash ? slash + 1 : fname);
 		ft_putchar('\t');
 		return ;
 	}
 	last_access = ctime(&details.st_atime);
 	last_access[24] = 0;
-	user_infos = getpwuid(details.st_uid);
+	!(opts & 0x80) ? user_infos = getpwuid(details.st_uid) : (void)0;
 	gr_infos = getgrgid(details.st_gid);
 	ft_putchar(file_mode(details.st_mode));
 	ft_print_fmode(details.st_mode);
 	ft_putnbr(details.st_nlink);
 	ft_putstr("  ");
-	ft_putstr(ft_strjoin(user_infos->pw_name, "  "));
+	!(opts & 0x80) ? ft_putstr(ft_strjoin(user_infos->pw_name, "  ")): (void)0;
 	ft_putstr(ft_strjoin(gr_infos->gr_name, "  "));
-	ft_putnbr(details.st_size);
+	putfsize(details.st_size, opts&0x40);
 	ft_putstr("\t");
 	ft_putstr(ft_strjoin(last_access, "  "));
-	ft_putendl(fname);
+	ft_putendl(slash ? slash + 1 : fname);
 }
 
 /*
