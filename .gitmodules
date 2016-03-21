@@ -1,0 +1,3 @@
+[submodule "libft"]
+	path = libft
+	url = liums@maisnon.ddns.net:~/repos/libft
