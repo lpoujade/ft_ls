@@ -6,13 +6,13 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/20 19:05:00 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/21 23:46:06 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void	node_insert_strcmp(t_fileinfo **fflist, t_fileinfo *node)
+void		node_insert_strcmp(t_fileinfo **fflist, t_fileinfo *node)
 {
 	t_fileinfo	*tmp;
 	int			comp;
@@ -48,7 +48,7 @@ void	node_add(t_fileinfo **fflist, t_fileinfo *new)
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new;
-	new->prev = tmp;
+	//new->prev = tmp; ??
 }
 
 void		fflist_add(t_fileinfo **file_list, char *fname)
