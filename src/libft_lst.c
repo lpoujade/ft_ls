@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/21 16:18:56 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/22 15:09:04 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void	fts_lstadd(t_list **alst, t_list *new)
 	*alst = new;
 }
 
-void	fts_lstinsert(t_list **fflist, t_list *new, int (*f)(void*,void*))
+void	fts_lstinsert(t_list **fflist, t_list *new, int (*f)(t_list*,t_list*))
 {
 	t_list		*tmp;
 	int			comp;
 
 	tmp = (*fflist);
-	while ((comp = (f)((new + 2 * sizeof(t_list*)), (tmp + 2*sizeof(t_list*))) > 0 && tmp->next))
+	while ((comp = (f)(new, tmp) > 0 && tmp->next))
 		tmp = tmp->next;
 	if (comp > 0)
 	{

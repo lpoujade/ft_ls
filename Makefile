@@ -6,7 +6,7 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/03/21 16:09:23 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/03/22 15:42:01 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ LDLIBS=-lft
 
 LIB=libft/libft.a
 
-SRC=ft_ls.c paramss.c lsfile.c libft_lst.c lists_wrapper.c printing.c
+SRC=ft_ls.c paramss.c lsfile.c lists_wrapper.c printing.c
 OBJ=$(SRC:.c=.o)
 
 SRCS=$(addprefix $(SRCDIR)/,$(SRC))

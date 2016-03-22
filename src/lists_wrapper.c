@@ -6,15 +6,19 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/21 15:54:12 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/22 15:42:36 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static int	ft_void_strcmp(void *s1, void *s2)
+static int	ft_void_strcmp(t_list *s1, t_list *s2)
 {
-	return (ft_strcmp(s1, s2));
+	char *a;
+	char *b;
+	a = ((t_fileinfo*)s1)->infos;
+	b = ((t_fileinfo*)s2)->infos;
+	return (ft_strcmp(a, b));
 }
 
 void		fflist_add(t_fileinfo **file_list, char *fname)
@@ -32,7 +36,7 @@ void		fflist_add(t_fileinfo **file_list, char *fname)
 	if (!*file_list)
 		*file_list = new;
 	else
-		fts_lstinsert((t_list**)file_list, (t_list*)new, &ft_void_strcmp);
+		ft_lstinsert((t_list**)file_list, (t_list*)new, &ft_void_strcmp);
 		//method ? node_insert_strcmp(file_list, new) : node_add(file_list, new);
 }
 
