@@ -6,11 +6,19 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/20 13:22:29 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/22 16:22:36 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+static void	ftls_del(void *no)
+{
+	t_fileinfo	*node;
+
+	node = (t_fileinfo *)no;
+	ft_strdel(&node->infos);
+}
 
 int		main(int ac, char **av)
 {
@@ -36,10 +44,13 @@ int		main(int ac, char **av)
 		}
 	}
 	if (!file_list)
-	{
-		c++;
-		fflist_add(&file_list, ".");
-	}
+		file_list = fold_list(".", opts);
 	eval(&file_list, opts, c);
+	ft_lstdel((t_list**)file_list, &ftls_del);
+	if (file_list)
+	{
+		ft_putendl("not freed : ");
+		ls_out(file_list, opts);
+	}
 	return (errno ? 1 : 0);
 }

@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/20 18:51:05 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/21 21:28:35 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,19 @@ static void	ft_print_fmode(mode_t details)
 	details & S_IWUSR ? ft_putchar('w') : ft_putchar('-');
 	if (details & S_IXUSR && details & S_ISUID)
 		ft_putchar('s');
-	else if (!details & S_IXUSR && details & S_ISUID)
+	else if (details & S_ISUID)
 		ft_putchar('S');
-	else if (details & S_IXUSR & !details & S_ISUID)
+	else if (details & S_IXUSR)
 		ft_putchar('x');
 	else
 		ft_putchar('-');
 	details & S_IRGRP ? ft_putchar('r') : ft_putchar('-');
 	details & S_IWGRP ? ft_putchar('w') : ft_putchar('-');
-	if (details & S_IXGRP && details & S_ISUID)
+	if (details & S_IXGRP && details & S_ISGID)
 		ft_putchar('s');
-	else if (!details & S_IXGRP && details & S_ISUID)
+	else if (details & S_ISGID)
 		ft_putchar('S');
-	else if (details & S_IXGRP & details & S_ISUID)
+	else if (details & S_ISGID)
 		ft_putchar('x');
 	else
 		ft_putchar('-');
