@@ -6,13 +6,20 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/21 21:44:06 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/22 15:03:29 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
+int		ls(int ac, char **av);
+
 int		main(int ac, char **av)
+{
+	return (ls(ac, av));
+}
+
+int		ls(int ac, char **av)
 {
 	t_params	opts;
 	int			ap;
