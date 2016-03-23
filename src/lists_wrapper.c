@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/22 21:20:16 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/23 01:32:29 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,30 +25,27 @@ t_list		*fts_new(char *fname)
 {
 	t_fileinfo	*new;
 
-	new = malloc(sizeof(t_fileinfo));
-	new->infos = fname;
-	new->next = NULL;
-	new->prev = NULL;
-	return ((t_list *)new);
-}
-
-void		fflist_add(t_fileinfo **file_list, char *fname)
-{
-	t_fileinfo	*new;
-
-	if (!(new = malloc(sizeof(t_fileinfo))))
+	if (!(new = (t_fileinfo*)malloc(sizeof(t_fileinfo))))
 	{
 		perror(ft_strjoin("ls: ", fname));
 		exit(3);
 	}
 	new->infos = fname;
-	new->prev = NULL;
-	//new->prev = (t_list*)new;
 	new->next = NULL;
-	if (!*file_list)
-		*file_list = new;
-	else
-		ft_lstinsert((t_list**)file_list, (t_list*)new, &fts_strcmp);
+	new->prev = NULL;
+	new->tot = 0;
+	return ((t_list *)new);
+}
+
+void		fts_lstadd_nfold(t_fileinfo **file_list, char *fname)
+{
+	t_fileinfo	*new;
+	t_fileinfo	*tmp;
+
+	tmp = (*file_list);
+	new = (t_fileinfo*)fts_new(fname);
+
+	ft_lstinsert((t_list**)file_list, (t_list*)new, &fts_strcmp);
 }
 
 void		ls_out(t_fileinfo *flist, t_params opts)

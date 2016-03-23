@@ -6,7 +6,7 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/03/22 15:42:01 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/03/23 01:00:56 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,9 +34,9 @@ OBJS=$(addprefix $(OBJDIR)/,$(OBJ))
 # LDFLAGS+=--coverage
 
 
-all: $(LIB) $(NAME)
+all: $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(LIB) $(OBJS)
 	@echo "linking to\033[32m" $@ "\033[0m ... "
 	@$(CC) $^ -o $@ $(LDFLAGS) $(LDLIBS)
 

@@ -6,12 +6,11 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/22 21:44:08 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/23 01:32:55 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
 
 int		main(int ac, char **av)
 {
@@ -31,16 +30,15 @@ int		main(int ac, char **av)
 	while (++ap < ac)
 	{
 		if (*av[ap] == '-' && !end_args)
-			*(av[ap] + 1) == '-' ? end_args = 1 : (opts |= parse_args(av[ap]));
+			*(av[ap] + 1) == '-' ? end_args = 1 : (opts |= parse_args(av[ap] + 1));
 		else
 		{
 			ft_lstinsert((t_list**)file_list, fts_new(av[ap]), &fts_strcmp);
-			//ft_putstr((*file_list)->infos);ft_putendl("******");
 			c++;
 		}
 	}
-	if (!*file_list)
-		new = fold_list(".", opts);
+	if (!*file_list && ++c)
+		ft_lstinsert((t_list**)file_list, fts_new("."), &fts_strcmp);
 	eval(file_list, opts, c);
 //	ft_lstdel((t_list**)file_list, &ftls_del);
 //	if (file_list)

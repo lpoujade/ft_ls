@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 23:37:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/22 15:55:37 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/23 01:58:03 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,26 @@ t_params	parse_args(char *av)
 	t_params	opts;
 
 	opts = 0;
-	while (*(++av))
+	while (*(av))
 	{
 		if (*av == 'l')
-			opts |= 0x01;
+			opts |= LONG_FORMAT;
 		else if (*av == 'r')
-			opts |= 0x02;
+			opts |= REV_SORT;
 		else if (*av == 'R')
-			opts |= 0x04;
+			opts |= RECURSIVE;
 		else if (*av == 'a')
-			opts |= 0x08;
+			opts |= ALL;
 		else if (*av == 't')
-			opts |= 0x10;
+			opts |= TIME_SORT;
 		else if (*av == 'A')
-			opts |= 0x20;
+			opts |= ALMOST_ALL;
 		else if (*av == 'h')
-			opts |= 0x40;
+			opts |= HUMAN_READ;
 		else if (*av == 'g')
-			opts |= 0x80;
+			opts |= HIDE_OWNER;
+		else if (*av == 'D')
+			opts |= ONLY_FOLD;
 		else
 		{
 			ft_putstr("ls : ");
@@ -43,6 +45,7 @@ t_params	parse_args(char *av)
 			ft_putendl(strerror(22));
 			exit(1);
 		}
+		av++;
 	}
 	return (opts);
 }
