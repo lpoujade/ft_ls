@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/23 20:53:43 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/24 12:56:00 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 				perror(ft_strjoin("ls: ", tmp->infos));
 				exit(3);
 			}
-			if (stated_file.st_mode & S_IFDIR && (opts & 0x04 || c > 0))
-				ft_lstinsert_list((t_list*)*fflist, (t_list*)fold_list(tmp->infos, opts), &fts_strcmp);
-			if ((c > 0 || !(opts & ONLY_FOLD)) && tmp->tot!= -1)
+			if ((c > 0 || !(opts & ONLY_FOLD)) && tmp->tot != -1)
 				print_file_infos(stated_file, tmp->infos, opts);
+			if (stated_file.st_mode & S_IFDIR && (opts & 0x04 || c > 0) && !ft_strstr(tmp->infos, ".."))
+				fts_lstinsert_list(tmp, fold_list(tmp->infos, opts), &fts_strcmp);
 			((tmp && !tmp->next) && !(opts & 0x01)) ? ft_putchar('\n') : 0;
 			ft_bzero((void**)&stated_file, sizeof(struct stat));
 		}

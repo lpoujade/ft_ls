@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/23 01:32:29 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/24 12:21:27 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,12 @@ t_list		*fts_new(char *fname)
 	return ((t_list *)new);
 }
 
+void		fts_lstinsert_list(t_fileinfo *flist, t_fileinfo *lnew, int (*f)(t_list *,t_list *))
+{
+	while (flist->next && !flist->tot)
+		flist = (t_fileinfo*)flist->next;
+	ft_lstinsert_list((t_list*)flist, (t_list*)lnew, f);
+}
 void		fts_lstadd_nfold(t_fileinfo **file_list, char *fname)
 {
 	t_fileinfo	*new;
