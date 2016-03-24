@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/24 12:56:00 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/24 22:40:33 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 	tmp = *fflist;
 	while (tmp)
 	{
-		if (tmp->tot && tmp->prev)
+		if (tmp->fcount)
 		{
 			ft_putchar('\n');
 			ft_putstr(tmp->infos);
@@ -28,25 +28,24 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 			if (opts & LONG_FORMAT)
 			{
 				ft_putstr("total ");
-				ft_putnbr(tmp->tot);
+				ft_putnbr(tmp->fcount ? tmp->fcount : 0);
 				ft_putchar('\n');
 			}
+			tmp = (t_fileinfo *)tmp->next;
 		}
-		else
+		else if (lstat(tmp->infos, &stated_file) != -1)
 		{
-			if (lstat(tmp->infos, &stated_file) == -1)
-			{
-				perror(ft_strjoin("ls: ", tmp->infos));
-				exit(3);
-			}
-			if ((c > 0 || !(opts & ONLY_FOLD)) && tmp->tot != -1)
-				print_file_infos(stated_file, tmp->infos, opts);
-			if (stated_file.st_mode & S_IFDIR && (opts & 0x04 || c > 0) && !ft_strstr(tmp->infos, ".."))
-				fts_lstinsert_list(tmp, fold_list(tmp->infos, opts), &fts_strcmp);
+			if (!(opts & ONLY_FOLD))
+				pfile_infos(stated_file, tmp->infos, opts);
+			if (stated_file.st_mode & S_IFDIR && (opts & 0x04 || c > 0)
+					&& !ft_strstr(tmp->infos, ".."))
+				tmp->fcount = fts_lstinsert_list(tmp, fold_list(tmp->infos, opts), &fts_strcmp);
 			((tmp && !tmp->next) && !(opts & 0x01)) ? ft_putchar('\n') : 0;
 			ft_bzero((void**)&stated_file, sizeof(struct stat));
 		}
-		tmp = (t_fileinfo*)tmp->next;
+		else
+			perror(ft_strjoin("(lsfile.c:lstat)ls: ", tmp->infos));
+		tmp->fcount ? (void)0 : (tmp = (t_fileinfo*)tmp->next);
 		c--;
 	}
 }
@@ -56,28 +55,22 @@ t_fileinfo		*fold_list(char *dname, t_params opts)
 	DIR					*ddir;
 	struct dirent		*dfile;
 	t_fileinfo			*fflist;
-	int					*tot;
 
 	fflist = NULL;
 	if ((ddir = opendir(dname)))
 	{
-		fflist = (t_fileinfo*)fts_new(dname);
-		tot = &(*fflist).tot;
 		while ((dfile = readdir(ddir)))
 			if (*dfile->d_name != '.' || opts & 0x08 ||
 					(opts & 0x20 && (ft_strcmp(dfile->d_name, ".")
-									&& ft_strcmp(dfile->d_name, ".."))))
+									 && ft_strcmp(dfile->d_name, ".."))))
 			{
 				fts_lstadd_nfold(&fflist,
 						ft_strjoin(dname, ft_strjoin("/", dfile->d_name)));
-				(*tot)++;
 			}
-		if (!*tot)
-			*tot = -1;
 		if ((closedir(ddir) != 0))
-			perror("ls: ");
+			perror("(lsfile.c:closedir)ls: ");
 	}
 	else
-		perror(ft_strjoin("ls: ", dname));
+		perror(ft_strjoin("(lsfile.c:opendir)ls: ", dname));
 	return ((fflist ? fflist : (t_fileinfo*)fts_new("")));
 }

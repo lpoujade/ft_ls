@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   src/lists.c                                        :+:      :+:    :+:   */
+/*   lists_wrapper.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/24 12:21:27 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/24 21:57:47 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,22 @@ t_list		*fts_new(char *fname)
 	new->infos = fname;
 	new->next = NULL;
 	new->prev = NULL;
-	new->tot = 0;
+	new->fcount = 0;
 	return ((t_list *)new);
 }
 
-void		fts_lstinsert_list(t_fileinfo *flist, t_fileinfo *lnew, int (*f)(t_list *,t_list *))
+int			fts_lstinsert_list(t_fileinfo *flist, t_fileinfo *lnew, int (*f)(t_list *,t_list *))
 {
-	while (flist->next && !flist->tot)
+	if (!flist)
+	{
+		flist = lnew;
+		return (0);
+	}
+	while (flist->next && !((t_fileinfo*)flist->next)->fcount)
 		flist = (t_fileinfo*)flist->next;
-	ft_lstinsert_list((t_list*)flist, (t_list*)lnew, f);
+	return (ft_lstinsert_list((t_list*)flist, (t_list*)lnew, f));
 }
+
 void		fts_lstadd_nfold(t_fileinfo **file_list, char *fname)
 {
 	t_fileinfo	*new;
@@ -60,7 +66,8 @@ void		ls_out(t_fileinfo *flist, t_params opts)
 	while (flist)
 	{
 		ft_putstr(flist->infos);
-		ft_putchar('\t');
+		if (!(opts & LONG_FORMAT))
+				ft_putchar('\t');
 		flist = (t_fileinfo*)flist->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/23 01:32:55 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/24 20:13:56 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int		main(int ac, char **av)
 	if (!*file_list && ++c)
 		ft_lstinsert((t_list**)file_list, fts_new("."), &fts_strcmp);
 	eval(file_list, opts, c);
+
 //	ft_lstdel((t_list**)file_list, &ftls_del);
 //	if (file_list)
 //	{

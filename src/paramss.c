@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 23:37:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/23 01:58:03 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/24 15:37:51 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_params	parse_args(char *av)
 		else if (*av == 'h')
 			opts |= HUMAN_READ;
 		else if (*av == 'g')
-			opts |= HIDE_OWNER;
+			opts |= HIDE_OWNER | LONG_FORMAT;
 		else if (*av == 'D')
 			opts |= ONLY_FOLD;
 		else

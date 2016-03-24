@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/21 21:28:35 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/24 21:28:38 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,23 @@ static char	file_mode(mode_t f)
 {
 	char c;
 
-	if (f & S_IFREG)
-		c = '-';
-	else if (f & S_IFDIR)
-		c = 'd';
-	else if (f & S_IFIFO)
-		c = 'p';
-	else if (f & S_IFCHR)
-		c = 'c';
-	else if (f & S_IFBLK)
-		c = 'b';
-	else if (f & S_IFLNK)
+	c = '?';
+	if (S_ISLNK(f))
 		c = 'l';
-	else if (f & S_IFSOCK)
+	if (S_ISREG(f))
+		c = '-';
+	if (S_ISFIFO(f))
+		c = 'p';
+	if (S_ISCHR(f))
+		c = 'c';
+	if (S_ISBLK(f))
+		c = 'b';
+	if (S_ISLNK(f))
+		c = 'l';
+	if (S_ISSOCK(f))
 		c = 's';
-	else
-		c = '?';
+	if (S_ISDIR(f))
+		c = 'd';
 	return (c);
 }
 
@@ -53,7 +54,7 @@ static void	ft_print_fmode(mode_t details)
 		ft_putchar('s');
 	else if (details & S_ISGID)
 		ft_putchar('S');
-	else if (details & S_ISGID)
+	else if (details & S_IXGRP)
 		ft_putchar('x');
 	else
 		ft_putchar('-');
@@ -81,17 +82,18 @@ static void	putfsize(off_t bytes, int hreadable)
 	}
 }
 
-void		print_file_infos(struct stat details, char *fname, t_params opts)
+void		pfile_infos(struct stat details, char *fname, t_params opts)
 {
 	struct passwd	*user_infos;
 	struct group	*gr_infos;
 	char			*last_access;
 	char			*slash;
 
-	slash = ft_strrchr(fname, '/');
+	if ((slash = ft_strrchr(fname, '/')))
+		slash = (*(slash + 1)) ? slash + 1 : fname;
 	if (!(opts & 0x01))
 	{
-		ft_putstr(slash ? slash + 1 : fname);
+		ft_putstr(slash ? slash : fname);
 		ft_putchar('\t');
 		return ;
 	}
@@ -108,7 +110,7 @@ void		print_file_infos(struct stat details, char *fname, t_params opts)
 	putfsize(details.st_size, opts & 0x40);
 	ft_putstr("\t");
 	ft_putstr(ft_strjoin(last_access, "  "));
-	ft_putendl(slash ? slash + 1 : fname);
+	ft_putendl(slash ? slash : fname);
 }
 
 /*
