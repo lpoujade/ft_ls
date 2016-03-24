@@ -20,20 +20,7 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 	tmp = *fflist;
 	while (tmp)
 	{
-		if (tmp->fcount)
-		{
-			ft_putchar('\n');
-			ft_putstr(tmp->infos);
-			ft_putendl(":");
-			if (opts & LONG_FORMAT)
-			{
-				ft_putstr("total ");
-				ft_putnbr(tmp->fcount ? tmp->fcount : 0);
-				ft_putchar('\n');
-			}
-			tmp = (t_fileinfo *)tmp->next;
-		}
-		else if (lstat(tmp->infos, &stated_file) != -1)
+		if (!tmp->fcount && lstat(tmp->infos, &stated_file) != -1)
 		{
 			if (!(opts & ONLY_FOLD))
 				pfile_infos(stated_file, tmp->infos, opts);
@@ -45,7 +32,19 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 		}
 		else
 			perror(ft_strjoin("(lsfile.c:lstat)ls: ", tmp->infos));
-		tmp->fcount ? (void)0 : (tmp = (t_fileinfo*)tmp->next);
+		if (tmp->fcount)
+		{
+			ft_putchar('\n');
+			ft_putstr(tmp->infos);
+			ft_putendl(":");
+			if (opts & LONG_FORMAT)
+			{
+				ft_putstr("total ");
+				ft_putnbr(tmp->fcount ? tmp->fcount : 0);
+				ft_putchar('\n');
+			}
+		}
+		tmp = (t_fileinfo*)tmp->next;
 		c--;
 	}
 }
@@ -63,10 +62,8 @@ t_fileinfo		*fold_list(char *dname, t_params opts)
 			if (*dfile->d_name != '.' || opts & 0x08 ||
 					(opts & 0x20 && (ft_strcmp(dfile->d_name, ".")
 									 && ft_strcmp(dfile->d_name, ".."))))
-			{
 				fts_lstadd_nfold(&fflist,
 						ft_strjoin(dname, ft_strjoin("/", dfile->d_name)));
-			}
 		if ((closedir(ddir) != 0))
 			perror("(lsfile.c:closedir)ls: ");
 	}
