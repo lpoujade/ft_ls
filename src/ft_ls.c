@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/24 20:13:56 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/25 19:48:25 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ int		main(int ac, char **av)
 	int			ap;
 	int			end_args;
 	t_fileinfo	**file_list;
+	int 		c;
 	t_fileinfo	*new;
-	int c;
 
-	c = 0;
 	new = NULL;
+	c = 0;
 	file_list = &new;
 	end_args = 0;
 	opts = 0;
@@ -40,12 +40,5 @@ int		main(int ac, char **av)
 	if (!*file_list && ++c)
 		ft_lstinsert((t_list**)file_list, fts_new("."), &fts_strcmp);
 	eval(file_list, opts, c);
-
-//	ft_lstdel((t_list**)file_list, &ftls_del);
-//	if (file_list)
-//	{
-//		ft_putendl("not freed : ");
-//		ls_out(file_list, opts);
-//	}
 	return (errno ? 1 : 0);
 }

@@ -6,7 +6,7 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/03/23 01:00:56 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/03/25 19:52:58 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ $(NAME): $(LIB) $(OBJS)
 	@$(CC) $^ -o $@ $(LDFLAGS) $(LDLIBS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p .obj
 	@echo "compiling\033[36m" $@ "\033[0m ..."
 	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 

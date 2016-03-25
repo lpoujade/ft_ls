@@ -6,16 +6,17 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/24 21:57:47 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/25 19:14:51 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int	fts_strcmp(t_list *s1, t_list *s2)
+int			fts_strcmp(t_list *s1, t_list *s2)
 {
 	char *a;
 	char *b;
+
 	a = ((t_fileinfo*)s1)->infos;
 	b = ((t_fileinfo*)s2)->infos;
 	return (ft_strcmp(a, b));
@@ -37,7 +38,8 @@ t_list		*fts_new(char *fname)
 	return ((t_list *)new);
 }
 
-int			fts_lstinsert_list(t_fileinfo *flist, t_fileinfo *lnew, int (*f)(t_list *,t_list *))
+int			fts_lstinsert_l(t_fileinfo *flist, t_fileinfo *lnew,
+								int (*f)(t_list *, t_list *))
 {
 	if (!flist)
 	{
@@ -56,7 +58,6 @@ void		fts_lstadd_nfold(t_fileinfo **file_list, char *fname)
 
 	tmp = (*file_list);
 	new = (t_fileinfo*)fts_new(fname);
-
 	ft_lstinsert((t_list**)file_list, (t_list*)new, &fts_strcmp);
 }
 
@@ -67,7 +68,7 @@ void		ls_out(t_fileinfo *flist, t_params opts)
 	{
 		ft_putstr(flist->infos);
 		if (!(opts & LONG_FORMAT))
-				ft_putchar('\t');
+			ft_putchar('\t');
 		flist = (t_fileinfo*)flist->next;
 	}
 }
