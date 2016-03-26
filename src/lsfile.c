@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/26 18:03:57 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/26 23:52:30 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 {
 	t_fileinfo		*tmp;
 	struct stat		stated_file;
+	int				first_time;
 	int				nfile;
 
 	tmp = *fflist;
+	first_time = -1;
 	while (tmp)
 	{
 		tmp->next && !*(tmp->infos) ? tmp = (t_fileinfo*)tmp->next : 0;
@@ -32,17 +34,23 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 			(nfile != -1 && (!tmp->next) && !(opts & 0x01)) ? ft_putchar('\n') : 0;
 			ft_bzero((void**)&stated_file, sizeof(struct stat));
 		}
-		else if (!tmp->fcount)
+		else if (!tmp->fcount && first_time > -1)
 			perror(ft_strjoin("ls: lstat: ", tmp->infos));
-
-		if (tmp->fcount )
+		if (tmp->fcount)
 		{
-			ft_putchar('\n');
-			ft_putstr(tmp->infos);
-			ft_putstr(opts & 0x01 ? " (" : ":\n");
+			if (first_time)
+			{
+				ft_putchar('\n');
+				ft_putstr(tmp->infos);
+				ft_putstr(opts & 0x01 ? " (" : ":\n");
+				if (opts & LONG_FORMAT)
+				{
+					ft_putnbr(nfile);
+					ft_putendl(" files):");
+				}
+			}
 			if (opts & LONG_FORMAT)
 			{
-				ft_putnbr(nfile);ft_putendl(" files):");
 				ft_putstr("total ");
 				ft_putnbr(tmp->fcount ? tmp->fcount : 0);
 				ft_putchar('\n');
@@ -50,6 +58,7 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 		}
 		tmp = (t_fileinfo*)tmp->next;
 		c--;
+		first_time++;
 	}
 }
 
@@ -69,7 +78,7 @@ t_fileinfo		*fold_list(char *dname, t_params opts)
 					(opts & 0x20 && (ft_strcmp(dfile->d_name, ".")
 									&& ft_strcmp(dfile->d_name, ".."))))
 				ft_lstinsert((t_list**)&fflist, fts_new(ft_strjoin(dname,
-								ft_strjoin("/", dfile->d_name))), &fts_strcmp);
+								ft_strjoin("/", dfile->d_name))), opts & TIME_SORT ? &ftime_cmp : &fts_strcmp);
 		if ((closedir(ddir) != 0))
 			perror("ls: closedir: ");
 	}

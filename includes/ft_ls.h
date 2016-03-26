@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/26 17:55:55 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/26 23:54:21 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,12 @@ typedef struct			s_fileinfo
 {
 	t_list				*next;
 	t_list				*prev;
+	t_list				*(*lastnode)(t_list*);
 	char				*infos;
 	int					fcount;
 }						t_fileinfo;
+
+t_list			*lastnode(t_list *node);
 
 void			eval(t_fileinfo **fflist, t_params opts, int c);
 t_fileinfo		*fold_list(char *dname, t_params opts);
@@ -59,5 +62,5 @@ t_list			*fts_new(char *fname);
 int				fts_strcmp(t_list *s1, t_list *s2);
 int				fts_lstinsert_l(t_fileinfo *flist, t_fileinfo *lnew,
 		int (*f)(t_list *, t_list *));
-int				fts_foldstrcmp(t_list *s1, t_list *s2);
+int			ftime_cmp(t_list *f1, t_list *f2);
 #endif
