@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/25 19:48:25 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/26 15:39:07 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,27 @@ int		main(int ac, char **av)
 {
 	t_params	opts;
 	int			ap;
-	int			end_args;
-	t_fileinfo	**file_list;
-	int 		c;
-	t_fileinfo	*new;
+	int			eargs;
+	t_fileinfo	*file_list;
+	int			c;
 
-	new = NULL;
 	c = 0;
-	file_list = &new;
-	end_args = 0;
+	file_list = NULL;
+	eargs = 0;
 	opts = 0;
 	ap = 0;
 	while (++ap < ac)
 	{
-		if (*av[ap] == '-' && !end_args)
-			*(av[ap] + 1) == '-' ? end_args = 1 : (opts |= parse_args(av[ap] + 1));
+		if (*av[ap] == '-' && !eargs)
+			*(av[ap] + 1) == '-' ? eargs = 1 : (opts |= parse_args(av[ap] + 1));
 		else
 		{
-			ft_lstinsert((t_list**)file_list, fts_new(av[ap]), &fts_strcmp);
+			ft_lstinsert((t_list**)&file_list, fts_new(av[ap]), &fts_strcmp);
 			c++;
 		}
 	}
-	if (!*file_list && ++c)
-		ft_lstinsert((t_list**)file_list, fts_new("."), &fts_strcmp);
-	eval(file_list, opts, c);
+	if (!file_list && ++c)
+		ft_lstinsert((t_list**)&file_list, fts_new("."), &fts_strcmp);
+	eval(&file_list, opts, c);
 	return (errno ? 1 : 0);
 }

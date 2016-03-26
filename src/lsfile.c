@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/25 19:51:16 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/26 18:03:57 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,33 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 {
 	t_fileinfo		*tmp;
 	struct stat		stated_file;
+	int				nfile;
 
 	tmp = *fflist;
 	while (tmp)
 	{
+		tmp->next && !*(tmp->infos) ? tmp = (t_fileinfo*)tmp->next : 0;
 		if (!tmp->fcount && lstat(tmp->infos, &stated_file) != -1)
 		{
-			if (!(opts & ONLY_FOLD) && tmp->prev && tmp->prev->prev)
+			if (!(opts & ONLY_FOLD) )
 				pfile_infos(stated_file, tmp->infos, opts);
 			if (stated_file.st_mode & S_IFDIR && (opts & 0x04 || c > 0))
-				fts_lstinsert_l(tmp, fold_list(tmp->infos, opts), &fts_strcmp);
-			((!tmp->next) && !(opts & 0x01)) ? ft_putchar('\n') : 0;
+				nfile = fts_lstinsert_l(tmp,
+						fold_list(tmp->infos, opts), &fts_strcmp);
+			(nfile != -1 && (!tmp->next) && !(opts & 0x01)) ? ft_putchar('\n') : 0;
 			ft_bzero((void**)&stated_file, sizeof(struct stat));
 		}
 		else if (!tmp->fcount)
-			perror(ft_strjoin("(lsfile.c:lstat)ls: ", tmp->infos));
+			perror(ft_strjoin("ls: lstat: ", tmp->infos));
 
-		if (tmp->fcount)
+		if (tmp->fcount )
 		{
 			ft_putchar('\n');
 			ft_putstr(tmp->infos);
-			ft_putendl(":");
+			ft_putstr(opts & 0x01 ? " (" : ":\n");
 			if (opts & LONG_FORMAT)
 			{
+				ft_putnbr(nfile);ft_putendl(" files):");
 				ft_putstr("total ");
 				ft_putnbr(tmp->fcount ? tmp->fcount : 0);
 				ft_putchar('\n');
@@ -58,18 +62,18 @@ t_fileinfo		*fold_list(char *dname, t_params opts)
 	fflist = NULL;
 	if ((ddir = opendir(dname)))
 	{
-		fts_lstadd_nfold(&fflist, dname);
-		fflist->fcount = 2;
+		ft_lstinsert((t_list**)&fflist, fts_new(dname), &fts_strcmp);
+		fflist->fcount = 4577;
 		while ((dfile = readdir(ddir)))
 			if (*dfile->d_name != '.' || opts & 0x08 ||
 					(opts & 0x20 && (ft_strcmp(dfile->d_name, ".")
 									&& ft_strcmp(dfile->d_name, ".."))))
-				fts_lstadd_nfold(&fflist,
-						ft_strjoin(dname, ft_strjoin("/", dfile->d_name)));
+				ft_lstinsert((t_list**)&fflist, fts_new(ft_strjoin(dname,
+								ft_strjoin("/", dfile->d_name))), &fts_strcmp);
 		if ((closedir(ddir) != 0))
-			perror("(lsfile.c:closedir)ls: ");
+			perror("ls: closedir: ");
 	}
 	else
-		perror(ft_strjoin("(lsfile.c:opendir)ls: ", dname));
-	return ((fflist ? fflist : (t_fileinfo*)fts_new("")));
+		perror(ft_strjoin("ls: opendir: ", dname));
+	return (fflist);
 }

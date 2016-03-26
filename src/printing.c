@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/24 21:28:38 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/26 15:35:27 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,11 @@ void		pfile_infos(struct stat details, char *fname, t_params opts)
 	struct passwd	*user_infos;
 	struct group	*gr_infos;
 	char			*last_access;
+	char			link[1024];
 	char			*slash;
 
 	if ((slash = ft_strrchr(fname, '/')))
-		slash = (*(slash + 1)) ? slash + 1 : fname;
+		slash = (*(slash + 1)) ? slash + 1 : fname;
 	if (!(opts & 0x01))
 	{
 		ft_putstr(slash ? slash : fname);
@@ -99,6 +100,8 @@ void		pfile_infos(struct stat details, char *fname, t_params opts)
 	}
 	last_access = ctime(&details.st_atime);
 	last_access[24] = 0;
+	if (S_ISLNK(details.st_mode))
+		link[readlink(fname, link, 1024)] = 0;
 	!(opts & 0x80) ? user_infos = getpwuid(details.st_uid) : (void)0;
 	gr_infos = getgrgid(details.st_gid);
 	ft_putchar(file_mode(details.st_mode));
@@ -110,29 +113,32 @@ void		pfile_infos(struct stat details, char *fname, t_params opts)
 	putfsize(details.st_size, opts & 0x40);
 	ft_putstr("\t");
 	ft_putstr(ft_strjoin(last_access, "  "));
-	ft_putendl(slash ? slash : fname);
+	if (S_ISLNK(details.st_mode))
+		ft_putendl(ft_strjoin(slash ? slash : fname, ft_strjoin(" -> ", link)));
+	else
+		ft_putendl(slash ? slash : fname);
 }
 
 /*
-** void		parse_file_infos(char **fname, struct stat *details)
-** {
-** 	char			*infos;
-** 	struct passwd	*user_infos;
-** 	struct group	*gr_infos;
-**
-** 	infos = ft_strnew(55 + ft_strlen(*fname));
-** 	user_infos = getpwuid(details->st_uid);
-** 	gr_infos = getgrgid(details->st_gid);
-** 	*infos = file_mode(details->st_mode);
-** 	ft_strcat(infos, "(riights)"); ft_strcat(infos, "  ");
-** 	ft_strcat(infos, ft_itoa(details->st_nlink)); ft_strcat(infos, "   ");
-** 	ft_strcat(infos, user_infos->pw_name); ft_strcat(infos, "   ");
-** 	ft_strcat(infos, gr_infos->gr_name); ft_strcat(infos, "   ");
-** 	ft_strcat(infos, ctime(&details->st_atime));
-** 	infos[ft_strlen(infos) - 1] = 0; ft_strcat(infos, "   ");
-** 	ft_strcat(infos, *fname);
-** 	ft_strcat(infos, "\n");
-** 	ft_strdel(fname);
-** 	*fname = infos;
-** }
+void		parse_file_infos(char **fname, struct stat *details)
+{
+	char			*infos;
+	struct passwd	*user_infos;
+	struct group	*gr_infos;
+
+	infos = ft_strnew(55 + ft_strlen(*fname));
+	user_infos = getpwuid(details->st_uid);
+	gr_infos = getgrgid(details->st_gid);
+	*infos = file_mode(details->st_mode);
+	ft_strcat(infos, "(riights)"); ft_strcat(infos, "  ");
+	ft_strcat(infos, ft_itoa(details->st_nlink)); ft_strcat(infos, "   ");
+	ft_strcat(infos, user_infos->pw_name); ft_strcat(infos, "   ");
+	ft_strcat(infos, gr_infos->gr_name); ft_strcat(infos, "   ");
+	ft_strcat(infos, ctime(&details->st_atime));
+	infos[ft_strlen(infos) - 1] = 0; ft_strcat(infos, "   ");
+	ft_strcat(infos, *fname);
+	ft_strcat(infos, "\n");
+	ft_strdel(fname);
+	*fname = infos;
+}
 */
