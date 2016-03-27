@@ -41,17 +41,17 @@ void		ls_out(t_fileinfo *flist, t_params opts)
 int			ftime_cmp(t_list *f1, t_list *f2)
 {
 	struct stat		file;
-	struct timespec	fst;
+	time_t			fst;
 
 	if ((lstat(((t_fileinfo*)f1)->infos, &file) == -1))
 		perror("ls: lstat: ");
-	fst = file.st_atimespec;
+	fst = file.st_atime;
 	ft_bzero(&file, sizeof(struct stat));
 	if ((lstat(((t_fileinfo*)f2)->infos, &file) == -1))
 		perror("ls: lstat: ");
-	if (fst > file.st_atime)
+	if ((double)fst > (double)file.st_atime)
 		return (1);
-	if (fst < file.st_atime)
+	if ((double)fst < (double)file.st_atime)
 		return (-1);
 	return (0);
 }
