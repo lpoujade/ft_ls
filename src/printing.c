@@ -6,11 +6,29 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/26 15:35:27 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/27 21:15:43 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+static void	print_typef_lastchar(mode_t f)
+{
+	char c;
+
+	c = ' ';
+	if (S_ISLNK(f))
+		c = '@';
+	if (S_ISREG(f) && f & S_IXUSR)
+		c = '*';
+	if (S_ISFIFO(f))
+		c = '|';
+	if (S_ISSOCK(f))
+		c = '=';
+	if (S_ISDIR(f))
+		c = '/';
+	ft_putchar(c);
+}
 
 static char	file_mode(mode_t f)
 {
@@ -27,8 +45,6 @@ static char	file_mode(mode_t f)
 		c = 'c';
 	if (S_ISBLK(f))
 		c = 'b';
-	if (S_ISLNK(f))
-		c = 'l';
 	if (S_ISSOCK(f))
 		c = 's';
 	if (S_ISDIR(f))
@@ -95,6 +111,8 @@ void		pfile_infos(struct stat details, char *fname, t_params opts)
 	if (!(opts & 0x01))
 	{
 		ft_putstr(slash ? slash : fname);
+		if (opts & ADD_FTYPE)
+			print_typef_lastchar(details.st_mode);
 		ft_putchar('\t');
 		return ;
 	}
@@ -113,10 +131,12 @@ void		pfile_infos(struct stat details, char *fname, t_params opts)
 	putfsize(details.st_size, opts & 0x40);
 	ft_putstr("\t");
 	ft_putstr(ft_strjoin(last_access, "  "));
+	ft_putstr(slash ? slash : fname);
 	if (S_ISLNK(details.st_mode))
-		ft_putendl(ft_strjoin(slash ? slash : fname, ft_strjoin(" -> ", link)));
-	else
-		ft_putendl(slash ? slash : fname);
+		ft_putstr(ft_strjoin(" -> ", link));
+	if (opts & ADD_FTYPE)
+		print_typef_lastchar(details.st_mode);
+	ft_putchar('\n');
 }
 
 /*

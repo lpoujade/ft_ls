@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/26 23:52:30 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/27 20:47:03 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 		tmp->next && !*(tmp->infos) ? tmp = (t_fileinfo*)tmp->next : 0;
 		if (!tmp->fcount && lstat(tmp->infos, &stated_file) != -1)
 		{
-			if (!(opts & ONLY_FOLD) )
+			if (!(opts & ONLY_FOLD) && first_time > -1)
 				pfile_infos(stated_file, tmp->infos, opts);
 			if (stated_file.st_mode & S_IFDIR && (opts & 0x04 || c > 0))
 				nfile = fts_lstinsert_l(tmp,
@@ -38,7 +38,7 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 			perror(ft_strjoin("ls: lstat: ", tmp->infos));
 		if (tmp->fcount)
 		{
-			if (first_time)
+			if (first_time > 0)
 			{
 				ft_putchar('\n');
 				ft_putstr(tmp->infos);
