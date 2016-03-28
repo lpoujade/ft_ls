@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/28 12:48:53 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/28 18:59:00 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,15 @@ t_list			*lastnode(t_list *node);
 
 void			eval(t_fileinfo **fflist, t_params opts, int c);
 t_fileinfo		*fold_list(char *dname, t_params opts);
-void			pfile_infos(struct stat details, char *fname, t_params opts);
+char			*pfile_infos(struct stat details, char *fname, t_params opts);
 
 t_params		parse_args(char *av);
 
 void			ls_out(t_fileinfo *flist, t_params opts);
-void			ftls_del(void *no);
+void			fts_del(void *no);
 t_list			*fts_new(char *fname);
 int				fts_strcmp(t_list *s1, t_list *s2);
-int				fts_lstinsert_l(t_fileinfo *flist, t_fileinfo *lnew,
-		int (*f)(t_list *, t_list *));
+int				fts_lstinsert_l(t_fileinfo *flist, t_fileinfo *lnew, int
+		(*f)(t_list *, t_list *));
 int			ftime_cmp(t_list *f1, t_list *f2);
 #endif

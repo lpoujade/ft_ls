@@ -6,28 +6,28 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/28 13:32:13 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/28 18:03:03 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void	print_typef_lastchar(mode_t f)
+static char	print_typef_lastchar(mode_t f)
 {
 	char c;
 
 	c = ' ';
 	if (S_ISLNK(f))
 		c = '@';
-	if (S_ISREG(f) && f & S_IXUSR)
+	else if (S_ISREG(f) && f & S_IXUSR)
 		c = '*';
-	if (S_ISFIFO(f))
+	else if (S_ISFIFO(f))
 		c = '|';
-	if (S_ISSOCK(f))
+	else if (S_ISSOCK(f))
 		c = '=';
-	if (S_ISDIR(f))
+	else if (S_ISDIR(f))
 		c = '/';
-	ft_putchar(c);
+	return (c);
 }
 
 static char	file_mode(mode_t f)
@@ -52,34 +52,82 @@ static char	file_mode(mode_t f)
 	return (c);
 }
 
-static void	ft_print_fmode(mode_t details)
+static char	*ft_print_fmode(mode_t details)
 {
-	details & S_IRUSR ? ft_putchar('r') : ft_putchar('-');
-	details & S_IWUSR ? ft_putchar('w') : ft_putchar('-');
+	char	*rights;
+	int		i;
+
+	i = 0;
+	rights = (char*)malloc(10);
+	rights[0] = details & S_IRUSR ? 'r' : '-';
+	rights[1] = details & S_IWUSR ? 'w' : '-';
 	if (details & S_IXUSR && details & S_ISUID)
-		ft_putchar('s');
+		rights[2] = 's';
 	else if (details & S_ISUID)
-		ft_putchar('S');
+		rights[2] = 'S';
 	else if (details & S_IXUSR)
-		ft_putchar('x');
+		rights[2] = 'x';
 	else
-		ft_putchar('-');
-	details & S_IRGRP ? ft_putchar('r') : ft_putchar('-');
-	details & S_IWGRP ? ft_putchar('w') : ft_putchar('-');
+		rights[2] = '-';
+	rights[3] = details & S_IRGRP ? 'r' : '-';
+	rights[4] = details & S_IWGRP ? 'w' : '-';
 	if (details & S_IXGRP && details & S_ISGID)
-		ft_putchar('s');
+		rights[5] = 's';
 	else if (details & S_ISGID)
-		ft_putchar('S');
+		rights[5] = 'S';
 	else if (details & S_IXGRP)
-		ft_putchar('x');
+		rights[5] = 'x';
 	else
-		ft_putchar('-');
-	details & S_IROTH ? ft_putchar('r') : ft_putchar('-');
-	details & S_IWOTH ? ft_putchar('w') : ft_putchar('-');
-	details & S_IXGRP ? ft_putchar('x') : ft_putchar('-');
-	ft_putstr("  ");
+		rights[5] = '-';
+	rights[6] = details & S_IROTH ? 'r' : '-';
+	rights[7] = details & S_IWOTH ? 'w' : '-';
+	rights[8] = details & S_IXGRP ? 'x' : '-';
+	rights[9] = 0;
+	return (rights);
 }
 
+char		*pfile_infos(struct stat details, char *fname, t_params opts)
+{
+	char			*infos;
+	char			*tmp;
+	struct passwd	*user_infos;
+	struct group	*gr_infos;
+	char			*slash;
+
+	if (!(opts & FULL_NAMES) && (slash = ft_strrchr(fname, '/')))
+		slash = (*(slash + 1)) ? slash + 1 : fname;
+	else
+		slash = fname;
+	tmp = (char *)malloc(100);
+	if (!(opts & 0x01))
+	{
+		return (slash);
+		if (opts & ADD_FTYPE)
+			print_typef_lastchar(details.st_mode);
+		ft_putchar('\t');
+	}
+	user_infos = getpwuid(details.st_uid);
+	gr_infos = getgrgid(details.st_gid);
+	infos = (char *)malloc(55 + ft_strlen(fname));
+	*infos = file_mode(details.st_mode);
+	ft_strcat(infos, ft_print_fmode(details.st_mode));
+	ft_strcat(infos, "  ");
+	ft_strcat(infos, ft_itoa(details.st_nlink));
+	ft_strcat(infos, "  ");
+	ft_strcat(infos, user_infos->pw_name);
+	ft_strcat(infos, "  ");
+	ft_strcat(infos, gr_infos->gr_name);
+	ft_strcat(infos, "  ");
+	ft_strcat(infos, ft_itoa(details.st_size));
+	ft_strcat(infos, details.st_size >= 100 ? "  " : "    ");
+	ft_strncat(infos, ctime(&details.st_mtime) + 4, 12);
+	ft_strcat(infos, "  ");
+	ft_strcat(infos, slash);
+	ft_strcat(infos, "\n\0");
+	return (infos);
+}
+
+/*
 static void	putfsize(off_t bytes, int hreadable)
 {
 	if (!hreadable)
@@ -96,71 +144,5 @@ static void	putfsize(off_t bytes, int hreadable)
 			ft_putchar('K');
 		}
 	}
-}
-
-void		pfile_infos(struct stat details, char *fname, t_params opts)
-{
-	struct passwd	*user_infos;
-	struct group	*gr_infos;
-	char			*last_access;
-	char			link[1024];
-	char			time[20];
-	char			*slash;
-
-	if (!(opts & FULL_NAMES) && (slash = ft_strrchr(fname, '/')))
-		slash = (*(slash + 1)) ? slash + 1 : fname;
-	if (!(opts & 0x01))
-	{
-		ft_putstr(slash ? slash : fname);
-		if (opts & ADD_FTYPE)
-			print_typef_lastchar(details.st_mode);
-		ft_putchar('\t');
-		return ;
-	}
-	last_access = ctime(&details.st_mtime);
-	last_access[24] = 0;
-	ft_strncpy(time, last_access + 4, 12);
-	if (S_ISLNK(details.st_mode))
-		link[readlink(fname, link, 1024)] = 0;
-	!(opts & 0x80) ? user_infos = getpwuid(details.st_uid) : (void)0;
-	gr_infos = getgrgid(details.st_gid);
-	ft_putchar(file_mode(details.st_mode));
-	ft_print_fmode(details.st_mode);
-	ft_putnbr(details.st_nlink);
-	ft_putstr("  ");
-	!(opts & 0x80) ? ft_putstr(ft_strjoin(user_infos->pw_name, "  ")) : (void)0;
-	ft_putstr(ft_strjoin(gr_infos->gr_name, "  "));
-	putfsize(details.st_size, opts & 0x40);
-	ft_putstr("\t");
-	ft_putstr(ft_strjoin(time, "  "));
-	ft_putstr(slash ? slash : fname);
-	if (S_ISLNK(details.st_mode))
-		ft_putstr(ft_strjoin(" -> ", link));
-	if (opts & ADD_FTYPE)
-		print_typef_lastchar(details.st_mode);
-	ft_putchar('\n');
-}
-
-/*
-void		parse_file_infos(char **fname, struct stat *details)
-{
-	char			*infos;
-	struct passwd	*user_infos;
-	struct group	*gr_infos;
-
-	infos = ft_strnew(55 + ft_strlen(*fname));
-	user_infos = getpwuid(details->st_uid);
-	gr_infos = getgrgid(details->st_gid);
-	*infos = file_mode(details->st_mode);
-	ft_strcat(infos, "(riights)"); ft_strcat(infos, "  ");
-	ft_strcat(infos, ft_itoa(details->st_nlink)); ft_strcat(infos, "   ");
-	ft_strcat(infos, user_infos->pw_name); ft_strcat(infos, "   ");
-	ft_strcat(infos, gr_infos->gr_name); ft_strcat(infos, "   ");
-	ft_strcat(infos, ctime(&details->st_atime));
-	infos[ft_strlen(infos) - 1] = 0; ft_strcat(infos, "   ");
-	ft_strcat(infos, *fname);
-	ft_strcat(infos, "\n");
-	ft_strdel(fname);
-	*fname = infos;
 }
 */
