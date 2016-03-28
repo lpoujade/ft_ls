@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/27 21:15:43 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/28 13:32:13 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,10 @@ void		pfile_infos(struct stat details, char *fname, t_params opts)
 	struct group	*gr_infos;
 	char			*last_access;
 	char			link[1024];
+	char			time[20];
 	char			*slash;
 
-	if ((slash = ft_strrchr(fname, '/')))
+	if (!(opts & FULL_NAMES) && (slash = ft_strrchr(fname, '/')))
 		slash = (*(slash + 1)) ? slash + 1 : fname;
 	if (!(opts & 0x01))
 	{
@@ -116,8 +117,9 @@ void		pfile_infos(struct stat details, char *fname, t_params opts)
 		ft_putchar('\t');
 		return ;
 	}
-	last_access = ctime(&details.st_atime);
+	last_access = ctime(&details.st_mtime);
 	last_access[24] = 0;
+	ft_strncpy(time, last_access + 4, 12);
 	if (S_ISLNK(details.st_mode))
 		link[readlink(fname, link, 1024)] = 0;
 	!(opts & 0x80) ? user_infos = getpwuid(details.st_uid) : (void)0;
@@ -130,7 +132,7 @@ void		pfile_infos(struct stat details, char *fname, t_params opts)
 	ft_putstr(ft_strjoin(gr_infos->gr_name, "  "));
 	putfsize(details.st_size, opts & 0x40);
 	ft_putstr("\t");
-	ft_putstr(ft_strjoin(last_access, "  "));
+	ft_putstr(ft_strjoin(time, "  "));
 	ft_putstr(slash ? slash : fname);
 	if (S_ISLNK(details.st_mode))
 		ft_putstr(ft_strjoin(" -> ", link));

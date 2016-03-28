@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/27 21:06:19 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/28 12:48:53 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define HIDE_OWNER		0x80
 # define ONLY_FOLD		0x100
 # define ADD_FTYPE		0x200
+# define FULL_NAMES		0x400
 
 typedef int				t_params;
 

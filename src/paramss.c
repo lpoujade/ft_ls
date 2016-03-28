@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 23:37:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/27 21:06:00 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/28 12:56:27 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ t_params	parse_args(char *av)
 			opts |= ONLY_FOLD;
 		else if (*av == 'F')
 			opts |= ADD_FTYPE;
+		else if (*av == 'B')
+			opts |= FULL_NAMES;
 		else
 			err_exit(*av);
 		av++;
