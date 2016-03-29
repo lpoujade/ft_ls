@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/28 18:23:58 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/29 16:10:26 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 		if (!tmp->fcount && lstat(tmp->infos, &stated_file) != -1)
 		{
 			if (!(opts & ONLY_FOLD) && first_time > -1)
-				ft_putstr(tmp->formatted);
 				ft_putstr(pfile_infos(stated_file, tmp->infos, opts));
 			if (stated_file.st_mode & S_IFDIR && (opts & 0x04 || c > 0))
 				nfile = fts_lstinsert_l(*fflist,
@@ -81,9 +80,9 @@ t_fileinfo		*fold_list(char *dname, t_params opts)
 			if (*dfile->d_name != '.' || opts & 0x08 ||
 					(opts & 0x20 && (ft_strcmp(dfile->d_name, ".")
 									&& ft_strcmp(dfile->d_name, ".."))))
-				(ft_lstinsert((t_list**)&fflist, fts_new(ft_strjoin(dname,
+				ft_lstinsert((t_list**)&fflist, fts_new(ft_strjoin(dname,
 								ft_strjoin("/", dfile->d_name))),
-						opts & TIME_SORT ? &ftime_cmp : &fts_strcmp))
+						opts & TIME_SORT ? &ftime_cmp : &fts_strcmp);
 		if ((closedir(ddir) != 0))
 			perror("ls: closedir: ");
 	}

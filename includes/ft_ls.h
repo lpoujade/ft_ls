@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/28 18:59:00 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/29 15:59:23 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef struct			s_fileinfo
 {
 	t_list				*next;
 	t_list				*prev;
-	t_list				*(*lastnode)(t_list*);
 	char				*infos;
 	int					fcount;
 }						t_fileinfo;
