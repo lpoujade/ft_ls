@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/30 11:17:33 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/01 16:13:55 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,4 @@ void		fts_del(void *no)
 
 	node = (t_fileinfo *)no;
 	free (&node);
-}
-
-t_list		*lastnode(t_list *node)
-{
-	t_list	*tmp;
-
-	tmp = node;
-	while (tmp->next && tmp->next->next)
-		tmp = tmp->next;
-	return (tmp->prev);
 }

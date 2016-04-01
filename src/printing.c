@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/30 13:57:30 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/01 16:45:38 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,20 @@ int			pfile_infos(char **buff, char *fname, t_params opts)
 
 	(void)buff;
 	if (lstat(fname, &details) == -1)
+	{
+		perror(ft_strjoin("ls: lstat: ", fname));
 		return (-1);
+	}
 	if (!(opts & FULL_NAMES) && (slash = ft_strrchr(fname, '/')))
 		slash = (*(slash + 1)) ? slash + 1 : fname;
 	else
 		slash = fname;
 	if (!(opts & 0x01))
 	{
+		//if (opts & ADD_FTYPE)
+		//	print_typef_lastchar(details.st_mode);
 		*buff = ft_strdup(slash);
 		return (details.st_size);
-		if (opts & ADD_FTYPE)
-			print_typef_lastchar(details.st_mode);
 	}
 	ui = getpwuid(details.st_uid);
 	gi = getgrgid(details.st_gid);

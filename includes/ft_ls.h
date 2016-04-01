@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/30 11:19:42 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/01 17:00:10 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # define ADD_FTYPE		0x200
 # define FULL_NAMES		0x400
 
-typedef int				t_params;
+typedef unsigned int	t_params;
 
 typedef struct			s_fileinfo
 {
@@ -50,14 +50,10 @@ typedef struct			s_fileinfo
 	int					fcount;
 }						t_fileinfo;
 
-t_list			*lastnode(t_list *node);
-
+t_params		parse_args(char *av);
 void			eval(t_fileinfo **fflist, t_params opts, int c);
 t_fileinfo		*fold_list(char *dname, t_params opts);
 int				pfile_infos(char **buff, char *fname, t_params opts);
-
-t_params		parse_args(char *av);
-
 void			ls_out(t_fileinfo *flist, t_params opts);
 void			fts_del(void *no);
 t_list			*fts_new(char *fname);
