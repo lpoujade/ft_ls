@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 23:37:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/28 12:56:27 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/30 13:51:10 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ t_params	parse_args(char *av)
 			opts |= TIME_SORT;
 		else if (*av == 'A')
 			opts |= ALMOST_ALL;
-		else if (*av == 'h')
-			opts |= HUMAN_READ;
+//		else if (*av == 'h')
+//			opts |= HUMAN_READ;
 		else if (*av == 'g')
 			opts |= HIDE_OWNER | LONG_FORMAT;
 		else if (*av == 'D')

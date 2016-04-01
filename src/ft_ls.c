@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/28 18:16:24 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/03/30 14:24:17 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ int		main(int ac, char **av)
 			*(av[ap] + 1) == '-' ? eargs = 1 : (opts |= parse_args(av[ap] + 1));
 		else
 		{
-			ft_lstinsert((t_list**)&file_list, fts_new(av[ap]), &fts_strcmp);
+			ft_lstinsert((t_list**)&file_list, fts_new(av[ap]),
+					opts&TIME_SORT ? &ftime_cmp : &fts_strcmp);
 			c++;
 		}
 	}
