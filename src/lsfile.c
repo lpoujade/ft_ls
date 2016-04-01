@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/01 17:15:46 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/01 20:30:16 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,19 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 	t_fileinfo		*tmp;
 	int				first_time;
 
+	(void)c;
 	tmp = *fflist;
 	first_time = -1;
+/*
+	while (tmp)
+	{
+		pfile_infos(&tmp->details, tmp->infos, opts);
+		ft_putstr(tmp->details);
+		!(opts & LONG_FORMAT) ? ft_putchar('\t') : 0;
+		tmp = (t_fileinfo *)tmp->next;
+	}
+	!(opts & LONG_FORMAT) ? ft_putchar('\n') : 0;
+*/
 	while (tmp)
 	{
 		if ((!tmp->details))
@@ -44,7 +55,7 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 		if (*tmp->details == 'd' && !tmp->fcount && (opts & 0x04 || c > 0))
 			fts_lstinsert_l(tmp,
 					fold_list(tmp->infos, opts), &fts_strcmp);
-		if (*tmp->details == 'd')
+		else if (*tmp->details == 'd' && tmp->fcount)
 			pdir_infos(tmp, first_time, opts);
 		else
 			ft_putstr(tmp->details);
@@ -58,7 +69,6 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 
 t_fileinfo		*fold_list(char *dname, t_params opts)
 {
-	ft_putendl("unfold");
 	DIR					*ddir;
 	struct dirent		*dfile;
 	t_fileinfo			*fflist;
@@ -71,14 +81,13 @@ t_fileinfo		*fold_list(char *dname, t_params opts)
 	ft_lstinsert((t_list**)&fflist, fts_new(dname), &fts_strcmp);
 	fsizes = &fflist->fcount;
 	while ((dfile = readdir(ddir)))
-		if (*dfile->d_name != '.' || opts & 0x08 ||
-				(opts & 0x20 && (ft_strcmp(dfile->d_name, ".")
+		if ((opts & 0x20 && (ft_strcmp(dfile->d_name, ".")
 								 && ft_strcmp(dfile->d_name, ".."))))
 		{
-			details = ((t_fileinfo*)ft_lstinsert((t_list**)&fflist, fts_new(ft_strjoin(dname,
-								ft_strjoin("/", dfile->d_name))),
+			details = ((t_fileinfo*)ft_lstinsert((t_list**)&fflist,
+						fts_new(ft_strjoin(dname, ft_strjoin("/", dfile->d_name))),
 						opts & TIME_SORT ? &ftime_cmp : &fts_strcmp))->details;
-			*fsizes += pfile_infos(&details, dfile->d_name, opts) / 512;
+			*fsizes += pfile_infos(&details, dfile->d_name, opts);
 		}
 	if ((closedir(ddir) != 0))
 		perror("ls: closedir: ");

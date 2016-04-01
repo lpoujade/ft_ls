@@ -6,7 +6,7 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/03/26 15:56:01 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/04/01 18:55:56 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ SRCDIR=./src
 OBJDIR=./.obj
 
 CC=clang
-CFLAGS=-Wall -Werror -Wextra -g -Wno-unicode-whitespace
+CFLAGS=-Wall -Werror -Wextra -g -Wno-unicode-whitespace -Wno-unused-function
 CPPFLAGS=-Iincludes/ -Ilibft/includes
 
 LDFLAGS=-Llibft/
