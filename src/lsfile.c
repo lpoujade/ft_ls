@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/01 20:30:16 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/02 12:57:43 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void		pdir_infos(t_fileinfo *dir,
 {
 	if (first_time > 0)
 	{
-		ft_putchar('\n');
+		ft_putstr(opts & LONG_FORMAT ? "\n" : "\n\n");
 		ft_putstr(dir->infos);
 		ft_putstr(":\n");
 	}
@@ -34,19 +34,27 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 	t_fileinfo		*tmp;
 	int				first_time;
 
-	(void)c;
 	tmp = *fflist;
-	first_time = -1;
-/*
+	first_time = c;
 	while (tmp)
 	{
-		pfile_infos(&tmp->details, tmp->infos, opts);
-		ft_putstr(tmp->details);
-		!(opts & LONG_FORMAT) ? ft_putchar('\t') : 0;
+		!tmp->details ? pfile_infos(tmp, tmp->infos, opts) : 0;
+		if ((opts & RECURSIVE || c > 0) && (*tmp->details == 'd' || tmp->fcount == -1))
+			fts_lstinsert_l(tmp, fold_list(tmp->infos, opts), &fts_strcmp);
+		else if (tmp->fcount)
+			pdir_infos(tmp, (first_time != c + 1), opts);
+		else
+		{
+			//ft_putstr(opts & LONG_FORMAT ? tmp->details : tmp->infos);
+			ft_putstr(tmp->details);
+			!(opts & LONG_FORMAT) ? ft_putchar('\t') : 0;
+		}
 		tmp = (t_fileinfo *)tmp->next;
+		//tmp && tmp->prev ? free(tmp->prev) : 0;
+		--c;
 	}
 	!(opts & LONG_FORMAT) ? ft_putchar('\n') : 0;
-*/
+/*
 	while (tmp)
 	{
 		if ((!tmp->details))
@@ -65,6 +73,7 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 		c--;
 		first_time++;
 	}
+	*/
 }
 
 t_fileinfo		*fold_list(char *dname, t_params opts)
@@ -72,7 +81,7 @@ t_fileinfo		*fold_list(char *dname, t_params opts)
 	DIR					*ddir;
 	struct dirent		*dfile;
 	t_fileinfo			*fflist;
-	char				*details;
+	t_fileinfo			*node;
 	int					*fsizes;
 
 	fflist = NULL;
@@ -81,13 +90,13 @@ t_fileinfo		*fold_list(char *dname, t_params opts)
 	ft_lstinsert((t_list**)&fflist, fts_new(dname), &fts_strcmp);
 	fsizes = &fflist->fcount;
 	while ((dfile = readdir(ddir)))
-		if ((opts & 0x20 && (ft_strcmp(dfile->d_name, ".")
-								 && ft_strcmp(dfile->d_name, ".."))))
+		if ((opts & ALMOST_ALL || *dfile->d_name != '.') &&
+				(opts & 0x20 || (ft_strcmp(dfile->d_name, ".") && ft_strcmp(dfile->d_name, ".."))))
 		{
-			details = ((t_fileinfo*)ft_lstinsert((t_list**)&fflist,
+			node = ((t_fileinfo*)ft_lstinsert((t_list**)&fflist,
 						fts_new(ft_strjoin(dname, ft_strjoin("/", dfile->d_name))),
-						opts & TIME_SORT ? &ftime_cmp : &fts_strcmp))->details;
-			*fsizes += pfile_infos(&details, dfile->d_name, opts);
+						opts & TIME_SORT ? &ftime_cmp : &fts_strcmp));
+			*fsizes += pfile_infos(node, ft_strjoin(dname, ft_strjoin("/", dfile->d_name)), opts);
 		}
 	if ((closedir(ddir) != 0))
 		perror("ls: closedir: ");

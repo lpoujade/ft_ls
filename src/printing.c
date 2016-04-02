@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/01 16:45:38 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/02 12:57:09 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,15 +86,14 @@ static char	*ft_print_fmode(mode_t details)
 	return (rights);
 }
 
-int			pfile_infos(char **buff, char *fname, t_params opts)
+int			pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 {
 	struct stat		details;
-	char			*infos;
 	struct passwd	*ui;
 	struct group	*gi;
 	char			*slash;
+	char			*infos;
 
-	(void)buff;
 	if (lstat(fname, &details) == -1)
 	{
 		perror(ft_strjoin("ls: lstat: ", fname));
@@ -108,12 +107,13 @@ int			pfile_infos(char **buff, char *fname, t_params opts)
 	{
 		//if (opts & ADD_FTYPE)
 		//	print_typef_lastchar(details.st_mode);
-		*buff = ft_strdup(slash);
-		return (details.st_size);
+		node->details = slash;
+		node->fcount = S_ISDIR(details.st_mode) ? -1 : 0;
+		return (details.st_blocks);
 	}
 	ui = getpwuid(details.st_uid);
 	gi = getgrgid(details.st_gid);
-	infos = (char *)malloc(55 + ft_strlen(fname));
+	infos = (char *)malloc(56 + ft_strlen(slash));
 	*infos = file_mode(details.st_mode);
 	ft_strcat(infos, ft_print_fmode(details.st_mode));
 	ft_strcat(infos, "  ");
@@ -128,9 +128,10 @@ int			pfile_infos(char **buff, char *fname, t_params opts)
 	ft_strncat(infos, ctime(&details.st_mtime) + 4, 12);
 	ft_strcat(infos, "  ");
 	ft_strcat(infos, slash);
+	opts & ADD_FTYPE ? *(infos + ft_strlen(infos)) =  print_typef_lastchar(details.st_mode) : 0; 
 	ft_strcat(infos, "\n\0");
-	*buff = ft_strdup(infos);
-	return (details.st_size);
+	node->details = infos;
+	return (details.st_blocks);
 }
 
 /*
