@@ -46,8 +46,9 @@ typedef struct			s_fileinfo
 	t_list				*next;
 	t_list				*prev;
 	char				*infos;
-	char				*details;
+	char				**details;
 	int					fcount;
+	int					s_size;
 }						t_fileinfo;
 
 t_params		parse_args(char *av);

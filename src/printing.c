@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-static char	print_typef_lastchar(mode_t f)
+static inline char	print_typef_lastchar(mode_t f)
 {
 	char c;
 
@@ -30,7 +30,7 @@ static char	print_typef_lastchar(mode_t f)
 	return (c);
 }
 
-static char	file_mode(mode_t f)
+static inline char	file_mode(mode_t f)
 {
 	char c;
 
@@ -52,92 +52,108 @@ static char	file_mode(mode_t f)
 	return (c);
 }
 
-static char	*ft_print_fmode(mode_t details)
+static inline char	*ft_print_fmode(mode_t details)
 {
 	char	*rights;
 	int		i;
 
 	i = 0;
-	rights = (char*)malloc(10);
-	rights[0] = details & S_IRUSR ? 'r' : '-';
-	rights[1] = details & S_IWUSR ? 'w' : '-';
+	rights = (char*)malloc(11);
+	rights[0] = file_mode(details);
+	rights[1] = details & S_IRUSR ? 'r' : '-';
+	rights[2] = details & S_IWUSR ? 'w' : '-';
 	if (details & S_IXUSR && details & S_ISUID)
-		rights[2] = 's';
+		rights[3] = 's';
 	else if (details & S_ISUID)
-		rights[2] = 'S';
+		rights[3] = 'S';
 	else if (details & S_IXUSR)
-		rights[2] = 'x';
+		rights[3] = 'x';
 	else
-		rights[2] = '-';
-	rights[3] = details & S_IRGRP ? 'r' : '-';
-	rights[4] = details & S_IWGRP ? 'w' : '-';
+		rights[3] = '-';
+	rights[4] = details & S_IRGRP ? 'r' : '-';
+	rights[5] = details & S_IWGRP ? 'w' : '-';
 	if (details & S_IXGRP && details & S_ISGID)
-		rights[5] = 's';
+		rights[6] = 's';
 	else if (details & S_ISGID)
-		rights[5] = 'S';
+		rights[6] = 'S';
 	else if (details & S_IXGRP)
-		rights[5] = 'x';
+		rights[6] = 'x';
 	else
-		rights[5] = '-';
-	rights[6] = details & S_IROTH ? 'r' : '-';
-	rights[7] = details & S_IWOTH ? 'w' : '-';
-	rights[8] = details & S_IXGRP ? 'x' : '-';
-	rights[9] = 0;
+		rights[6] = '-';
+	rights[7] = details & S_IROTH ? 'r' : '-';
+	rights[8] = details & S_IWOTH ? 'w' : '-';
+	rights[9] = details & S_IXGRP ? 'x' : '-';
+	rights[10] = 0;
 	return (rights);
+}
+
+static inline int	ndigits(int a)
+{
+	int c;
+
+	c = 0;
+	if (!a)
+		return (1);
+	while (a)
+	{
+		a /= 10;
+		c++;
+	}
+	return (c);
 }
 
 int			pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 {
-	//ft_putendl_fd(ft_strjoin("loading ", ft_strjoin(fname, " infos")), 2);
 	struct stat		details;
 	struct passwd	*ui;
 	struct group	*gi;
 	char			*slash;
-	char			*infos;
 
 	if (lstat(fname, &details) == -1)
 	{
 		perror(ft_strjoin("ls: lstat: ", fname));
 		return (-1);
 	}
+	node->s_size = ndigits(details.st_size);
+	node->fcount = S_ISDIR(details.st_mode) ? -1 : 0;
 	if (!(opts & FULL_NAMES) && (slash = ft_strrchr(fname, '/')))
 		slash = (*(slash + 1)) ? slash + 1 : fname;
 	else
 		slash = fname;
+	node->details = (char **)malloc(8);
 	if (!(opts & 0x01))
 	{
-		//if (opts & ADD_FTYPE)
-		//	print_typef_lastchar(details.st_mode);
-		node->details = slash;
-		node->fcount = S_ISDIR(details.st_mode) ? -1 : 0;
+		if (opts & ADD_FTYPE)
+		{
+			node->details[0] = ft_strnew(ft_strlen(slash) + 1);
+			ft_strcpy(node->details[0], slash);
+			node->details[0][ft_strlen(slash)] = print_typef_lastchar(details.st_mode);
+		}
+		else
+			node->details[0] = slash;
 		return (details.st_blocks);
 	}
 	ui = getpwuid(details.st_uid);
 	gi = getgrgid(details.st_gid);
-	if (!(infos = (char *)malloc(56 + 255)))
-			exit (3);
-	//infos = ft_memset(&infos, 0, 56);
-	*infos = file_mode(details.st_mode);
-	ft_strcat(infos, ft_print_fmode(details.st_mode));
-	ft_strcat(infos, "  ");
-	ft_strcat(infos, ft_itoa(details.st_nlink));
-	ft_strcat(infos, "  ");
-	ft_strcat(infos, ui->pw_name ? ui->pw_name : ft_itoa(ui->pw_uid));
-	ft_strcat(infos, "  ");
-	ft_strcat(infos, gi->gr_name ? gi->gr_name : ft_itoa(gi->gr_gid));
-	ft_strcat(infos, "  ");
-	if (S_ISCHR(details.st_mode))
-		ft_strcat(infos, ft_strjoin(ft_itoa((details.st_rdev >> 24) & 0xff), ft_strjoin(", ", ft_itoa(details.st_rdev & 0xffffff))));
+	node->details[0] = ft_strdup(ft_print_fmode(details.st_mode));
+	node->details[1] = ft_strdup(ft_itoa(details.st_nlink));
+	node->details[2] = ft_strdup(ui->pw_name ? ui->pw_name : ft_itoa(ui->pw_uid));
+	node->details[3] = ft_strdup(gi->gr_name ? gi->gr_name : ft_itoa(gi->gr_gid));
+	if (S_ISCHR(details.st_mode) || S_ISBLK(details.st_mode))
+		node->details[4] = ft_strjoin(ft_itoa(major(details.st_rdev)), ft_strjoin(", ", ft_itoa(minor(details.st_rdev))));
 	else
-		ft_strcat(infos, ft_itoa(details.st_size));
-	ft_strcat(infos, details.st_size >= 100 ? "  " : "    ");
-	ft_strncat(infos, ctime(&details.st_mtime) + 4, 12);
-	ft_strcat(infos, "  ");
-	ft_strcat(infos, slash);
-	opts & ADD_FTYPE ? *(infos + ft_strlen(infos)) =  print_typef_lastchar(details.st_mode) : 0; 
-	ft_strcat(infos, "\n\0");
-	node->details = infos;
-	node->fcount = S_ISDIR(details.st_mode) ? -1 : 0;
+		node->details[4] = ft_itoa(details.st_size);
+	node->details[5] = ft_strnew(12);
+	ft_strncpy(node->details[5], ctime(&details.st_mtime) + 4, 12);
+	if (opts & ADD_FTYPE)
+	{
+		node->details[6] = ft_strnew(ft_strlen(slash) + 1);
+		ft_strcpy(node->details[6], slash);
+		node->details[6][ft_strlen(slash)] = print_typef_lastchar(details.st_mode);
+	}
+	else
+		node->details[6] = slash;
+	node->details[7] = (char*)0;
 	return (details.st_blocks);
 }
 
