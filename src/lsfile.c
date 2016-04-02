@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/02 12:57:43 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/02 13:34:19 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void		pdir_infos(t_fileinfo *dir,
 		int first_time, t_params opts)
 {
-	if (first_time > 0)
+	if (first_time)
 	{
 		ft_putstr(opts & LONG_FORMAT ? "\n" : "\n\n");
 		ft_putstr(dir->infos);
@@ -38,14 +38,13 @@ void			eval(t_fileinfo **fflist, t_params opts, int c)
 	first_time = c;
 	while (tmp)
 	{
-		!tmp->details ? pfile_infos(tmp, tmp->infos, opts) : 0;
-		if ((opts & RECURSIVE || c > 0) && (*tmp->details == 'd' || tmp->fcount == -1))
+		!tmp->details && !tmp->fcount ? pfile_infos(tmp, tmp->infos, opts) : 0;
+		if ((opts & RECURSIVE || c > 0) && tmp->fcount == -1)
 			fts_lstinsert_l(tmp, fold_list(tmp->infos, opts), &fts_strcmp);
-		else if (tmp->fcount)
+		if (tmp->fcount > 0)
 			pdir_infos(tmp, (first_time != c + 1), opts);
-		else
+		else if (!tmp->fcount || c < 0)
 		{
-			//ft_putstr(opts & LONG_FORMAT ? tmp->details : tmp->infos);
 			ft_putstr(tmp->details);
 			!(opts & LONG_FORMAT) ? ft_putchar('\t') : 0;
 		}

@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/02 12:57:09 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/02 14:38:52 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ static char	*ft_print_fmode(mode_t details)
 
 int			pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 {
+	//ft_putendl_fd(ft_strjoin("loading ", ft_strjoin(fname, " infos")), 2);
 	struct stat		details;
 	struct passwd	*ui;
 	struct group	*gi;
@@ -113,7 +114,9 @@ int			pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 	}
 	ui = getpwuid(details.st_uid);
 	gi = getgrgid(details.st_gid);
-	infos = (char *)malloc(56 + ft_strlen(slash));
+	if (!(infos = (char *)malloc(56 + 255)))
+			exit (3);
+	//infos = ft_memset(&infos, 0, 56);
 	*infos = file_mode(details.st_mode);
 	ft_strcat(infos, ft_print_fmode(details.st_mode));
 	ft_strcat(infos, "  ");
@@ -123,7 +126,10 @@ int			pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 	ft_strcat(infos, "  ");
 	ft_strcat(infos, gi->gr_name ? gi->gr_name : ft_itoa(gi->gr_gid));
 	ft_strcat(infos, "  ");
-	ft_strcat(infos, ft_itoa(details.st_size));
+	if (S_ISCHR(details.st_mode))
+		ft_strcat(infos, ft_strjoin(ft_itoa((details.st_rdev >> 24) & 0xff), ft_strjoin(", ", ft_itoa(details.st_rdev & 0xffffff))));
+	else
+		ft_strcat(infos, ft_itoa(details.st_size));
 	ft_strcat(infos, details.st_size >= 100 ? "  " : "    ");
 	ft_strncat(infos, ctime(&details.st_mtime) + 4, 12);
 	ft_strcat(infos, "  ");
@@ -131,6 +137,7 @@ int			pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 	opts & ADD_FTYPE ? *(infos + ft_strlen(infos)) =  print_typef_lastchar(details.st_mode) : 0; 
 	ft_strcat(infos, "\n\0");
 	node->details = infos;
+	node->fcount = S_ISDIR(details.st_mode) ? -1 : 0;
 	return (details.st_blocks);
 }
 
