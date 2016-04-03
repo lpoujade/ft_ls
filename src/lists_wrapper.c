@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/01 16:13:55 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/03 16:08:56 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_list		*fts_new(char *fname)
 	new->prev = NULL;
 	new->fcount = 0;
 	new->details = NULL;
+	new->s_len = 0;
 	return ((t_list *)new);
 }
 
@@ -47,5 +48,5 @@ void		fts_del(void *no)
 	t_fileinfo	*node;
 
 	node = (t_fileinfo *)no;
-	free (&node);
+	free(&node);
 }

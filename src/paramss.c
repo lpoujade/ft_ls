@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 23:37:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/03/30 13:51:10 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/03 13:35:24 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,34 +24,24 @@ static void	err_exit(char c)
 t_params	parse_args(char *av)
 {
 	t_params	opts;
+	short int	err;
 
+	err = 0;
 	opts = 0;
 	while (*av)
 	{
-		if (*av == 'l')
-			opts |= LONG_FORMAT;
-		else if (*av == 'r')
-			opts |= REV_SORT;
-		else if (*av == 'R')
-			opts |= RECURSIVE;
-		else if (*av == 'a')
-			opts |= ALL;
-		else if (*av == 't')
-			opts |= TIME_SORT;
-		else if (*av == 'A')
-			opts |= ALMOST_ALL;
-//		else if (*av == 'h')
-//			opts |= HUMAN_READ;
-		else if (*av == 'g')
-			opts |= HIDE_OWNER | LONG_FORMAT;
-		else if (*av == 'D')
-			opts |= ONLY_FOLD;
-		else if (*av == 'F')
-			opts |= ADD_FTYPE;
-		else if (*av == 'B')
-			opts |= FULL_NAMES;
-		else
-			err_exit(*av);
+		*av == 'l' ? opts |= LONG_FORMAT : err++;
+		*av == 'r' ? opts |= REV_SORT : err++;
+		*av == 'R' ? opts |= RECURSIVE : err++;
+		*av == 'a' ? opts |= ALL : err++;
+		*av == 't' ? opts |= TIME_SORT : err++;
+		*av == 'A' ? opts |= ALMOST_ALL : err++;
+//		*av == 'h' ? opts |= HUMAN_READ : err++;
+		*av == 'g' ? opts |= HIDE_OWNER | LONG_FORMAT : err++;
+//		*av == 'D' ? opts |= ONLY_FOLD : err++;
+		*av == 'F' ? opts |= ADD_FTYPE : err++;
+		*av == 'B' ? opts |= FULL_NAMES : err++;
+		err == 9 ? err_exit(*av) : 0;
 		av++;
 	}
 	return (opts);

@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/02 12:35:15 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/03 17:27:52 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct			s_fileinfo
 	char				*infos;
 	char				**details;
 	int					fcount;
-	int					s_size;
+	int					s_len;
 }						t_fileinfo;
 
 t_params		parse_args(char *av);
