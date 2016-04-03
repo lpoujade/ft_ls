@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/02 13:34:19 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/03 12:12:20 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static inline void	st_fputstr(char **details, int nbrmax)
 	int	step;
 
 	c = 0;
-	while (*details)
+	while (*details && c <= 7)
 	{
 		if (**details)
 		{
