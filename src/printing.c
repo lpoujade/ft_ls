@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/03 18:28:08 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/04 11:57:28 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,12 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 		: ft_itoa(stated.st_size);
 	node->details[5] = ft_strnew(12);
 	ft_strncpy(node->details[5], ctime(&stated.st_mtime) + 4, 12);
+	if (S_ISLNK(stated.st_mode))
+	{
+		tmp = ft_strnew(255);
+		tmp[readlink(fname, tmp, 255)] = 0;
+		slash = ft_strjoin(slash, ft_strjoin(" -> ", tmp));
+	}
 	node->details[6] = slash;
 	node->details[7] = NULL;
 	return (stated.st_blocks);

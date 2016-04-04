@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/03 19:53:42 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/04 12:22:10 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ static inline void	pdir_infos(t_fileinfo *dir,
 		ft_putstr(dir->infos);
 		ft_putstr(":\n");
 	}
-	if (opts & LONG_FORMAT)
+	if (opts & LONG_FORMAT && dir->fcount > 0)
 	{
 		ft_putstr("total ");
-		ft_putnbr(dir->fcount ? dir->fcount : 0);
+		ft_putnbr(dir->fcount > 0 ? dir->fcount : 0);
 		ft_putchar('\n');
 	}
 }
@@ -68,7 +68,7 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 		!tmp->details && !tmp->fcount ? pfile_infos(tmp, tmp->infos, opts) : 0;
 		if ((opts & RECURSIVE || c > 0) && tmp->fcount == -1)
 			fts_lstinsert_l(tmp, fold_list(tmp->infos, opts), &fts_strcmp);
-		if (tmp->fcount > 0)
+		if (tmp->fcount > 0 || tmp->fcount == -2)
 		{
 			pdir_infos(tmp, (first_time != c + 1), opts);
 			s_len = tmp->s_len;
@@ -113,5 +113,6 @@ t_fileinfo			*fold_list(char *dname, t_params opts)
 		}
 	if ((closedir(ddir) != 0))
 		perror("ls: closedir: ");
+	!*fsizes ? *fsizes = -2 : 0;
 	return (fflist);
 }
