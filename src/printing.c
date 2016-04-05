@@ -84,6 +84,15 @@ static inline char	*ft_print_fmode(mode_t details)
 	return (rights);
 }
 
+char				*fts_date(char *act) /* to replace with f(time_t --) */
+{
+	char *date;
+
+	ret = ft_strnew(24);
+	ret = date;
+	ft_strncpy(node->details[5], ctime(&stated.st_mtime) + 4, 12);
+}
+
 int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 {
 	struct stat		stated;
@@ -127,14 +136,13 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 		ft_strjoin(ft_itoa(major(stated.st_rdev)),
 				ft_strjoin(", ", ft_itoa(minor(stated.st_rdev))))
 		: ft_itoa(stated.st_size);
-	node->details[5] = ft_strnew(12);
-	ft_strncpy(node->details[5], ctime(&stated.st_mtime) + 4, 12);
 	if (S_ISLNK(stated.st_mode))
 	{
 		tmp = ft_strnew(255);
 		tmp[readlink(fname, tmp, 255)] = 0;
 		slash = ft_strjoin(slash, ft_strjoin(" -> ", tmp));
 	}
+	node->details[5] = fts_filedate(ctime(&stated.st_mtime));
 	node->details[6] = slash;
 	node->details[7] = NULL;
 	return (stated.st_blocks);
