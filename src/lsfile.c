@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/04 12:22:10 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/05 13:22:36 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 	t_fileinfo		*tmp;
 	int				first_time;
 	int				s_len;
+	t_fileinfo		*todel;
 
 	tmp = *fflist;
 	first_time = c;
@@ -78,8 +79,10 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 			st_fputstr(tmp->details, s_len);
 			ft_putchar(!(opts & LONG_FORMAT) ? '\t' : '\n');
 		}
+		todel = tmp;
 		tmp = (t_fileinfo *)tmp->next;
-		//tmp && tmp->prev ? free(tmp->prev) : 0;
+		free (todel->details);
+		free (todel);
 		--c;
 	}
 	!(opts & LONG_FORMAT) ? ft_putchar('\n') : 0;

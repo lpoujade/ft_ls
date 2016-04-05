@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/03 16:08:56 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/05 13:25:29 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ int			fts_lstinsert_l(t_fileinfo *flist, t_fileinfo *lnew,
 
 void		fts_del(void *no)
 {
-	t_fileinfo	*node;
-
-	node = (t_fileinfo *)no;
-	free(&node);
+	if (no)
+		free (no);
 }
