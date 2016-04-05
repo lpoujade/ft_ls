@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/04 11:57:28 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/05 14:37:46 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 		slash[ft_strlen(tmp)] = print_typef_lastchar(stated.st_mode);
 	}
 	node->details = (char **)malloc(sizeof(char *) * 8);
-	//ft_bzero(&node->details, 8 * sizeof(char *));
 	if (!(opts & 0x01))
 	{
 		node->details[0] = slash;
