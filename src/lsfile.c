@@ -6,13 +6,13 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/05 16:16:19 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/06 12:25:51 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static inline void	st_fputstr(char **details, int nbrmax)
+static inline void	st_fputstr(char **details, int *nbrmax)
 {
 	int c;
 	int	step;
@@ -22,13 +22,10 @@ static inline void	st_fputstr(char **details, int nbrmax)
 	{
 		if (**details)
 		{
-			if (c == 4)
-			{
-				step = nbrmax - ft_strlen(*details);
-				if (nbrmax < 20)
-					while (step > 0 && step--)
-						write(1, " ", 1);
-			}
+			step = nbrmax[c] - ft_strlen(*details);
+			if (nbrmax[c] < 20)
+				while (step > 0 && step--)
+					write(1, " ", 1);
 			ft_putstr(*details);
 			ft_putchar(' ');
 		}
@@ -68,12 +65,13 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 {
 	t_fileinfo		*tmp;
 	int				first_time;
-	int				s_len;
+	int				*s_local;
+	int				fxdw_col[7] = {10, 10, 10, 10, 10, 10, 10};
 	t_fileinfo		*todel;
 
 	tmp = *fflist;
 	first_time = c;
-	s_len = 0;
+	s_local = NULL;
 	while (tmp)
 	{
 		!tmp->details && !tmp->fcount ? pfile_infos(tmp, tmp->infos, opts) : 0;
@@ -82,11 +80,11 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 		if (tmp->fcount > 0 || tmp->fcount == -2)
 		{
 			pdir_infos(tmp, (first_time != c + 1), opts);
-			s_len = tmp->s_len;
+			s_local = tmp->s_len;
 		}
 		else if (!tmp->fcount || c < 0)
 		{
-			st_fputstr(tmp->details, s_len);
+			st_fputstr(tmp->details, s_local ?: fxdw_col);
 			ft_putchar(!(opts & LONG_FORMAT) ? '\t' : '\n');
 		}
 		todel = tmp;
@@ -98,6 +96,17 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 	!(opts & LONG_FORMAT) ? ft_putchar('\n') : 0;
 }
 
+static inline void	adjust_cols(int *final, int *act)
+{
+	int c = 6;
+	while (c + 1)
+	{
+		if (final[c] < act[c])
+			final[c] = act[c];
+		c--;
+	}
+}
+
 t_fileinfo			*fold_list(char *dname, t_params opts)
 {
 	DIR					*ddir;
@@ -105,14 +114,14 @@ t_fileinfo			*fold_list(char *dname, t_params opts)
 	t_fileinfo			*fflist;
 	t_fileinfo			*node;
 	int					*fsizes;
-	int					*s_len;
+	int					*s_local;
 
 	fflist = NULL;
 	if (!(ddir = opendir(dname)))
 		perror(ft_strjoin("ls: opendir: ", dname));
 	ft_lstinsert((t_list**)&fflist, fts_new(dname), &fts_strcmp);
-	s_len = &fflist->s_len;
 	fsizes = &fflist->fcount;
+	s_local = fflist->s_len;
 	while ((dfile = readdir(ddir)))
 		if ((opts & ALMOST_ALL || *dfile->d_name != '.') &&
 				(opts & ALL || (ft_strcmp(dfile->d_name, ".") &&
@@ -122,7 +131,8 @@ t_fileinfo			*fold_list(char *dname, t_params opts)
 					fts_new(ft_strjoin(dname, ft_strjoin("/", dfile->d_name))),
 					((opts & TIME_SORT) ? &ftime_cmp : &fts_strcmp));
 			*fsizes += pfile_infos(node, node->infos, opts);
-			*s_len < node->s_len ? *s_len = node->s_len : 0;
+			adjust_cols(s_local, node->s_len);
+
 		}
 	if ((closedir(ddir) != 0))
 		perror("ls: closedir: ");

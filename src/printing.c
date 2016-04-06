@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/05 14:37:46 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/06 12:56:50 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,18 @@ static inline char	*ft_print_fmode(mode_t details)
 	return (rights);
 }
 
-char				*fts_date(char *act) /* to replace with f(time_t --) */
+char				*fts_date(time_t const *clock)
 {
-	char *date;
+	char 	*date;
+	char	*t_buf;
+	time_t	act;
 
-	ret = ft_strnew(24);
-	ret = date;
-	ft_strncpy(node->details[5], ctime(&stated.st_mtime) + 4, 12);
+	date = ft_strnew(13);
+	t_buf = ctime(clock);
+	date = ft_strncpy(date, t_buf + 4, 12);
+	if ((time(&act) - *clock) >= 13042800 || act < *clock)
+		ft_strncpy(date + 7, t_buf + 19, 5);
+	return (date);
 }
 
 int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
@@ -106,7 +111,6 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 		perror(ft_strjoin("ls: lstat: ", fname));
 		exit (3);
 	}
-	node->s_len = ft_getndigits(stated.st_size);
 	node->fcount = S_ISDIR(stated.st_mode) && !node->fcount ? -1 : 0;
 	if (!(opts & FULL_NAMES) && (slash = ft_strrchr(fname, '/')))
 		slash = (*(slash + 1)) ? slash + 1 : fname;
@@ -128,21 +132,21 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 	}
 	ui = getpwuid(stated.st_uid);
 	gi = getgrgid(stated.st_gid);
-	node->details[0] = ft_strdup(ft_print_fmode(stated.st_mode));
-	node->details[1] = ft_strdup(ft_itoa(stated.st_nlink));
-	node->details[2] = ft_strdup(ui->pw_name ? ui->pw_name : ft_itoa(ui->pw_uid));
-	node->details[3] = ft_strdup(gi->gr_name ? gi->gr_name : ft_itoa(gi->gr_gid));
-	node->details[4] = (S_ISCHR(stated.st_mode) || S_ISBLK(stated.st_mode)) ?
+	node->s_len[0] = ft_strlen((node->details[0] = ft_print_fmode(stated.st_mode)));
+	node->s_len[1] = ft_strlen((node->details[1] = ft_itoa(stated.st_nlink)));
+	node->s_len[2] = ft_strlen((node->details[2] = ui->pw_name ? ft_strdup(ui->pw_name) : ft_itoa(ui->pw_uid)));
+	node->s_len[3] = ft_strlen((node->details[3] = gi->gr_name ? ft_strdup(gi->gr_name) : ft_itoa(gi->gr_gid)));
+	node->s_len[4] = ft_strlen((node->details[4] = (S_ISCHR(stated.st_mode) || S_ISBLK(stated.st_mode)) ?
 		ft_strjoin(ft_itoa(major(stated.st_rdev)),
 				ft_strjoin(", ", ft_itoa(minor(stated.st_rdev))))
-		: ft_itoa(stated.st_size);
+		: ft_itoa(stated.st_size)));
 	if (S_ISLNK(stated.st_mode))
 	{
 		tmp = ft_strnew(255);
 		tmp[readlink(fname, tmp, 255)] = 0;
 		slash = ft_strjoin(slash, ft_strjoin(" -> ", tmp));
 	}
-	node->details[5] = fts_filedate(ctime(&stated.st_mtime));
+	node->s_len[5] = ft_strlen((node->details[5] = fts_date(&stated.st_mtime)));
 	node->details[6] = slash;
 	node->details[7] = NULL;
 	return (stated.st_blocks);
