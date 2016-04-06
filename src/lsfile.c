@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/06 15:45:23 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/06 22:12:14 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static inline void	st_fputstr(char **details, int *nbrmax)
 		{
 			step = nbrmax[c] - ft_strlen(*details);
 			if (nbrmax[c] < 20)
-				while (step > 0 && step--)
+				while (step--)
 					write(1, " ", 1);
 			ft_putstr(*details);
 			ft_putchar(' ');
@@ -51,25 +51,22 @@ static inline void	pdir_infos(t_fileinfo *dir,
 	}
 }
 
-/*
 static t_list		*nextdir(t_fileinfo *act)
 {
 	t_fileinfo	*tmp;
-	int			comp;
 
 	tmp = act;
-	comp = ft_strclchr(tmp->infos, '/');
-	while (tmp->next && comp == ft_strclchr(tmp->infos, '/'))
+	while (tmp->next)
 		tmp = (t_fileinfo*)tmp->next;
 	return ((t_list*)tmp);
 }
-*/
 
 void				eval(t_fileinfo **fflist, t_params opts, int c)
 {
 	t_fileinfo		*tmp;
 	int				first_time;
 	int				*s_local;
+	int				s_default[7] = {10, 10, 10, 10, 10, 10, 10};
 	t_fileinfo		*todel;
 
 	tmp = *fflist;
@@ -77,9 +74,10 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 	s_local = NULL;
 	while (tmp)
 	{
+		todel = tmp;
 		!tmp->details && !tmp->fcount ? pfile_infos(tmp, tmp->infos, opts) : 0;
 		if ((opts & RECURSIVE || c > 0) && tmp->fcount == -1)
-			ft_lstinsert_list((t_list*)tmp, (t_list*)fold_list(tmp->infos, opts), &fts_strcmp);
+			ft_lstinsert_list(nextdir(tmp), (t_list*)fold_list(tmp->infos, opts), &fts_strcmp);
 		if (tmp->fcount > 0 || tmp->fcount == -2)
 		{
 			pdir_infos(tmp, (first_time != c + 1), opts);
@@ -87,10 +85,9 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 		}
 		else if (!tmp->fcount || c < 0)
 		{
-			st_fputstr(tmp->details, s_local);
+			st_fputstr(tmp->details, s_local ?: s_default);
 			ft_putchar(!(opts & LONG_FORMAT) ? '\t' : '\n');
 		}
-		todel = tmp;
 		tmp = (t_fileinfo *)tmp->next;
 		free(todel->details);
 		free(todel);
@@ -102,7 +99,7 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 static inline void	adjust_cols(int *final, int *act)
 {
 	int c;
-	
+
 	c = 6;
 	while (c + 1)
 	{
