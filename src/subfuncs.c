@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/26 15:55:39 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/01 16:20:28 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/06 15:22:36 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int			fts_strcmp(t_list *s1, t_list *s2)
 	a = (unsigned char*)((t_fileinfo*)s1)->infos;
 	b = (unsigned char*)((t_fileinfo*)s2)->infos;
 	i = 0;
-	while (a[i] == b[i] && a[i] && b[i])
+	while (a[i] && b[i] && a[i] == b[i])
 		i++;
 	return (a[i] - b[i]);
 }
