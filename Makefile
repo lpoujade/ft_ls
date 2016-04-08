@@ -6,7 +6,7 @@
 #    By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/02/11 13:41:06 by lpoujade          #+#    #+#              #
-#    Updated: 2016/04/02 13:53:38 by lpoujade         ###   ########.fr        #
+#    Updated: 2016/04/08 14:29:18 by lpoujade         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,13 +23,13 @@ LDLIBS=-lft
 
 LIB=libft/libft.a
 
-SRC=ft_ls.c paramss.c lsfile.c lists_wrapper.c printing.c subfuncs.c
+SRC=ft_ls.c paramss.c lsfile.c lists_wrapper.c printing.c subfuncs.c load_finfos.c
 OBJ=$(SRC:.c=.o)
 
 SRCS=$(addprefix $(SRCDIR)/,$(SRC))
 OBJS=$(addprefix $(OBJDIR)/,$(OBJ))
 
-# llvm specific
+# GCOV, llvm specific
 # CFLAGS+=-g -fprofile-arcs -ftest-coverage
 # LDFLAGS+=--coverage
 

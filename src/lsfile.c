@@ -6,50 +6,11 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/06 22:12:14 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/08 14:28:56 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-static inline void	st_fputstr(char **details, int *nbrmax)
-{
-	int c;
-	int	step;
-
-	c = 0;
-	while (*details && c <= 7)
-	{
-		if (**details)
-		{
-			step = nbrmax[c] - ft_strlen(*details);
-			if (nbrmax[c] < 20)
-				while (step--)
-					write(1, " ", 1);
-			ft_putstr(*details);
-			ft_putchar(' ');
-		}
-		c++;
-		details++;
-	}
-}
-
-static inline void	pdir_infos(t_fileinfo *dir,
-		int first_time, t_params opts)
-{
-	if (first_time)
-	{
-		ft_putstr(opts & LONG_FORMAT ? "\n" : "\n\n");
-		ft_putstr(dir->infos);
-		ft_putstr(":\n");
-	}
-	if (opts & LONG_FORMAT && dir->fcount > 0)
-	{
-		ft_putstr("total ");
-		ft_putnbr(dir->fcount);
-		ft_putchar('\n');
-	}
-}
 
 static t_list		*nextdir(t_fileinfo *act)
 {
@@ -85,7 +46,7 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 		}
 		else if (!tmp->fcount || c < 0)
 		{
-			st_fputstr(tmp->details, s_local ?: s_default);
+			st_fputstr(tmp->details, s_local ? s_local : s_default);
 			ft_putchar(!(opts & LONG_FORMAT) ? '\t' : '\n');
 		}
 		tmp = (t_fileinfo *)tmp->next;
