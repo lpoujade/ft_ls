@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/06 11:57:33 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/10 12:14:27 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,12 @@ t_list		*fts_new(char *fname)
 	new->prev = NULL;
 	new->fcount = 0;
 	new->details = NULL;
+	new->s_len[6] = 0;
+	new->s_len[5] = 0;
+	new->s_len[4] = 0;
+	new->s_len[3] = 0;
+	new->s_len[2] = 0;
+	new->s_len[1] = 0;
+	new->s_len[0] = 0;
 	return ((t_list *)new);
 }

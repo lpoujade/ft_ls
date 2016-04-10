@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/08 14:28:54 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/10 11:37:52 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,12 @@ inline void	st_fputstr(char **details, int *nbrmax)
 		if (**details)
 		{
 			step = nbrmax[c] - ft_strlen(*details);
-			c == 3 || c == 2 ? ft_putstr(*details) : 0;
+			step < 0 ? step = 10 : 0;
+			c == 3 || c == 2 ? ft_putstr(*details) : 0;
 			if (nbrmax[c] < 20)
 				while (step-- > 0)
 					write(1, " ", 1);
-			c != 3 && c != 2 ? ft_putstr(*details) : 0;
+			c != 3 && c != 2 ? ft_putstr(*details) : 0;
 			ft_putstr("  ");
 		}
 		c++;

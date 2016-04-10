@@ -6,49 +6,35 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/08 14:25:57 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/08 14:28:58 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/10 12:16:38 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static inline char	print_typef_lastchar(mode_t f)
-{
-	char c;
-
-	c = ' ';
-	if (S_ISLNK(f))
-		c = '@';
-	else if (S_ISREG(f) && f & S_IXUSR)
-		c = '*';
-	else if (S_ISFIFO(f))
-		c = '|';
-	else if (S_ISSOCK(f))
-		c = '=';
-	else if (S_ISDIR(f))
-		c = '/';
-	return (c);
-}
-
-static inline char	file_mode(mode_t f)
+static inline char	file_mode(mode_t f, int end)
 {
 	char c;
 
 	c = '?';
 	if (S_ISLNK(f))
-		c = 'l';
-	if (S_ISREG(f))
+		c = end ? '@' : 'l';
+	else if (S_ISREG(f))
 		c = '-';
-	if (S_ISFIFO(f))
-		c = 'p';
-	if (S_ISCHR(f))
+	else if (S_ISFIFO(f))
+		c = end ? '|' : 'p';
+	else if (S_ISSOCK(f))
+		c = end ? '=' : 's';
+	else if (S_ISDIR(f))
+		c = end ? '/' : 'd';
+	else if (S_ISCHR(f) && !end)
 		c = 'c';
-	if (S_ISBLK(f))
+	else if (S_ISBLK(f) && !end)
 		c = 'b';
-	if (S_ISSOCK(f))
-		c = 's';
-	if (S_ISDIR(f))
-		c = 'd';
+	if (end && c == '-' && S_IXUSR & f)
+		c = '*';
+	else if (!(S_IXUSR & f) && end)
+		c = ' ';
 	return (c);
 }
 
@@ -57,7 +43,7 @@ static inline char	*ft_print_fmode(mode_t details)
 	char	*rights;
 
 	rights = ft_strnew(10);
-	rights[0] = file_mode(details);
+	rights[0] = file_mode(details, 0);
 	rights[1] = details & S_IRUSR ? 'r' : '-';
 	rights[2] = details & S_IWUSR ? 'w' : '-';
 	if (details & S_IXUSR && details & S_ISUID)
@@ -127,25 +113,28 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 		tmp = slash;
 		slash = ft_strnew(ft_strlen(slash) + 1);
 		ft_memmove(slash, tmp, ft_strlen(tmp));
-		slash[ft_strlen(tmp)] = print_typef_lastchar(stated.st_mode);
+		slash[ft_strlen(tmp)] = file_mode(stated.st_mode, 1);
 	}
 	return (s_pfileinfo(stated, node, slash));
 }
 
 int					s_pfileinfo(struct stat stated, t_fileinfo *node, char *slash)
 {
-
 	struct passwd	*ui;
 	struct group	*gi;
 	char			*tmp;
 
 	ui = getpwuid(stated.st_uid);
 	gi = getgrgid(stated.st_gid);
-	node->s_len[2] = ft_strlen((node->details[2] = ui->pw_name ? ft_strdup(ui->pw_name) : ft_itoa(ui->pw_uid)));
-	node->s_len[3] = ft_strlen((node->details[3] = gi->gr_name ? ft_strdup(gi->gr_name) : ft_itoa(gi->gr_gid)));
-	node->s_len[0] = ft_strlen((node->details[0] = ft_print_fmode(stated.st_mode)));
+	node->s_len[2] = ft_strlen((node->details[2]
+				= ui->pw_name ? ft_strdup(ui->pw_name) : ft_itoa(ui->pw_uid)));
+	node->s_len[3] = ft_strlen((node->details[3]
+				= gi->gr_name ? ft_strdup(gi->gr_name) : ft_itoa(gi->gr_gid)));
+	node->s_len[0] = ft_strlen((node->details[0]
+				= ft_print_fmode(stated.st_mode)));
 	node->s_len[1] = ft_strlen((node->details[1] = ft_itoa(stated.st_nlink)));
-	node->s_len[4] = ft_strlen((node->details[4] = (S_ISCHR(stated.st_mode) || S_ISBLK(stated.st_mode)) ?
+	node->s_len[4] = ft_strlen((node->details[4]
+				= (S_ISCHR(stated.st_mode) || S_ISBLK(stated.st_mode)) ?
 		ft_strjoin(ft_itoa(major(stated.st_rdev)),
 				ft_strjoin(", ", ft_itoa(minor(stated.st_rdev))))
 		: ft_itoa(stated.st_size)));
