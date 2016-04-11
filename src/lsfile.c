@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/10 15:32:31 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/11 11:53:16 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 			pdir_infos(tmp, (first_time != c + 1), opts);
 			s_local = tmp->s_len;
 		}
-		if (!tmp->fcount || c < 0)
+		else if (!tmp->fcount || c < 0)
 		{
 			st_fputstr(tmp->details, s_local);
 			ft_putchar(!(opts & LONG_FORMAT) ? '\t' : '\n');
@@ -59,20 +59,6 @@ static inline void	adjust_cols(int *final, int *act)
 	}
 }
 
-static t_fileinfo	*prevdir(t_fileinfo *act, int dirs)
-{
-	t_fileinfo *tmp;
-
-	tmp = act;
-	while (dirs && tmp->next)
-	{
-		if (tmp->fcount == -1)
-			--dirs;
-		tmp = (t_fileinfo*)tmp->next;
-	}
-	return (tmp);
-}
-
 t_fileinfo			*fold_list(char *dname, t_params opts)
 {
 	DIR					*ddir;
@@ -81,46 +67,28 @@ t_fileinfo			*fold_list(char *dname, t_params opts)
 	t_fileinfo			*node;
 	int					*fsizes;
 	int					*s_local;
-	int					dir_in;
 
 	fflist = NULL;
-	dir_in = 1;
 	node = (t_fileinfo*)fts_new(dname); fflist = node;
-	while (dir_in)
-	{
-		//ft_putstr("unfolding "); ft_putstr(dname);
-		dir_in = 0;
-		if (!(ddir = opendir(dname)))
-			perror(ft_strjoin("ls: opendir: ", dname));
-		fsizes = &node->fcount;
-		s_local = node->s_len;
-		while ((dfile = readdir(ddir)))
-			if ((opts & ALMOST_ALL || *dfile->d_name != '.') &&
-					(opts & ALL || (ft_strcmp(dfile->d_name, ".") &&
-									ft_strcmp(dfile->d_name, ".."))))
+	if (!(ddir = opendir(dname)))
+		perror(ft_strjoin("ls: opendir: ", dname));
+	fsizes = &node->fcount;
+	s_local = node->s_len;
+	while ((dfile = readdir(ddir)))
+		if ((opts & ALMOST_ALL || *dfile->d_name != '.') &&
+				(opts & ALL || (ft_strcmp(dfile->d_name, ".") &&
+								ft_strcmp(dfile->d_name, ".."))))
+		{
+			if (*(node = (t_fileinfo *)ft_lstinsert((t_list**)&fflist,
+					fts_new(ft_strjoin(dname, ft_strjoin("/", dfile->d_name))),
+					((opts & TIME_SORT) ? &ftime_cmp : &fts_strcmp)))->infos)
 			{
-				node = (t_fileinfo *)ft_lstinsert((t_list**)&fflist,
-						fts_new(ft_strjoin(dname, ft_strjoin("/", dfile->d_name))),
-						((opts & TIME_SORT) ? &ftime_cmp : &fts_strcmp));
 				*fsizes += pfile_infos(node, node->infos, opts);
 				adjust_cols(s_local, node->s_len);
-				node->fcount == -1 ? dir_in++ : 0;
 			}
-		if ((closedir(ddir) != 0))
-			perror("ls: closedir: ");
-		!*fsizes ? *fsizes = -2 : 0;
-		if (opts & RECURSIVE && dir_in)
-		{
-			if (prevdir(fflist, dir_in) && prevdir(fflist, dir_in)->fcount == -1)
-				dname = prevdir(fflist, dir_in)->infos;
-			else
-				break ;
-			node->next = fts_new(dname);
-			node = (t_fileinfo*)node->next;
-			dir_in--;
 		}
-		opts & RECURSIVE ? 0 : (dir_in = 0);
-	}
-	//ft_putendl("fold list return this : "); ls_out(fflist, opts); ft_putendl("\n----------------");
+	if ((closedir(ddir) != 0))
+		perror("ls: closedir: ");
+	!*fsizes ? *fsizes = -2 : 0;
 	return (fflist);
 }

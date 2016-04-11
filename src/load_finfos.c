@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/08 14:25:57 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/10 12:16:38 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/11 12:07:43 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,14 +94,15 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 		slash = (*(slash + 1)) ? slash + 1 : fname;
 	else
 		slash = fname;
+	node->details = (char **)malloc(sizeof(char *) * 8);
 	if ((lstat(fname, &stated) == -1))
 	{
-		perror(ft_strjoin("ls: lstat: ", fname));
-		node->details[0] = NULL;
+		//perror(ft_strjoin("ls: lstat: ", fname));
+		node->details[0] = ft_strjoin("ls: ", ft_strjoin(fname, ft_strjoin(": ", strerror(errno))));
+		node->details[1] = NULL;
 		return (0);
 	}
 	node->fcount = S_ISDIR(stated.st_mode) && !node->fcount ? -1 : 0;
-	node->details = (char **)malloc(sizeof(char *) * 8);
 	if (!(opts & 0x01))
 	{
 		node->details[0] = slash;
