@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/26 15:55:39 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/11 15:25:06 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/11 16:25:51 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int			ftime_cmp(t_list *f1, t_list *f2)
 	while (f1->next && *((t_fileinfo*)f1)->infos)
 		f1 = f1->next;
 	if ((lstat(((t_fileinfo*)f1)->infos, &file) == -1))
-		perror("ls: lstat: ");
+		perror(ft_strjoin("ls: lstat: ", ((t_fileinfo*)f1)->infos));
 	fst = file.st_atime;
 	ft_bzero(&file, sizeof(struct stat));
 	if ((lstat(((t_fileinfo*)f2)->infos, &file) == -1))
