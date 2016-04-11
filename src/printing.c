@@ -6,13 +6,13 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/11 12:06:26 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/11 15:42:28 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-inline void	st_fputstr(char **details, int *nbrmax)
+void	st_fputstr(char **details, int *nbrmax)
 {
 	int c;
 	int	step;

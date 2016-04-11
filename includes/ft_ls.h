@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/10 14:36:46 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/11 13:20:24 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void					eval(t_fileinfo **fflist, t_params opts, int c);
 t_fileinfo				*fold_list(char *dname, t_params opts);
 void					ls_out(t_fileinfo *flist, t_params opts);
 t_list					*fts_new(char *fname);
+void					fts_delnode(t_fileinfo *node);
 
 char					*fts_date(time_t const *clock);
 int						fts_strcmp(t_list *s1, t_list *s2);
