@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/11 16:24:00 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/12 19:22:47 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 {
 	t_fileinfo		*tmp;
 	int				*s_local;
+	short			first;
 
+	first = 1;
 	tmp = *fflist;
 	s_local = NULL;
 	while (tmp)
@@ -26,7 +28,7 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 			ft_lstappend((t_list*)tmp, (t_list*)fold_list(tmp->infos, opts));
 		if (tmp->fcount > 0 || tmp->fcount == -2)
 		{
-			pdir_infos(tmp, ((t_fileinfo*)tmp->prev != *fflist), opts);
+			pdir_infos(tmp, &first, opts);
 			s_local = tmp->s_len;
 		}
 		else if (!tmp->fcount || c < 0)
@@ -83,7 +85,7 @@ t_fileinfo			*fold_list(char *dname, t_params opts)
 			{
 				if (*(node = (t_fileinfo *)ft_lstinsert(&fflist->next,
 								fts_new(ft_strjoin(dname, ft_strjoin("/", dfile->d_name))),
-								((opts & TIME_SORT) ? &ftime_cmp : &fts_strcmp)))->infos)
+								((opts & 0x10) ? &ftime_cmp : &fts_strcmp)))->infos)
 				{
 					*fsizes += pfile_infos(node, node->infos, opts);
 					adjust_cols(s_local, node->s_len);

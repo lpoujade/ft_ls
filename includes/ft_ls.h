@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/11 13:20:24 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/04/12 19:56:18 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,11 @@ void					fts_delnode(t_fileinfo *node);
 char					*fts_date(time_t const *clock);
 int						fts_strcmp(t_list *s1, t_list *s2);
 int						ftime_cmp(t_list *f1, t_list *f2);
+char					*epure_name(char *fname, t_params opts);
 
 
 int						pfile_infos(t_fileinfo *node, char *fname, t_params opts);
 int						s_pfileinfo(struct stat stated, t_fileinfo *node, char *slash);
-void					pdir_infos(t_fileinfo *dir, int first_time, t_params opts);
+void					pdir_infos(t_fileinfo *dir, short *first_time, t_params opts);
 void					st_fputstr(char **details, int *nbrmax);
 #endif
