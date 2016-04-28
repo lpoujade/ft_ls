@@ -1,0 +1,58 @@
+-rw-r--r-- 1 lpoujade 2015_paris 1890 Apr  3 12:52 Makefile 
+-rw-r--r-- 1 lpoujade 2015_paris 9 Feb 17 19:03 auteur 
+-rw-r--r-- 1 lpoujade 2015_paris 744 Mar 30 11:15 fcount 
+-rwxr-xr-x 1 lpoujade 2015_paris 27624 Apr  4 12:22 ft_ls 
+-rw-r--r-- 1 lpoujade 2015_paris 2902 Apr  2 11:32 o_lsfile.c 
+-rw-r--r-- 1 lpoujade 2015_paris 15634 Apr  3 13:26 out 
+
+doc:
+total 1
+-rw-r--r-- 1 lpoujade 2015_paris 504 Apr  1 15:37 ls.1 
+
+ft_ls.dSYM:
+total 8
+drwxr-xr-x 3 lpoujade 2015_paris 4096 Mar 21 15:54 Contents 
+
+includes:
+total 5
+-rw-r--r-- 1 lpoujade 2015_paris 2163 Apr  3 17:27 ft_ls.h 
+
+libft:
+total 355
+-rw-r--r-- 1 lpoujade 2015_paris   2238 Apr  3 15:59 Makefile 
+-rw-r--r-- 1 lpoujade 2015_paris      9 Mar 21 13:29 auteur 
+drwxr-xr-x 2 lpoujade 2015_paris   4096 Apr  3 15:59 includes 
+-rw-r--r-- 1 lpoujade 2015_paris 170176 Apr  3 16:05 libft.a 
+drwxr-xr-x 2 lpoujade 2015_paris   4096 Apr  3 16:05 src 
+
+src:
+total 31
+-rw-r--r-- 1 lpoujade 2015_paris 1474 Apr  3 13:34 ft_ls.c 
+-rw-r--r-- 1 lpoujade 2015_paris 1594 Apr  4 12:17 lists_wrapper.c 
+-rw-r--r-- 1 lpoujade 2015_paris 3331 Apr  4 12:22 lsfile.c 
+-rw-r--r-- 1 lpoujade 2015_paris 1680 Apr  3 13:35 paramss.c 
+-rw-r--r-- 1 lpoujade 2015_paris 4371 Apr  4 11:57 printing.c 
+-rw-r--r-- 1 lpoujade 2015_paris 1906 Apr  1 20:47 subfuncs.c 
+
+test:
+total 57
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar 22 20:28 BÉPOLDV 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar 22 20:28 MAUSRI 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar  8 19:49 a 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar  8 19:49 aa 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar 22 20:28 aaaaz 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar 22 20:28 aast 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar  8 19:49 ab 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar  8 19:49 ac 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar 22 20:28 aui 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar 22 20:28 bcd 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar 22 20:28 bépoldq 
+-rw-r--r-- 1 lpoujade 2015_paris  354 Apr  4 13:06 ft_ls.txt 
+drwxr-xr-x 2 lpoujade 2015_paris 4096 Mar 24 16:00 loop 
+-rw-r--r-- 1 lpoujade 2015_paris 7956 Apr  4 11:31 ls.txt 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar 22 20:28 narusi 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar 22 20:28 nrq 
+-rw-r--r-- 1 lpoujade 2015_paris 7956 Apr  4 11:25 out 
+drwxr-xr-x 2 lpoujade 2015_paris 4096 Mar 21 21:46 void 
+drwxr-xr-x 2 lpoujade 2015_paris 4096 Apr  3 18:31 zfolder 
+-rw-r--r-- 1 lpoujade 2015_paris    0 Mar 22 20:28 zzaui 
