@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/12 19:22:47 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/16 10:22:19 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 		else if (!tmp->fcount || c < 0)
 		{
 			st_fputstr(tmp->details, s_local);
-			ft_putchar(!(opts & LONG_FORMAT) ? '\t' : '\n');
+			if (tmp->next)
+				ft_putchar('\n');
 		}
 		if ((tmp = (t_fileinfo *)tmp->next))
 			fts_delnode((t_fileinfo*)tmp->prev);
@@ -64,7 +65,6 @@ t_fileinfo			*fold_list(char *dname, t_params opts)
 	int					*fsizes;
 	int					*s_local;
 
-	fflist = NULL;
 	node = (t_fileinfo*)fts_new(dname);
 	fflist = node;
 	fsizes = &node->fcount;
@@ -72,14 +72,14 @@ t_fileinfo			*fold_list(char *dname, t_params opts)
 	{
 		node->next = fts_new("NOP");
 		((t_fileinfo*)node->next)->details = (char**)malloc(2);
-		((t_fileinfo*)node->next)->details[0] = ft_strjoin("ls: opendir: ", ft_strjoin(dname, ft_strjoin(": ", strerror(errno))));
+		((t_fileinfo*)node->next)->details[0] = ft_strjoin(dname, ft_strjoin(": ", strerror(errno)));
 		((t_fileinfo*)node->next)->details[1] = NULL;
 	}
 	else
 	{
 		s_local = node->s_len;
 		while ((dfile = readdir(ddir)))
-			if ((opts & ALMOST_ALL || *dfile->d_name != '.') &&
+			if ((opts & ALMOST_ALL || *dfile->d_name != '.' || opts & ALL) &&
 					(opts & ALL || (ft_strcmp(dfile->d_name, ".") &&
 									ft_strcmp(dfile->d_name, ".."))))
 			{
