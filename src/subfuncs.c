@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/26 15:55:39 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/12 19:55:31 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/16 11:20:06 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int			fts_strcmp(t_list *s1, t_list *s2)
 
 void		ls_out(t_fileinfo *flist, t_params opts)
 {
-	(void)opts;
 	while (flist)
 	{
 		ft_putstr(flist->infos);
