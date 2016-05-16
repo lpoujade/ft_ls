@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 23:37:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/15 12:07:57 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/16 15:53:59 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ t_params	parse_args(char *av)
 		*av == 'g' ? opts |= HIDE_OWNER | LONG_FORMAT : err++;
 		*av == 'F' ? opts |= ADD_FTYPE : err++;
 		*av == 'B' ? opts |= FULL_NAMES : err++;
-		err != 8 ? err_exit(*av) : (err = 0);
+		*av == '1' ? 0 : err++;
+		err != 9 ? err_exit(*av) : (err = 0);
 		av++;
 	}
 	return (opts);

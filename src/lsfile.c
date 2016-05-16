@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/16 11:49:12 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/16 16:00:53 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,11 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 	t_fileinfo		*dirs;
 	int				*s_local;
 	short			first;
-	t_fileinfo		*ffi;
 
 	first = 1;
 	tmp = *fflist;
 	dirs = NULL;
 	s_local = NULL;
-	ffi = NULL;
 	while (tmp)
 	{
 		!tmp->details && !tmp->fcount ? pfile_infos(tmp, tmp->infos, opts) : 0;
@@ -45,10 +43,10 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 		}
 		if ((tmp = (t_fileinfo *)tmp->next))
 			fts_delnode((t_fileinfo*)tmp->prev);
-		else if (dirs != ffi)
+		else if (dirs)
 		{
 			tmp = dirs;
-			ffi = dirs;
+			dirs = (t_fileinfo*)dirs->prev;
 		}
 		--c;
 	}
