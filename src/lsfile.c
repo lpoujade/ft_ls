@@ -6,30 +6,42 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/16 16:00:53 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/17 15:03:01 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
+static inline t_list *nextdir(t_fileinfo *onode)
+{
+	t_fileinfo *node;
+
+	node = onode;
+	while (node->next && (node->fcount <= 0 || node->fcount == -2))
+		node = (t_fileinfo *)node->next;
+	return ((t_list *)node);
+}
+
 void				eval(t_fileinfo **fflist, t_params opts, int c)
 {
 	t_fileinfo		*tmp;
-	t_fileinfo		*dirs;
+	t_list			*ndir;
 	int				*s_local;
 	short			first;
 
 	first = 1;
 	tmp = *fflist;
-	dirs = NULL;
 	s_local = NULL;
+	ndir = (t_list*)tmp;
 	while (tmp)
 	{
 		!tmp->details && !tmp->fcount ? pfile_infos(tmp, tmp->infos, opts) : 0;
 		if ((opts & RECURSIVE || c > 0) && tmp->fcount == -1)
-			ft_lstinsert_list((t_list**)&dirs, (t_list*)fold_list(tmp->infos, opts),
+		{
+			ndir = nextdir(tmp);
+			ft_lstinsert_list((t_list**)ndir, (t_list*)fold_list(tmp->infos, opts),
 					&fts_strcmp);
-			//ft_lstappend((t_list*)tmp, (t_list*)fold_list(tmp->infos, opts));
+		}
 		if (tmp->fcount > 0 || tmp->fcount == -2)
 		{
 			pdir_infos(tmp, &first, opts);
@@ -43,11 +55,6 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 		}
 		if ((tmp = (t_fileinfo *)tmp->next))
 			fts_delnode((t_fileinfo*)tmp->prev);
-		else if (dirs)
-		{
-			tmp = dirs;
-			dirs = (t_fileinfo*)dirs->prev;
-		}
 		--c;
 	}
 }
@@ -117,3 +124,17 @@ t_fileinfo			*fold_list(char *dname, t_params opts)
 	!*fsizes ? *fsizes = -2 : 0;
 	return (fflist);
 }
+
+/*
+t_fileinfo		*unfold_list(t_fileinfo *flist, t_params opts)
+{
+	DIR					*ddir;
+	struct dirent		*dfile;
+	t_fileinfo			*tmp;
+
+	while (tmp)
+	{
+		rrrrrr
+	}
+}
+*/
