@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/17 15:03:01 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/18 13:42:55 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static inline t_list *nextdir(t_fileinfo *onode)
 	return ((t_list *)node);
 }
 
-void				eval(t_fileinfo **fflist, t_params opts, int c)
+t_fileinfo			*eval(t_fileinfo **fflist, t_params opts, int c)
 {
 	t_fileinfo		*tmp;
 	t_list			*ndir;
@@ -42,21 +42,22 @@ void				eval(t_fileinfo **fflist, t_params opts, int c)
 			ft_lstinsert_list((t_list**)ndir, (t_list*)fold_list(tmp->infos, opts),
 					&fts_strcmp);
 		}
-		if (tmp->fcount > 0 || tmp->fcount == -2)
+		if ((tmp->fcount > 0 || tmp->fcount == -2) && !(opts & REV_SORT))
 		{
 			pdir_infos(tmp, &first, opts);
 			s_local = tmp->s_len;
 		}
-		else if (!tmp->fcount || c < 0)
+		else if ((!tmp->fcount || c < 0) && !(opts & REV_SORT))
 		{
 			st_fputstr(tmp->details, s_local);
 			if (tmp->next || opts & LONG_FORMAT)
 				ft_putchar('\n');
 		}
-		if ((tmp = (t_fileinfo *)tmp->next))
+		if ((tmp = (t_fileinfo *)tmp->next) && !(opts & REV_SORT))
 			fts_delnode((t_fileinfo*)tmp->prev);
 		--c;
 	}
+	return (opts & REV_SORT ? *fflist : NULL);
 }
 
 static inline void	adjust_cols(int *final, int *act)

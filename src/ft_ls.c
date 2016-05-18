@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/11 12:58:16 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/18 13:48:30 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,28 @@ int		main(int ac, char **av)
 		}
 	if (!file_list && ++c)
 		ft_lstinsert((t_list**)&file_list, fts_new("."), &fts_strcmp);
-	eval(&file_list, opts, c);
+	if ((eval(&file_list, opts, c)))
+	{
+		ft_putendl("REVERSE PRINTING");
+		rev_print_list(file_list);
+	}
 	!(opts & LONG_FORMAT) ? ft_putchar('\n') : 0;
 	return (errno ? 1 : 0);
+}
+
+void	rev_print_list(t_fileinfo *start)
+{
+	t_fileinfo *tmp;
+	int			*s_local = NULL;
+
+	tmp = start;
+	while (tmp->next)
+		tmp = (t_fileinfo*)tmp->next;
+	while (tmp)
+	{
+		st_fputstr(tmp->details, s_local);
+		if (tmp->prev)
+			ft_putchar('\n');
+		tmp = (t_fileinfo*)tmp->prev;
+	}
 }

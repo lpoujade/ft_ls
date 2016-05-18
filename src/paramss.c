@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 23:37:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/16 15:53:59 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/18 13:27:05 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	err_exit(char c)
 	ft_putchar(c);
 	ft_putstr(": ");
 	ft_putendl(strerror(22));
-	exit(1);
+	exit(EXIT_FAILURE);
 }
 
 t_params	parse_args(char *av)

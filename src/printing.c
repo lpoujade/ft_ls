@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/12 20:03:12 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/18 13:55:23 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void		st_fputstr(char **details, int *nbrmax)
 			else
 				step = 10;
 			c == 3 || c == 2 ? ft_putstr(*details) : 0;
-			if (step < 20 && c != 6)
+			if (step < 20 && c != 6 && c > 0)
 				while (step-- > 0)
 					write(1, " ", 1);
 			c != 3 && c != 2 ? ft_putstr(*details) : 0;
