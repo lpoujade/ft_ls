@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/18 13:48:30 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/18 17:10:32 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,22 @@ int		main(int ac, char **av)
 
 void	rev_print_list(t_fileinfo *start)
 {
-	t_fileinfo *tmp;
-	int			*s_local = NULL;
+	t_fileinfo	*tmp;
+	t_fileinfo	*dir_check;
 
 	tmp = start;
 	while (tmp->next)
 		tmp = (t_fileinfo*)tmp->next;
+	dir_check = tmp;
 	while (tmp)
 	{
-		st_fputstr(tmp->details, s_local);
-		if (tmp->prev)
+		while (dir_check->prev && dir_check->fcount == 0)
+			dir_check = (t_fileinfo*)dir_check->prev;
+		st_fputstr(tmp->details, dir_check->s_len);
+		if (tmp->prev || *tmp->details[3])
 			ft_putchar('\n');
 		tmp = (t_fileinfo*)tmp->prev;
+		if (tmp && tmp->fcount != 0)
+			dir_check = (t_fileinfo*)tmp->prev;
 	}
 }

@@ -6,11 +6,28 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/17 14:08:40 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/19 21:41:06 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+void		add_list(t_fileinfo *nlist, t_fileinfo *act_list, t_params opts)
+{
+	(void)opts;
+	t_fileinfo	*end_nlist;
+
+	end_nlist = nlist;
+	while (end_nlist->next)
+		end_nlist = (t_fileinfo*)end_nlist->next;
+	while (act_list->next && (act_list->fcount <= 0 && act_list->fcount != -2))
+		act_list = (t_fileinfo*)act_list->next;
+
+	act_list->prev = (t_list*)act_list;
+	end_nlist->next = act_list->next;
+	act_list->next = (t_list*)nlist;
+	return ;
+}
 
 t_list		*fts_new(char *fname)
 {

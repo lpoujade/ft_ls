@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/18 13:40:31 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/19 21:29:15 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ typedef struct			s_fileinfo
 	int					s_len[7];
 }						t_fileinfo;
 
-void	rev_print_list(t_fileinfo *start);
+void					rev_print_list(t_fileinfo *start);
+void		add_list(t_fileinfo *nlist, t_fileinfo *act_list, t_params opts);
 
 t_params				parse_args(char *av);
 t_fileinfo				*eval(t_fileinfo **fflist, t_params opts, int c);
@@ -64,7 +65,6 @@ char					*fts_date(time_t const *clock);
 int						fts_strcmp(t_list *s1, t_list *s2);
 int						ftime_cmp(t_list *f1, t_list *f2);
 char					*epure_name(char *fname, t_params opts);
-
 
 int						pfile_infos(t_fileinfo *node, char *fname, t_params opts);
 int						s_pfileinfo(struct stat stated, t_fileinfo *node, char *slash);

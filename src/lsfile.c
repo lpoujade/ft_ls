@@ -6,21 +6,11 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/18 13:42:55 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/19 21:29:01 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-static inline t_list *nextdir(t_fileinfo *onode)
-{
-	t_fileinfo *node;
-
-	node = onode;
-	while (node->next && (node->fcount <= 0 || node->fcount == -2))
-		node = (t_fileinfo *)node->next;
-	return ((t_list *)node);
-}
 
 t_fileinfo			*eval(t_fileinfo **fflist, t_params opts, int c)
 {
@@ -37,11 +27,7 @@ t_fileinfo			*eval(t_fileinfo **fflist, t_params opts, int c)
 	{
 		!tmp->details && !tmp->fcount ? pfile_infos(tmp, tmp->infos, opts) : 0;
 		if ((opts & RECURSIVE || c > 0) && tmp->fcount == -1)
-		{
-			ndir = nextdir(tmp);
-			ft_lstinsert_list((t_list**)ndir, (t_list*)fold_list(tmp->infos, opts),
-					&fts_strcmp);
-		}
+			add_list(fold_list(tmp->infos, opts), tmp, opts);
 		if ((tmp->fcount > 0 || tmp->fcount == -2) && !(opts & REV_SORT))
 		{
 			pdir_infos(tmp, &first, opts);
@@ -125,17 +111,3 @@ t_fileinfo			*fold_list(char *dname, t_params opts)
 	!*fsizes ? *fsizes = -2 : 0;
 	return (fflist);
 }
-
-/*
-t_fileinfo		*unfold_list(t_fileinfo *flist, t_params opts)
-{
-	DIR					*ddir;
-	struct dirent		*dfile;
-	t_fileinfo			*tmp;
-
-	while (tmp)
-	{
-		rrrrrr
-	}
-}
-*/
