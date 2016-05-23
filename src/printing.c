@@ -6,13 +6,13 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/18 13:55:23 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/23 14:26:22 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void		st_fputstr(char **details, int *nbrmax)
+void	st_fputstr(char **details, int *nbrmax)
 {
 	int c;
 	int	step;
@@ -36,9 +36,10 @@ void		st_fputstr(char **details, int *nbrmax)
 		c++;
 		details++;
 	}
+	ft_putchar('\n');
 }
 
-inline void	pdir_infos(t_fileinfo *dir, short *first_time, t_params opts)
+void	pdir_infos(t_fileinfo *dir, short *first_time, t_params opts, int **s)
 {
 	if (!*first_time || !ft_strcmp(dir->infos, "./"))
 	{
@@ -54,4 +55,5 @@ inline void	pdir_infos(t_fileinfo *dir, short *first_time, t_params opts)
 		ft_putnbr(dir->fcount);
 		ft_putchar('\n');
 	}
+	*s = dir->s_len;
 }

@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/08 14:25:57 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/13 16:08:58 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/23 14:30:49 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ static inline char	*ft_print_fmode(mode_t details)
 int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 {
 	struct stat		stated;
-	char			*slash;
+	char			*slh;
 	char			*tmp;
 
-	slash = epure_name(fname, opts);
+	slh = epure_name(fname, opts);
 	node->details = (char **)malloc(sizeof(char *) * 8);
 	node->details[1] = NULL;
 	if ((lstat(fname, &stated) == -1))
@@ -85,16 +85,16 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 	node->fcount = S_ISDIR(stated.st_mode) && !node->fcount ? -1 : 0;
 	if (opts & ADD_FTYPE)
 	{
-		tmp = slash;
-		ft_memmove(slash = ft_strnew(ft_strlen(slash) + 1), tmp, ft_strlen(tmp));
-		slash[ft_strlen(tmp)] = file_mode(stated.st_mode, 1);
+		tmp = slh;
+		ft_memmove(slh = ft_strnew(ft_strlen(slh) + 1), tmp, ft_strlen(tmp));
+		slh[ft_strlen(tmp)] = file_mode(stated.st_mode, 1);
 	}
 	if (!(opts & 0x01))
 	{
-		node->details[0] = slash;
+		node->details[0] = slh;
 		return (stated.st_blocks);
 	}
-	return (s_pfileinfo(stated, node, slash));
+	return (s_pfileinfo(stated, node, slh));
 }
 
 inline static void	cols_iter(t_fileinfo *node)

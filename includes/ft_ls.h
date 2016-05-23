@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:46 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/19 21:29:15 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/23 14:26:22 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,6 @@ char					*epure_name(char *fname, t_params opts);
 
 int						pfile_infos(t_fileinfo *node, char *fname, t_params opts);
 int						s_pfileinfo(struct stat stated, t_fileinfo *node, char *slash);
-void					pdir_infos(t_fileinfo *dir, short *first_time, t_params opts);
+void					pdir_infos(t_fileinfo *dir, short *first_time, t_params opts, int **s);
 void					st_fputstr(char **details, int *nbrmax);
 #endif

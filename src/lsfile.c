@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/23 12:44:00 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/23 14:25:05 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,9 @@ t_fileinfo			*eval(t_fileinfo **fflist, t_params opts, int c)
 		if ((opts & RECURSIVE || c > 0) && tmp->fcount == -1)
 			add_list(fold_list(tmp->infos, opts), tmp, opts);
 		if ((tmp->fcount > 0 || tmp->fcount == -2) && !(opts & REV_SORT))
-		{
-			pdir_infos(tmp, &first, opts);
-			s_local = tmp->s_len;
-		}
+			pdir_infos(tmp, &first, opts, &s_local);
 		else if ((!tmp->fcount || c < 0) && !(opts & REV_SORT))
-		{
 			st_fputstr(tmp->details, s_local);
-			if (tmp->next || opts & LONG_FORMAT)
-				ft_putchar('\n');
-		}
 		if ((tmp = (t_fileinfo *)tmp->next) && !(opts & REV_SORT))
 			fts_delnode((t_fileinfo*)tmp->prev);
 		--c;
