@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/19 21:29:01 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/23 12:44:00 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ t_fileinfo			*fold_list(char *dname, t_params opts)
 			{
 				if (*(node = (t_fileinfo *)ft_lstinsert(&fflist->next,
 								fts_new(fname_join(dname, dfile->d_name)),
-								((opts & 0x10) ? &ftime_cmp : &fts_strcmp)))->infos)
+								((opts & TIME_SORT) ? &ftime_cmp : &fts_strcmp)))->infos)
 				{
 					*fsizes += pfile_infos(node, node->infos, opts);
 					adjust_cols(s_local, node->s_len);

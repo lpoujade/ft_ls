@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/26 15:55:39 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/18 13:33:00 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/23 14:07:18 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,24 @@ void		ls_out(t_fileinfo *flist, t_params opts)
 int			ftime_cmp(t_list *f1, t_list *f2)
 {
 	struct stat		file;
-	time_t			fst;
+	time_t			fst; // f1
+	struct timespec	stmp;
 
 	if ((lstat(((t_fileinfo*)f1)->infos, &file) == -1))
 		perror(ft_strjoin("ls: lstat: ", ((t_fileinfo*)f1)->infos));
-	fst = file.st_atime;
+	fst = file.st_mtime;
+	stmp = file.st_mtimespec;
 	ft_bzero(&file, sizeof(struct stat));
 	if ((lstat(((t_fileinfo*)f2)->infos, &file) == -1))
 		perror("ls: lstat: ");
-	if ((double)fst < (double)file.st_atime)
+	if ((double)stmp.tv_sec < (double)file.st_mtimespec.tv_sec)
 		return (1);
-	else if ((double)fst > (double)file.st_atime)
+	else if ((double)stmp.tv_sec > (double)file.st_mtimespec.tv_sec)
 		return (-1);
-	else
-		return (fts_strcmp(f1, f2));
+	else if ((double)stmp.tv_nsec < (double)file.st_mtimespec.tv_nsec)
+		return (1);
+	else if ((double)stmp.tv_nsec > (double)file.st_mtimespec.tv_nsec)
+		return (-1);
 	return (0);
 }
 
