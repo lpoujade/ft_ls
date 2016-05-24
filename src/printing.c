@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/24 11:46:34 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/24 18:08:09 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	pdir_infos(t_fileinfo *dir, t_params opts, int **s)
 {
 	if (ft_strcmp(dir->infos, "."))
 	{
-		ft_putstr(opts & LONG_FORMAT ? "\n" : "\n\n");
+		//ft_putstr(opts & LONG_FORMAT ? "\n" : "\n\n");
 		ft_putstr(dir->infos);
 		ft_putstr(":\n");
 	}
