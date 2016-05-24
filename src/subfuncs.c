@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/26 15:55:39 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/23 14:07:18 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/24 11:42:20 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void		ls_out(t_fileinfo *flist, t_params opts)
 int			ftime_cmp(t_list *f1, t_list *f2)
 {
 	struct stat		file;
-	time_t			fst; // f1
+	time_t			fst;
 	struct timespec	stmp;
 
 	if ((lstat(((t_fileinfo*)f1)->infos, &file) == -1))

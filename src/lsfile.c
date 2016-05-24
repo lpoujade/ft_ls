@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/23 14:25:05 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/24 11:44:53 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ t_fileinfo			*eval(t_fileinfo **fflist, t_params opts, int c)
 	t_fileinfo		*tmp;
 	t_list			*ndir;
 	int				*s_local;
-	short			first;
 
-	first = 1;
 	tmp = *fflist;
 	s_local = NULL;
 	ndir = (t_list*)tmp;
@@ -29,7 +27,7 @@ t_fileinfo			*eval(t_fileinfo **fflist, t_params opts, int c)
 		if ((opts & RECURSIVE || c > 0) && tmp->fcount == -1)
 			add_list(fold_list(tmp->infos, opts), tmp, opts);
 		if ((tmp->fcount > 0 || tmp->fcount == -2) && !(opts & REV_SORT))
-			pdir_infos(tmp, &first, opts, &s_local);
+			pdir_infos(tmp, opts, &s_local);
 		else if ((!tmp->fcount || c < 0) && !(opts & REV_SORT))
 			st_fputstr(tmp->details, s_local);
 		if ((tmp = (t_fileinfo *)tmp->next) && !(opts & REV_SORT))

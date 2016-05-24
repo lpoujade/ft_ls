@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/08 14:25:57 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/23 14:30:49 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/24 11:43:38 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,7 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 	node->details[1] = NULL;
 	if ((lstat(fname, &stated) == -1))
 	{
-		node->details[0] = ft_strjoin("ls: ",
-				ft_strjoin(fname, ft_strjoin(": ", strerror(errno))));
+		node->details[0] = ft_strjoin(fname, ft_strjoin(": ", strerror(errno)));
 		return (0);
 	}
 	node->fcount = S_ISDIR(stated.st_mode) && !node->fcount ? -1 : 0;

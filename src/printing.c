@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/20 18:46:23 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/23 14:26:22 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/24 11:46:34 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	st_fputstr(char **details, int *nbrmax)
 			if (nbrmax)
 				step = nbrmax[c] - ft_strlen(*details);
 			else
-				step = 10;
+				step = 1;
 			c == 3 || c == 2 ? ft_putstr(*details) : 0;
 			if (step < 20 && c != 6 && c > 0)
 				while (step-- > 0)
@@ -39,16 +39,14 @@ void	st_fputstr(char **details, int *nbrmax)
 	ft_putchar('\n');
 }
 
-void	pdir_infos(t_fileinfo *dir, short *first_time, t_params opts, int **s)
+void	pdir_infos(t_fileinfo *dir, t_params opts, int **s)
 {
-	if (!*first_time || !ft_strcmp(dir->infos, "./"))
+	if (ft_strcmp(dir->infos, "."))
 	{
 		ft_putstr(opts & LONG_FORMAT ? "\n" : "\n\n");
 		ft_putstr(dir->infos);
 		ft_putstr(":\n");
 	}
-	else
-		*first_time = 0;
 	if (opts & LONG_FORMAT && dir->fcount > 0)
 	{
 		ft_putstr("total ");

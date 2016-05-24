@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/23 14:18:00 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/24 12:26:24 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,25 @@ void	rev_print_list(t_fileinfo *start)
 {
 	t_fileinfo	*tmp;
 	t_fileinfo	*dir_check;
+	int			*s_local = NULL;
+	int			bc = 0;
 
 	tmp = start;
-	while (tmp->next)
+	while (tmp->next && ++bc)
 		tmp = (t_fileinfo*)tmp->next;
 	dir_check = tmp;
-	while (tmp)
+	while (tmp->prev)
 	{
-		while (dir_check->prev && dir_check->fcount == 0)
+		while (dir_check->prev && (dir_check->fcount <= 0 || dir_check->fcount == -2))
 			dir_check = (t_fileinfo*)dir_check->prev;
+		if (!s_local)
+			pdir_infos(dir_check, 0, &s_local);
 		st_fputstr(tmp->details, dir_check->s_len);
-		if (tmp->prev || *tmp->details[3])
-			ft_putchar('\n');
-		tmp = (t_fileinfo*)tmp->prev;
-		if (tmp && tmp->fcount != 0)
+		if ((tmp = (t_fileinfo*)tmp->prev))
+			fts_delnode((t_fileinfo*)tmp->next);
+		if (tmp)
 			dir_check = (t_fileinfo*)tmp->prev;
 	}
+	if (tmp)
+		st_fputstr(tmp->details, s_local);
 }
