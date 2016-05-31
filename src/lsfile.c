@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 14:08:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/24 11:44:53 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/31 11:58:37 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ t_fileinfo			*eval(t_fileinfo **fflist, t_params opts, int c)
 	{
 		!tmp->details && !tmp->fcount ? pfile_infos(tmp, tmp->infos, opts) : 0;
 		if ((opts & RECURSIVE || c > 0) && tmp->fcount == -1)
-			add_list(fold_list(tmp->infos, opts), tmp, opts);
+			ft_lstappend((t_list *)tmp, (t_list*)fold_list(tmp->infos, opts));
+			//add_list(fold_list(tmp->infos, opts), tmp, opts);
 		if ((tmp->fcount > 0 || tmp->fcount == -2) && !(opts & REV_SORT))
 			pdir_infos(tmp, opts, &s_local);
 		else if ((!tmp->fcount || c < 0) && !(opts & REV_SORT))

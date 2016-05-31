@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 17:50:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/24 18:12:46 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/05/31 11:56:29 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void		add_list(t_fileinfo *nlist, t_fileinfo *act_list, t_params opts)
 {
+	(void)opts;
 	t_fileinfo	*end_nlist;
 
-	(void)opts;
 	end_nlist = nlist;
 	while (end_nlist->next)
 		end_nlist = (t_fileinfo*)end_nlist->next;
