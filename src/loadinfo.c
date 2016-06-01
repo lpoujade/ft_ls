@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   src/load_finfos.c                                  :+:      :+:    :+:   */
+/*   loadinfo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/04/08 14:25:57 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/04/13 16:08:58 by lpoujade         ###   ########.fr       */
+/*   Created: 2016/06/01 12:51:26 by lpoujade          #+#    #+#             */
+/*   Updated: 2016/06/01 17:08:48 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,15 @@ static inline char	*ft_print_fmode(mode_t details)
 	return (rights);
 }
 
-int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
+int					pfile_infos(t_files *node, char *fname, t_params opts)
 {
 	struct stat		stated;
 	char			*slash;
 	char			*tmp;
 
-	slash = epure_name(fname, opts);
+	//slh = epure_name(fname, opts);
+slh = fname;
+node->name = slh;
 	node->details = (char **)malloc(sizeof(char *) * 8);
 	node->details[1] = NULL;
 	if ((lstat(fname, &stated) == -1))
@@ -83,6 +85,7 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 		return (0);
 	}
 	node->fcount = S_ISDIR(stated.st_mode) && !node->fcount ? -1 : 0;
+	node->stmp = stated.st_mtimespec;
 	if (opts & ADD_FTYPE)
 	{
 		tmp = slash;
@@ -97,19 +100,19 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 	return (s_pfileinfo(stated, node, slash));
 }
 
-inline static void	cols_iter(t_fileinfo *node)
+inline static void	cols_iter(t_files *node)
 {
 	int c;
 
 	c = 0;
 	while (c < 7)
 	{
-		node->s_len[c] = ft_strlen(node->details[c]);
+		node->fields_len[c] = ft_strlen(node->details[c]);
 		c++;
 	}
 }
 
-int					s_pfileinfo(struct stat stated, t_fileinfo *n, char *slash)
+int					s_pfileinfo(struct stat stated, t_files *n, char *slash)
 {
 	struct passwd	*ui;
 	struct group	*gi;
@@ -128,10 +131,10 @@ int					s_pfileinfo(struct stat stated, t_fileinfo *n, char *slash)
 	if (S_ISLNK(stated.st_mode))
 	{
 		tmp = ft_strnew(255);
-		tmp[readlink(n->infos, tmp, 255)] = 0;
+		tmp[readlink(n->name, tmp, 255)] = 0;
 		slash = ft_strjoin(slash, ft_strjoin(" -> ", tmp));
 	}
-	(n->details[5] = fts_date(&stated.st_mtime));
+	n->details[5] = fts_date(&stated.st_mtime);
 	n->details[6] = slash;
 	n->details[7] = NULL;
 	cols_iter(n);

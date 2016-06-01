@@ -1,17 +1,60 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   src/ft_ls.c                                        :+:      :+:    :+:   */
+/*   ft_ls.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/11 14:14:04 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/18 17:10:32 by lpoujade         ###   ########.fr       */
+/*   Created: 2016/06/01 12:26:28 by lpoujade          #+#    #+#             */
+/*   Updated: 2016/06/01 17:09:20 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
+/*
+** Loop on **argv list,
+** fill opts with options
+** for files : loads files infos and sort them in a list
+** for folder: same, but get folder's files in a list
+*/
+
+t_files	*p_args(char const **av, int ac, t_params *opts)
+{
+	int		ap;
+	int		eargs;
+	t_files	*list;
+
+	ap = 0;
+	eargs = 0;
+	list = NULL;
+	while (++ap < ac)
+		if (*av[ap] == '-' && !eargs)
+			*(av[ap] + 1) == '-' ? eargs = 1 : (*opts |= parse_args(av[ap] + 1));
+		else
+			ft_lstinsert((t_list**)&list, fts_new(av[ap], *opts),
+					*opts & TIME_SORT ? &fts_timecmp : &fts_strcmp);
+	return (list);
+}
+
+int		main(int ac, char const **av)
+{
+	t_params	opts;
+	t_files		*list;
+
+	opts = 0;
+	list = NULL;
+	if (!(list = p_args(av, ac, &opts)))
+		list = (t_files*)fts_new(".", opts);
+	while (list)
+	{
+		st_fputstr(list->details, list->fields_len);
+		list = (t_files*)list->next;
+	}
+	return (EXIT_SUCCESS);
+}
+
+/*
 int		main(int ac, char **av)
 {
 	t_params	opts;
@@ -22,18 +65,6 @@ int		main(int ac, char **av)
 
 	c = 0;
 	file_list = NULL;
-	eargs = 0;
-	opts = 0;
-	ap = 0;
-	while (++ap < ac)
-		if (*av[ap] == '-' && !eargs)
-			*(av[ap] + 1) == '-' ? eargs = 1 : (opts |= parse_args(av[ap] + 1));
-		else
-		{
-			ft_lstinsert((t_list**)&file_list, fts_new(av[ap]),
-					opts & TIME_SORT ? &ftime_cmp : &fts_strcmp);
-			c++;
-		}
 	if (!file_list && ++c)
 		ft_lstinsert((t_list**)&file_list, fts_new("."), &fts_strcmp);
 	if ((eval(&file_list, opts, c)))
@@ -66,3 +97,4 @@ void	rev_print_list(t_fileinfo *start)
 			dir_check = (t_fileinfo*)tmp->prev;
 	}
 }
+*/
