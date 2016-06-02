@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/02 14:27:36 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/02 16:12:21 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void		recurse_out(t_files *root, t_params opts)
 		return ;
 	while (sons)
 	{
-		if (sons->fcount)
+		if (sons->fcount && !ft_strstr(sons->name, "/..\0") &&
+				!ft_strstr(sons->name, "/.\0"))
 			recurse_out(sons, opts);
 		sons = (t_files*)sons->next;
 	}

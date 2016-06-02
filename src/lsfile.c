@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:39:08 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/02 14:54:48 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/02 15:29:28 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ t_files				*unfold(t_files *fold, t_params opts)
 					fts_new(ft_strjoin(fold->path, dfile->d_name), opts),
 					opts & TIME_SORT ? &fts_timecmp : &fts_strcmp);
 			adjust_cols(fold->fields_len, ((t_files*)act)->fields_len);
-			if (opts & RECURSIVE && ((t_files*)act)->fcount)
+			if (opts & RECURSIVE && ((t_files*)act)->fcount &&
+					(ft_strcmp(dfile->d_name, ".") &&
+					 ft_strcmp(dfile->d_name, "..")))
 				unfold((t_files*)act, opts);
 		}
 	if (closedir(ddir) == -1)
