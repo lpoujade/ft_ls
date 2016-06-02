@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:29:29 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/01 17:09:35 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/02 14:26:45 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ typedef struct		s_files
 {
 	t_list			*next;
 	t_list			*prev;
-	char			*path;			// without name
+	char			*path;			// name + '/' (for folders only)
 	char			*name;
 	struct timespec	stmp;
 	char			**details;		// 'ls -l' fields
-	int				fields_len[7];
+	int				fields_len[7]; // for subfiles, point to folder's one
 	int				fcount;			// nb of files IF FOLDER, else 0
-	struct s_files	*subfiles;		// if folder, file list
+	struct s_files	*subfiles;		// if folder, subfiles list
 }					t_files;
 
 t_files		*p_args(char const **av, int ac, t_params *opts);
@@ -65,5 +65,7 @@ int			fts_strcmp(t_list *s1, t_list *s2);
 t_params	parse_args(char const *av);
 char		*epure_name(char *fname, t_params opts);
 void		st_fputstr(char **details, int *nbrmax);
+t_files		*unfold(t_files *fold, t_params opts);
+void		recurse_out(t_files *root, t_params opts);
 
 #endif

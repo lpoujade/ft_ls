@@ -6,11 +6,35 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/01 17:08:05 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/02 14:27:36 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+void		recurse_out(t_files *root, t_params opts)
+{
+	t_files	*sons;
+
+	ft_putchar('\n');
+	ft_putstr(root->name);
+	sons = root->subfiles;
+	ft_putstr(":\n");
+	while (sons)
+	{
+		st_fputstr(sons->details, root->fields_len);
+		sons = (t_files*)sons->next;
+	}
+	sons = root->subfiles;
+	if (!(opts & RECURSIVE))
+		return ;
+	while (sons)
+	{
+		if (sons->fcount)
+			recurse_out(sons, opts);
+		sons = (t_files*)sons->next;
+	}
+}
 
 void		st_fputstr(char **details, int *nbrmax)
 {
@@ -36,22 +60,5 @@ void		st_fputstr(char **details, int *nbrmax)
 		c++;
 		details++;
 	}
-}
-
-inline void	pdir_infos(t_fileinfo *dir, short *first_time, t_params opts)
-{
-	if (!*first_time || !ft_strcmp(dir->infos, "./"))
-	{
-		ft_putstr(opts & LONG_FORMAT ? "\n" : "\n\n");
-		ft_putstr(dir->infos);
-		ft_putstr(":\n");
-	}
-	else
-		*first_time = 0;
-	if (opts & LONG_FORMAT && dir->fcount > 0)
-	{
-		ft_putstr("total ");
-		ft_putnbr(dir->fcount);
-		ft_putchar('\n');
-	}
+	ft_putchar('\n');
 }

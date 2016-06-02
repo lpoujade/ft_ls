@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:47:58 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/01 17:09:09 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/02 14:49:53 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,17 @@ t_list		*fts_new(char const *fname, t_params opts)
 	}
 	new->next = NULL;
 	new->prev = NULL;
-	new->path = NULL;
-	new->name = NULL;
+	new->name = (char*)fname;
 	new->details = NULL;
 	new->fcount = 0;
 	new->subfiles = NULL;
-	pfile_infos(new, ft_strdup(fname), opts);
+	pfile_infos(new, new->name, opts);
+	if (new->fcount)
+	{
+		new->path = ft_strnew(ft_strlen(new->name) + 1);
+		ft_strcat(new->path, new->name);
+		ft_strcat(new->path, "/");
+	}
 	return ((t_list *)new);
 }
 
@@ -38,6 +43,8 @@ void		fts_delnode(t_files *node)
 	{
 		if (node->details)
 			free(node->details);
+		if (node->name)
+			free(node->name);
 		free(node);
 	}
 	node = NULL;
@@ -75,29 +82,4 @@ int			fts_timecmp(t_list *of1, t_list *of2)
 	else
 		return (fts_strcmp(of1, of2));
 	return (0);
-}
-
-char		*fts_date(time_t const *clock)
-{
-	char	*date;
-	char	*t_buf;
-	time_t	act;
-
-	date = ft_strnew(13);
-	t_buf = ctime(clock);
-	date = ft_strncpy(date, t_buf + 4, 12);
-	if ((time(&act) - *clock) >= 13042800 || act < *clock)
-		ft_strncpy(date + 7, t_buf + 19, 5);
-	return (date);
-}
-
-char		*epure_name(char *fname, t_params opts)
-{
-	char *slash;
-
-	if (!(opts & FULL_NAMES) && (slash = ft_strrchr(fname, '/')))
-		slash = (*(slash + 1)) ? slash + 1 : fname;
-	else
-		slash = fname;
-	return (slash);
 }
