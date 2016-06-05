@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:51:26 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/02 14:47:42 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/05 20:22:46 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,22 @@ static inline char	*ft_print_fmode(mode_t details)
 	char	*rights;
 
 	rights = ft_strnew(10);
-	rights[3] = '-';
-	rights[6] = '-';
 	rights[0] = file_mode(details, 0);
 	rights[1] = details & S_IRUSR ? 'r' : '-';
 	rights[2] = details & S_IWUSR ? 'w' : '-';
-	if (details & S_IXUSR && details & S_ISUID)
-		rights[3] = 's';
-	else if (details & S_ISUID)
-		rights[3] = 'S';
-	(details & S_IXUSR) ? rights[3] = 'x' : 0;
+	rights[3] = details & S_IXUSR ? 'x' : '-';
+	if (details & S_ISUID)
+		rights[3] = details & S_IXUSR ? 's' : 'S';
 	rights[4] = details & S_IRGRP ? 'r' : '-';
 	rights[5] = details & S_IWGRP ? 'w' : '-';
-	if (details & S_IXGRP && details & S_ISGID)
-		rights[6] = 's';
-	else if (details & S_ISGID)
-		rights[6] = 'S';
-	else if (details & S_IXGRP)
-		rights[6] = 'x';
+	rights[6] = details & S_IXGRP ? 'x' : '-';
+	if (details & S_ISGID)
+		rights[6] = details & S_IXGRP ? 's' : 'S';
 	rights[7] = details & S_IROTH ? 'r' : '-';
 	rights[8] = details & S_IWOTH ? 'w' : '-';
 	rights[9] = details & S_IXGRP ? 'x' : '-';
+	if (details & S_ISVTX)
+		rights[9] = details & S_IXGRP ? 't' : 'T';
 	return (rights);
 }
 

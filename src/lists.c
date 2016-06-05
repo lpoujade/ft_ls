@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:47:58 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/02 14:49:53 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/05 19:50:25 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_list		*fts_new(char const *fname, t_params opts)
 	new->details = NULL;
 	new->fcount = 0;
 	new->subfiles = NULL;
-	pfile_infos(new, new->name, opts);
+	new->fields_len[7] = pfile_infos(new, new->name, opts);
 	if (new->fcount)
 	{
 		new->path = ft_strnew(ft_strlen(new->name) + 1);
@@ -37,14 +37,29 @@ t_list		*fts_new(char const *fname, t_params opts)
 	return ((t_list *)new);
 }
 
-void		fts_delnode(t_files *node)
+void		fts_delnode(t_list *onode)
 {
+	t_files *node;
+	char	**m;
+
+	node = (t_files*)onode;
+	if (node->subfiles)
+		ft_lstiter((t_list*)node->subfiles, &fts_delnode);
 	if (node)
 	{
-		if (node->details)
+		if ((m = node->details))
+		{
+			while (*m)
+			{
+				free(*m);
+				m++;
+			}
 			free(node->details);
+		}
 		if (node->name)
 			free(node->name);
+		if (node->path)
+			free(node->path);
 		free(node);
 	}
 	node = NULL;
