@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:26:28 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/06 16:51:50 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/06 18:59:28 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 ** Loop on **argv list,
 ** fill opts with options
-** for files : loads files infos and sort them in a list
+** for files : loads file infos and insert file in a list, sorted as requested
 ** for folder: same, but get folder's files in a list
 */
 
@@ -70,5 +70,6 @@ int		main(int ac, char const **av)
 	}
 	if (opts & REV_SORT)
 		rev_recurse_out(lastnode(list), opts);
+	//ft_lstiter((t_list*)list, &fts_delnode); segv on reverse printing
 	return (EXIT_SUCCESS);
 }
