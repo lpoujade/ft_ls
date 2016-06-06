@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 13:15:07 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/06 13:33:50 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/06 18:20:53 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ static void	err_exit(char c)
 
 t_params	parse_args(char const *av)
 {
-	t_params	opts;
-	short int	err;
+	t_params			opts;
+	unsigned short int	err;
 
 	err = 0;
 	opts = 0;

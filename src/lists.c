@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:47:58 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/06 12:55:17 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/06 18:21:00 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void		fts_delnode(t_list *onode)
 			free(&node->name);
 		if (node->path)
 			free(&node->path);
-		free(&node);
+		free(node);
 	}
 	node = NULL;
 }
