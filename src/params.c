@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   src/paramss.c                                      :+:      :+:    :+:   */
+/*   params.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/11 23:37:35 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/24 11:41:50 by lpoujade         ###   ########.fr       */
+/*   Created: 2016/06/01 13:15:07 by lpoujade          #+#    #+#             */
+/*   Updated: 2016/06/06 13:33:50 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	err_exit(char c)
 	exit(EXIT_FAILURE);
 }
 
-t_params	parse_args(char *av)
+t_params	parse_args(char const *av)
 {
 	t_params	opts;
 	short int	err;

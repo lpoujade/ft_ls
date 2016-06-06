@@ -1,9 +1,0 @@
-- Recursive list folders/subfolders :
-	- loop while folder in last list
-	- transmit (return value?) state : if folder in last list or not
-	- each folder-node has an attached list
-- Segf on error : save error in struct OR notice node as void
-- init fields sizes to 10
-- reverse sorting option : - transmit boolean to compare function
-						   - to list function
-(see calendar)

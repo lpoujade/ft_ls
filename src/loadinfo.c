@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   src/load_finfos.c                                  :+:      :+:    :+:   */
+/*   loadinfo.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/04/08 14:25:57 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/05/24 11:43:38 by lpoujade         ###   ########.fr       */
+/*   Created: 2016/06/01 12:51:26 by lpoujade          #+#    #+#             */
+/*   Updated: 2016/06/06 13:33:21 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,31 +43,26 @@ static inline char	*ft_print_fmode(mode_t details)
 	char	*rights;
 
 	rights = ft_strnew(10);
-	rights[3] = '-';
-	rights[6] = '-';
 	rights[0] = file_mode(details, 0);
 	rights[1] = details & S_IRUSR ? 'r' : '-';
 	rights[2] = details & S_IWUSR ? 'w' : '-';
-	if (details & S_IXUSR && details & S_ISUID)
-		rights[3] = 's';
-	else if (details & S_ISUID)
-		rights[3] = 'S';
-	(details & S_IXUSR) ? rights[3] = 'x' : 0;
+	rights[3] = details & S_IXUSR ? 'x' : '-';
+	if (details & S_ISUID)
+		rights[3] = details & S_IXUSR ? 's' : 'S';
 	rights[4] = details & S_IRGRP ? 'r' : '-';
 	rights[5] = details & S_IWGRP ? 'w' : '-';
-	if (details & S_IXGRP && details & S_ISGID)
-		rights[6] = 's';
-	else if (details & S_ISGID)
-		rights[6] = 'S';
-	else if (details & S_IXGRP)
-		rights[6] = 'x';
+	rights[6] = details & S_IXGRP ? 'x' : '-';
+	if (details & S_ISGID)
+		rights[6] = details & S_IXGRP ? 's' : 'S';
 	rights[7] = details & S_IROTH ? 'r' : '-';
 	rights[8] = details & S_IWOTH ? 'w' : '-';
 	rights[9] = details & S_IXGRP ? 'x' : '-';
+	if (details & S_ISVTX)
+		rights[9] = details & S_IXGRP ? 't' : 'T';
 	return (rights);
 }
 
-int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
+int					pfile_infos(t_files *node, char *fname, t_params opts)
 {
 	struct stat		stated;
 	char			*slh;
@@ -82,6 +77,7 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 		return (0);
 	}
 	node->fcount = S_ISDIR(stated.st_mode) && !node->fcount ? -1 : 0;
+	node->stmp = stated.st_mtimespec;
 	if (opts & ADD_FTYPE)
 	{
 		tmp = slh;
@@ -89,26 +85,23 @@ int					pfile_infos(t_fileinfo *node, char *fname, t_params opts)
 		slh[ft_strlen(tmp)] = file_mode(stated.st_mode, 1);
 	}
 	if (!(opts & 0x01))
-	{
 		node->details[0] = slh;
-		return (stated.st_blocks);
-	}
-	return (s_pfileinfo(stated, node, slh));
+	return (opts & 0x01 ? s_pfileinfo(stated, node, slh) : stated.st_blocks);
 }
 
-inline static void	cols_iter(t_fileinfo *node)
+inline static void	cols_iter(t_files *node)
 {
 	int c;
 
 	c = 0;
 	while (c < 7)
 	{
-		node->s_len[c] = ft_strlen(node->details[c]);
+		node->fields_len[c] = ft_strlen(node->details[c]);
 		c++;
 	}
 }
 
-int					s_pfileinfo(struct stat stated, t_fileinfo *n, char *slash)
+int					s_pfileinfo(struct stat stated, t_files *n, char *slash)
 {
 	struct passwd	*ui;
 	struct group	*gi;
@@ -127,10 +120,10 @@ int					s_pfileinfo(struct stat stated, t_fileinfo *n, char *slash)
 	if (S_ISLNK(stated.st_mode))
 	{
 		tmp = ft_strnew(255);
-		tmp[readlink(n->infos, tmp, 255)] = 0;
+		tmp[readlink(n->name, tmp, 255)] = 0;
 		slash = ft_strjoin(slash, ft_strjoin(" -> ", tmp));
 	}
-	(n->details[5] = fts_date(&stated.st_mtime));
+	n->details[5] = fts_date(&stated.st_mtime);
 	n->details[6] = slash;
 	n->details[7] = NULL;
 	cols_iter(n);
