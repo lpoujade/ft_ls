@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:47:58 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/05 19:50:25 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/06 12:55:17 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ void		fts_delnode(t_list *onode)
 			free(node->details);
 		}
 		if (node->name)
-			free(node->name);
+			free(&node->name);
 		if (node->path)
-			free(node->path);
-		free(node);
+			free(&node->path);
+		free(&node);
 	}
 	node = NULL;
 }
@@ -97,4 +97,14 @@ int			fts_timecmp(t_list *of1, t_list *of2)
 	else
 		return (fts_strcmp(of1, of2));
 	return (0);
+}
+
+t_files		*lastnode(t_files *list)
+{
+	t_files	*ln;
+
+	ln = list;
+	while (ln && ln->next)
+		ln = (t_files*)ln->next;
+	return (ln);
 }

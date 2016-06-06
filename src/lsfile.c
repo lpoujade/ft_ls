@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:39:08 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/05 20:27:11 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/06 10:30:36 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ t_files				*unfold(t_files *fold, t_params opts)
 	struct dirent	*dfile;
 	t_list			*act;
 
-	fold->fcount = 0;
 	if (!(ddir = opendir(fold->name)))
 		return (NULL);
 	while ((dfile = readdir(ddir)))

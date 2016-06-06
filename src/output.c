@@ -6,29 +6,57 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/05 19:41:21 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/06 12:58:27 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void		recurse_out(t_files *root, t_params opts)
+static inline void	print_dirname(t_files *dir, t_params opts)
+{
+	if (dir->prev || dir->next)
+	{
+		if (dir->prev)
+			ft_putchar('\n');
+		ft_putstr(dir->name);
+		ft_putstr(":\n");
+	}
+	if (opts & LONG_FORMAT && dir->subfiles)
+	{
+		ft_putstr("total ");
+		ft_putnbr(dir->fcount > 0 ? ++dir->fcount : 0);
+		ft_putchar('\n');
+	}
+}
+
+void				rev_recurse_out(t_files *root, t_params opts)
+{
+	t_files	*tmp;
+
+	tmp = lastnode(root->subfiles);
+	print_dirname(root, opts);
+	while (tmp)
+	{
+		st_fputstr(tmp->details, root->fields_len);
+		tmp = (t_files*)tmp->prev;
+	}
+	if (!(opts & RECURSIVE))
+		return ;
+	tmp = lastnode(root->subfiles);
+	while (tmp)
+	{
+		if (tmp->fcount && !ft_strstr(tmp->name, "/..\0"))
+			rev_recurse_out(tmp, opts);
+		tmp = (t_files*)tmp->prev;
+	}
+}
+
+void				recurse_out(t_files *root, t_params opts)
 {
 	t_files		*sons;
 
-	if (root->next || root->prev)
-	{
-		ft_putchar('\n');
-		ft_putstr(root->name);
-		ft_putstr(":\n");
-	}
-	if (opts & LONG_FORMAT && root->subfiles)
-	{
-		ft_putstr("total ");
-		ft_putnbr(root->fcount > 0 ? root->fcount : 0);
-		ft_putchar('\n');
-	}
 	sons = root->subfiles;
+	print_dirname(root, opts);
 	while (sons)
 	{
 		st_fputstr(sons->details, root->fields_len);
@@ -45,7 +73,7 @@ void		recurse_out(t_files *root, t_params opts)
 	}
 }
 
-void		st_fputstr(char **details, int *nbrmax)
+void				st_fputstr(char **details, int *nbrmax)
 {
 	int c;
 	int	step;
@@ -74,7 +102,7 @@ void		st_fputstr(char **details, int *nbrmax)
 	ft_putchar('\n');
 }
 
-void		print_file(t_list *file)
+void				print_file(t_list *file)
 {
 	int		c;
 	int		step;

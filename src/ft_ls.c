@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:26:28 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/05 19:46:02 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/06 12:55:44 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,20 @@ int		main(int ac, char const **av)
 	list = NULL;
 	if (!(list = p_args(av, ac, &opts)))
 		list = (t_files*)fts_new(".", opts);
-	while (list && !(opts & REV_SORT))
+	while (list)
 	{
 		if (list->fcount && !list->subfiles)
 			unfold(list, opts);
-		else if (!list->fcount)
+		else if (!list->fcount && !(opts & REV_SORT))
 			st_fputstr(list->details, list->fields_len);
-		if (list->subfiles)
+		if (list->subfiles && !(opts & REV_SORT))
 			recurse_out(list, opts);
-		list = (t_files*)list->next;
+		if (list->next)
+			list = (t_files*)list->next;
+		else
+			break ;
 	}
-	ft_lstiter((t_list*)list, fts_delnode);
+	if (opts & REV_SORT)
+		rev_recurse_out(lastnode(list), opts);
 	return (EXIT_SUCCESS);
 }
