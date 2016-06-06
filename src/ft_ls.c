@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:26:28 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/06 13:33:01 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/06 16:51:50 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_files	*p_args(char const **av, int ac, t_params *opts)
 	int		ap;
 	int		earg;
 	t_files	*list;
+	t_files	*a;
 
 	ap = 0;
 	earg = 0;
@@ -32,8 +33,16 @@ t_files	*p_args(char const **av, int ac, t_params *opts)
 		if (*av[ap] == '-' && !earg)
 			*(av[ap] + 1) == '-' ? earg = 1 : (*opts |= parse_args(av[ap] + 1));
 		else
-			ft_lstinsert((t_list**)&list, fts_new(av[ap], *opts),
+			a = (t_files*)ft_lstinsert((t_list**)&list, fts_new(av[ap], *opts),
 					*opts & TIME_SORT ? &fts_timecmp : &fts_strcmp);
+	a = list;
+	while (a && ac)
+	{
+		adjust_cols(a->fields_len, list->fields_len);
+		adjust_cols(list->fields_len, a->fields_len);
+		if (!(a = (t_files*)a->next) && ac--)
+			a = list;
+	}
 	return (list);
 }
 
@@ -54,7 +63,7 @@ int		main(int ac, char const **av)
 			st_fputstr(list->details, list->fields_len);
 		if (list->subfiles && !(opts & REV_SORT))
 			recurse_out(list, opts);
-		if (list->next)
+		if (list->next || !(opts & REV_SORT))
 			list = (t_files*)list->next;
 		else
 			break ;

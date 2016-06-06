@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:29:29 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/06 13:34:12 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/06 16:40:45 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,5 @@ t_files				*unfold(t_files *fold, t_params opts);
 void				recurse_out(t_files *root, t_params opts);
 void				rev_recurse_out(t_files *root, t_params opts);
 t_files				*lastnode(t_files *list);
+void				adjust_cols(int *final, int *act);
 #endif

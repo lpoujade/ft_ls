@@ -6,13 +6,13 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:39:08 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/06 13:33:41 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/06 16:39:44 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static inline void	adjust_cols(int *final, int *act)
+void		adjust_cols(int *final, int *act)
 {
 	int c;
 
@@ -31,7 +31,7 @@ static inline void	adjust_cols(int *final, int *act)
 ** with info requested in opts
 */
 
-t_files				*unfold(t_files *fold, t_params opts)
+t_files		*unfold(t_files *fold, t_params opts)
 {
 	DIR				*ddir;
 	struct dirent	*dfile;
