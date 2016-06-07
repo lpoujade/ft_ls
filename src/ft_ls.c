@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:26:28 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/07 13:25:30 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/07 19:39:29 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,12 @@ int					main(int ac, char const **av)
 			st_fputstr(list->details, list->fields_len);
 		if (list->subfiles && !(opts & REV_SORT))
 			recurse_out(list, opts);
-		if (!list->next && (opts & REV_SORT))
+		if (!list->next)
 			break ;
 		list = (t_files*)list->next;
 	}
 	if (opts & REV_SORT)
-	{
-		rev_print_slist(lastnode(list));
-		rev_recurse_out(lastnode(list), opts);
-	}
-	//ft_lstiter((t_list*)list, &fts_delnode);
+		rev_recurse_out(rev_print_slist(lastnode(list)), opts);
+	ft_lstiter((t_list*)list, &fts_delnode);
 	return (EXIT_SUCCESS);
 }
