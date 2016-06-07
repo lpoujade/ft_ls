@@ -6,11 +6,24 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/06 16:26:38 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/07 11:53:10 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+void				rev_print_slist(t_files *node)
+{
+	t_files *tmp;
+
+	tmp = node;
+	while (tmp)
+	{
+		if (!tmp->subfiles)
+			st_fputstr(tmp->details, tmp->fields_len);
+		tmp = (t_files*)tmp->prev;
+	}
+}
 
 static inline void	print_dirname(t_files *dir, t_params opts)
 {
@@ -34,7 +47,8 @@ void				rev_recurse_out(t_files *root, t_params opts)
 	t_files	*tmp;
 
 	tmp = lastnode(root->subfiles);
-	print_dirname(root, opts);
+	if (root->subfiles)
+		print_dirname(root, opts);
 	while (tmp)
 	{
 		st_fputstr(tmp->details, root->fields_len);
@@ -87,35 +101,6 @@ void				st_fputstr(char **details, int *nbrmax)
 		{
 			if (nbrmax)
 				step = nbrmax[c] - ft_strlen(*details);
-			else
-				step = 10;
-			c == 3 || c == 2 ? ft_putstr(*details) : 0;
-			if (step < 20 && c != 6 && c > 0)
-				while (step-- > 0)
-					write(1, " ", 1);
-			c != 3 && c != 2 ? ft_putstr(*details) : 0;
-			ft_putstr(" ");
-		}
-		c++;
-		details++;
-	}
-	ft_putchar('\n');
-}
-
-void				print_file(t_list *file)
-{
-	int		c;
-	int		step;
-	char	**details;
-
-	c = 0;
-	details = ((t_files *)file)->details;
-	while (*details && c <= 7)
-	{
-		if (*details && **details)
-		{
-			if (*((t_files *)file)->fields_len)
-				step = ((t_files *)file)->fields_len[c] - ft_strlen(*details);
 			else
 				step = 10;
 			c == 3 || c == 2 ? ft_putstr(*details) : 0;
