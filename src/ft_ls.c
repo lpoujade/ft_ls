@@ -6,11 +6,25 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:26:28 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/07 12:52:38 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/07 13:25:30 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+static inline void	adjcols(t_files *list, int count)
+{
+	t_files *a;
+
+	a = list;
+	while (a && count)
+	{
+		adjust_cols(a->fields_len, list->fields_len);
+		adjust_cols(list->fields_len, a->fields_len);
+		if (!(a = (t_files*)a->next) && count--)
+			a = list;
+	}
+}
 
 /*
 ** Loop on **argv list,
@@ -19,7 +33,7 @@
 ** for folder: same, but get folder's files in a list
 */
 
-t_files	*p_args(char const **av, int ac, t_params *opts)
+t_files				*p_args(char const **av, int ac, t_params *opts)
 {
 	int		ap;
 	int		earg;
@@ -36,29 +50,17 @@ t_files	*p_args(char const **av, int ac, t_params *opts)
 			*(av[ap] + 1) == '-' ? earg = 1 : (*opts |= parse_args(av[ap] + 1));
 		else
 		{
-			if ((a = (t_files*)fts_new(av[ap], *opts))->fcount)
-				ft_lstinsert((t_list**)&list, (t_list*)a,
-						*opts & TIME_SORT ? &fts_timecmp : &fts_strcmp);
-			else
-				ft_lstinsert((t_list**)&false_subs, (t_list*)a,
-						*opts & TIME_SORT ? &fts_timecmp : &fts_strcmp);
+			a = (t_files*)fts_new(av[ap], *opts);
+			ft_lstinsert(a->fcount ? (t_list**)&list : (t_list**)&false_subs,
+					(t_list*)a, *opts & TIME_SORT ? &fts_timecmp : &fts_strcmp);
 		}
-	if (false_subs && list)
-		ft_lstappend((t_list*)false_subs, (t_list*)list);
-	if (false_subs)
-		list = false_subs;
-	a = false_subs;
-	while (a && ac)
-	{
-		adjust_cols(a->fields_len, list->fields_len);
-		adjust_cols(list->fields_len, a->fields_len);
-		if (!(a = (t_files*)a->next) && ac--)
-			a = false_subs;
-	}
+	ft_lstappend((t_list*)false_subs, (t_list*)list);
+	false_subs ? list = false_subs : 0;
+	adjcols(list, ac);
 	return (list);
 }
 
-int		main(int ac, char const **av)
+int					main(int ac, char const **av)
 {
 	t_params	opts;
 	t_files		*list;
