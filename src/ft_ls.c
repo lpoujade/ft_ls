@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:26:28 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/08 16:45:03 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/08 18:00:30 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,6 @@ int					main(int ac, char const **av)
 		while ((list = (t_files*)list->prev))
 			rev_recurse_out(list, opts);
 	}
-	//ft_lstiter((t_list*)list, &fts_delnode);
+	ft_lstiter((t_list*)list, &fts_delnode);
 	return (EXIT_SUCCESS);
 }
