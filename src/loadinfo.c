@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:51:26 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/06 13:33:21 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/08 16:05:03 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int					s_pfileinfo(struct stat stated, t_files *n, char *slash)
 		tmp = ft_strnew(255);
 		tmp[readlink(n->name, tmp, 255)] = 0;
 		slash = ft_strjoin(slash, ft_strjoin(" -> ", tmp));
+		free(tmp);
 	}
 	n->details[5] = fts_date(&stated.st_mtime);
 	n->details[6] = slash;

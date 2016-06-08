@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/07 19:39:59 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/08 17:58:57 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ t_files				*rev_print_slist(t_files *node)
 
 static inline void	print_dirname(t_files *dir, t_params opts)
 {
-	if (dir->prev || dir->next)
+	if (dir->next || dir->prev)
 	{
-		if (dir->prev || (!dir->prev && dir->subfiles))
+		if ((opts & RECURSIVE && dir->next) || (!(opts & RECURSIVE) && dir->prev))
 			ft_putchar('\n');
 		ft_putstr(dir->name);
 		ft_putstr(":\n");
@@ -47,27 +47,23 @@ void				rev_recurse_out(t_files *root, t_params opts)
 {
 	t_files	*tmp;
 
-	while (root)
+	tmp = lastnode(root->subfiles);
+	if (root->subfiles || root->fcount)
+		print_dirname(root, opts);
+	while (tmp)
+	{
+		st_fputstr(tmp->details, root->fields_len);
+		tmp = (t_files*)tmp->prev;
+	}
+	if (opts & RECURSIVE)
 	{
 		tmp = lastnode(root->subfiles);
-		if (root->subfiles)
-			print_dirname(root, opts);
 		while (tmp)
 		{
-			st_fputstr(tmp->details, root->fields_len);
+			if (tmp->fcount && !ft_strstr(tmp->name, "/..\0"))
+				rev_recurse_out(tmp, opts);
 			tmp = (t_files*)tmp->prev;
 		}
-		if (opts & RECURSIVE)
-		{
-			tmp = lastnode(root->subfiles);
-			while (tmp)
-			{
-				if (tmp->fcount && !ft_strstr(tmp->name, "/..\0"))
-					rev_recurse_out(tmp, opts);
-				tmp = (t_files*)tmp->prev;
-			}
-		}
-		root = (t_files*)root->prev;
 	}
 }
 
