@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:26:28 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/09 15:37:17 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/09 17:04:44 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ int					main(int ac, char const **av)
 	{
 		if (list->fcount && !list->subfiles)
 			unfold(list, opts);
-		else if (!list->fcount && !(opts & REV_SORT))
+		else if (!list->fcount && opts ^ REV_SORT)
 			st_fputstr(list->details, list->fields_len);
-		if (list->subfiles && !(opts & REV_SORT))
+		if (list->subfiles && opts ^ REV_SORT)
 			recurse_out(list, opts);
 		if (!list->next)
 			break ;
