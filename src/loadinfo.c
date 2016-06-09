@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:51:26 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/09 11:55:53 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/09 15:33:41 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int					pfile_infos(t_files *node, char *fname, t_params opts)
 	slh = ft_strdup(epure_name(fname, opts));
 	node->details = (char **)malloc(sizeof(char *) * 8);
 	node->details[1] = NULL;
+	node->details[7] = NULL;
 	if ((lstat(fname, &stated) == -1))
 	{
 		node->details[0] = ft_strjoin(fname, ft_strjoin(": ", strerror(errno)));
@@ -126,7 +127,6 @@ int					s_pfileinfo(struct stat stated, t_files *n, char *slash)
 	}
 	n->details[5] = fts_date(&stated.st_mtime);
 	n->details[6] = slash;
-	n->details[7] = NULL;
 	cols_iter(n);
 	return (stated.st_blocks);
 }

@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/09 13:56:50 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/09 14:57:13 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void				rev_recurse_out(t_files *root, t_params opts)
 
 	tmp = lastnode(root->subfiles);
 	if (root->subfiles || root->fcount)
-	print_dirname(root, opts);
+		print_dirname(root, opts);
 	while (tmp)
 	{
 		st_fputstr(tmp->details, root->fields_len);
@@ -60,7 +60,8 @@ void				rev_recurse_out(t_files *root, t_params opts)
 		tmp = lastnode(root->subfiles);
 		while (tmp)
 		{
-			if (tmp->fcount && !ft_strstr(tmp->name, "/.."))
+			if (tmp->fcount && !ft_strstr(tmp->name, "/..") &&
+				ft_strcmp(".", epure_name(tmp->name, opts)))
 				rev_recurse_out(tmp, opts);
 			tmp = (t_files*)tmp->prev;
 		}
@@ -72,7 +73,8 @@ void				recurse_out(t_files *root, t_params opts)
 	t_files		*sons;
 
 	sons = root->subfiles;
-	print_dirname(root, opts);
+	if (root->subfiles || root->fcount)
+		print_dirname(root, opts);
 	while (sons)
 	{
 		st_fputstr(sons->details, root->fields_len);
@@ -83,7 +85,8 @@ void				recurse_out(t_files *root, t_params opts)
 		return ;
 	while (sons)
 	{
-		if (sons->fcount && !ft_strstr(sons->name, "/..\0"))
+		if (sons->fcount && !ft_strstr(sons->name, "/..") &&
+				ft_strcmp(".", epure_name(sons->name, opts)))
 			recurse_out(sons, opts);
 		sons = (t_files*)sons->next;
 	}

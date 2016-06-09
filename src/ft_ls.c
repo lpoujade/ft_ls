@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:26:28 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/08 18:00:30 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/09 15:37:17 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,14 @@ t_files				*p_args(char const **av, int ac, t_params *opts)
 	return (list);
 }
 
+static inline void	rev_output(t_files *list, t_params opts)
+{
+	list = rev_print_slist(lastnode(list));
+	rev_recurse_out(list, opts);
+	while ((list = (t_files*)list->prev))
+		rev_recurse_out(list, opts);
+}
+
 int					main(int ac, char const **av)
 {
 	t_params	opts;
@@ -82,12 +90,7 @@ int					main(int ac, char const **av)
 		list = (t_files*)list->next;
 	}
 	if (opts & REV_SORT)
-	{
-		list = rev_print_slist(lastnode(list));
-		rev_recurse_out(list, opts);
-		while ((list = (t_files*)list->prev))
-			rev_recurse_out(list, opts);
-	}
+		rev_output(list, opts);
 	ft_lstiter((t_list*)list, &fts_delnode);
 	return (EXIT_SUCCESS);
 }
