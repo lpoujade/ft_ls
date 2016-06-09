@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:51:26 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/08 16:05:03 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/09 11:55:53 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int					pfile_infos(t_files *node, char *fname, t_params opts)
 	char			*slh;
 	char			*tmp;
 
-	slh = epure_name(fname, opts);
+	slh = ft_strdup(epure_name(fname, opts));
 	node->details = (char **)malloc(sizeof(char *) * 8);
 	node->details[1] = NULL;
 	if ((lstat(fname, &stated) == -1))
@@ -109,10 +109,10 @@ int					s_pfileinfo(struct stat stated, t_files *n, char *slash)
 
 	ui = getpwuid(stated.st_uid);
 	gi = getgrgid(stated.st_gid);
-	n->details[2] = ui->pw_name ? ft_strdup(ui->pw_name) : ft_itoa(ui->pw_uid);
-	n->details[3] = gi->gr_name ? ft_strdup(gi->gr_name) : ft_itoa(gi->gr_gid);
 	n->details[0] = ft_print_fmode(stated.st_mode);
 	n->details[1] = ft_itoa(stated.st_nlink);
+	n->details[2] = ui->pw_name ? ft_strdup(ui->pw_name) : ft_itoa(ui->pw_uid);
+	n->details[3] = gi->gr_name ? ft_strdup(gi->gr_name) : ft_itoa(gi->gr_gid);
 	n->details[4] = (S_ISCHR(stated.st_mode) || S_ISBLK(stated.st_mode)) ?
 		ft_strjoin(ft_itoa(major(stated.st_rdev)),
 				ft_strjoin(", ", ft_itoa(minor(stated.st_rdev))))

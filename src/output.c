@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/08 18:00:19 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/09 13:56:50 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ static inline void	print_dirname(t_files *dir, t_params opts)
 {
 	if (dir->next || dir->prev)
 	{
-		if ((opts & RECURSIVE && dir->next) ||
-				(!(opts & RECURSIVE) && dir->prev))
+		if ((opts ^ REV_SORT && dir->prev) || (opts & REV_SORT && dir->next))
 			ft_putchar('\n');
 		ft_putstr(dir->name);
 		ft_putstr(":\n");
@@ -50,7 +49,7 @@ void				rev_recurse_out(t_files *root, t_params opts)
 
 	tmp = lastnode(root->subfiles);
 	if (root->subfiles || root->fcount)
-		print_dirname(root, opts);
+	print_dirname(root, opts);
 	while (tmp)
 	{
 		st_fputstr(tmp->details, root->fields_len);
@@ -61,7 +60,7 @@ void				rev_recurse_out(t_files *root, t_params opts)
 		tmp = lastnode(root->subfiles);
 		while (tmp)
 		{
-			if (tmp->fcount && !ft_strstr(tmp->name, "/..\0"))
+			if (tmp->fcount && !ft_strstr(tmp->name, "/.."))
 				rev_recurse_out(tmp, opts);
 			tmp = (t_files*)tmp->prev;
 		}
