@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/09 14:57:13 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/10 13:39:25 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static inline void	print_dirname(t_files *dir, t_params opts)
 {
 	if (dir->next || dir->prev)
 	{
-		if ((opts ^ REV_SORT && dir->prev) || (opts & REV_SORT && dir->next))
+		if ((!(opts & REV_SORT) && dir->prev) || (opts & REV_SORT && dir->next))
 			ft_putchar('\n');
 		ft_putstr(dir->name);
 		ft_putstr(":\n");
@@ -113,7 +113,7 @@ void				st_fputstr(char **details, int *nbrmax)
 				while (step-- > 0)
 					write(1, " ", 1);
 			c != 3 && c != 2 ? ft_putstr(*details) : 0;
-			ft_putstr(" ");
+			ft_putstr(c == 0 || c == 2 || c == 3 ? "  " : " ");
 		}
 		c++;
 		details++;

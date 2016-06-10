@@ -6,13 +6,13 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:47:58 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/09 15:25:54 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/10 13:54:33 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-t_list		*fts_new(char const *fname, t_params opts)
+t_list		*fts_new(char *fname, t_params opts)
 {
 	t_files	*new;
 
@@ -45,10 +45,10 @@ void		fts_delnode(t_list *onode)
 
 	i = 0;
 	node = (t_files*)onode;
-	if (node->subfiles)
-		ft_lstiter((t_list*)node->subfiles, &fts_delnode);
 	if (node)
 	{
+		if (node->subfiles)
+			ft_lstiter((t_list*)node->subfiles, &fts_delnode);
 		while (node->details[i])
 		{
 			free(node->details[i]);
@@ -57,6 +57,7 @@ void		fts_delnode(t_list *onode)
 		free(node->details);
 		if (node->path)
 			free(node->path);
+		free(node->name);
 		free(node);
 	}
 	node = NULL;

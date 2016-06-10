@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:29:29 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/08 16:32:51 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/10 13:10:49 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ typedef struct		s_files
 t_files				*p_args(char const **av, int ac, t_params *opts);
 int					pfile_infos(t_files *node, char *fname, t_params opts);
 int					s_pfileinfo(struct stat stated, t_files *n, char *slash);
-t_list				*fts_new(char const *fname, t_params opts);
+t_list				*fts_new(char *fname, t_params opts);
 void				fts_delnode(t_list *node);
 char				*fts_date(time_t const *clock);
 int					fts_timecmp(t_list *f1, t_list *f2);

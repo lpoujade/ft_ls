@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:51:26 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/09 15:33:41 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/10 13:30:12 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,9 @@ int					pfile_infos(t_files *node, char *fname, t_params opts)
 	if (opts & ADD_FTYPE)
 	{
 		tmp = slh;
-		ft_memmove(slh = ft_strnew(ft_strlen(slh) + 1), tmp, ft_strlen(tmp));
+		ft_memmove((slh = ft_strnew(ft_strlen(slh) + 1)), tmp, ft_strlen(tmp));
 		slh[ft_strlen(tmp)] = file_mode(stated.st_mode, 1);
+		free(tmp);
 	}
 	if (!(opts & 0x01))
 		node->details[0] = slh;
