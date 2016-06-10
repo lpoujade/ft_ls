@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:29:29 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/10 13:10:49 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/10 16:43:03 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,21 @@ typedef struct		s_files
 }					t_files;
 
 t_files				*p_args(char const **av, int ac, t_params *opts);
+t_params			parse_args(char const *av);
+t_files				*unfold(t_files *fold, t_params opts);
 int					pfile_infos(t_files *node, char *fname, t_params opts);
 int					s_pfileinfo(struct stat stated, t_files *n, char *slash);
-t_list				*fts_new(char *fname, t_params opts);
-void				fts_delnode(t_list *node);
 char				*fts_date(time_t const *clock);
-int					fts_timecmp(t_list *f1, t_list *f2);
-int					fts_strcmp(t_list *s1, t_list *s2);
-t_params			parse_args(char const *av);
-char				*epure_name(char *fname, t_params opts);
-void				st_fputstr(char **details, int *nbrmax);
-void				print_file(t_list *file);
-t_files				*unfold(t_files *fold, t_params opts);
+t_list				*fts_new(char *fname, t_params opts);
+void				fts_delnode(void *node);
+t_files				*lastnode(t_files *list);
 void				recurse_out(t_files *root, t_params opts);
 void				rev_recurse_out(t_files *root, t_params opts);
-t_files				*lastnode(t_files *list);
-void				adjust_cols(int *final, int *act);
 t_files				*rev_print_slist(t_files *node);
+int					fts_timecmp(t_list *f1, t_list *f2);
+int					fts_strcmp(t_list *s1, t_list *s2);
+char				*epure_name(char *fname, t_params opts);
+void				adjust_cols(int *final, int *act);
+void				st_fputstr(char **details, int *nbrmax);
+void				print_file(t_list *file);
 #endif
