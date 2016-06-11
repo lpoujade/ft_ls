@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/10 16:59:32 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/11 11:15:42 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ t_files				*rev_print_slist(t_files *node)
 {
 	t_files *tmp;
 	int		bc;
+	int		nc;
 
 	bc = 0;
+	nc = 0;
 	tmp = node;
 	while (tmp)
 	{
@@ -25,22 +27,25 @@ t_files				*rev_print_slist(t_files *node)
 			st_fputstr(tmp->details, tmp->fields_len);
 		else
 			bc++;
+		nc++;
 		tmp = (t_files*)tmp->prev;
 	}
-	if (bc)
+	if (bc != nc)
 		ft_putendl("");
 	return (node);
 }
 
 static inline void	print_dirname(t_files *dir, t_params opts)
 {
-	if (dir->next || dir->prev)
+	int static nb = 0;
+
+	if (nb)
 	{
-		if ((!(opts & REV_SORT) && dir->prev) || (opts & REV_SORT && dir->next))
-			ft_putchar('\n');
+		ft_putchar('\n');
 		ft_putstr(dir->name);
 		ft_putstr(":\n");
 	}
+	nb++;
 	if (opts & LONG_FORMAT && dir->subfiles)
 	{
 		ft_putstr("total ");
