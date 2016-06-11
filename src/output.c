@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/11 12:58:50 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/11 13:06:47 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,15 @@ t_files				*rev_print_slist(t_files *node)
 	while (tmp)
 	{
 		if (!tmp->subfiles && !tmp->fcount)
+		{
 			st_fputstr(tmp->details, tmp->fields_len);
+			nc++;
+		}
 		else
 			bc++;
-		nc++;
 		tmp = (t_files*)tmp->prev;
 	}
-	if (bc != nc)
+	if (bc && nc)
 		ft_putendl("");
 	return (node);
 }
