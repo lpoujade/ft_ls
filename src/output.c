@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/11 12:26:47 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/11 12:58:50 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_files				*rev_print_slist(t_files *node)
 	tmp = node;
 	while (tmp)
 	{
-		if (!tmp->subfiles)
+		if (!tmp->subfiles && !tmp->fcount)
 			st_fputstr(tmp->details, tmp->fields_len);
 		else
 			bc++;
@@ -57,7 +57,7 @@ void				rev_recurse_out(t_files *root, t_params opts)
 	t_files	*tmp;
 
 	tmp = lastnode(root->subfiles);
-	if (root->subfiles || root->fcount)
+	if (root->subfiles || (root->fcount && (root->next || root->prev)))
 		print_dirname(root, opts);
 	while (tmp)
 	{
