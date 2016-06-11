@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:51:26 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/10 13:30:12 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/11 12:44:05 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ int					s_pfileinfo(struct stat stated, t_files *n, char *slash)
 {
 	struct passwd	*ui;
 	struct group	*gi;
-	char			*tmp;
 
 	ui = getpwuid(stated.st_uid);
 	gi = getgrgid(stated.st_gid);
@@ -116,16 +115,10 @@ int					s_pfileinfo(struct stat stated, t_files *n, char *slash)
 	n->details[2] = ui->pw_name ? ft_strdup(ui->pw_name) : ft_itoa(ui->pw_uid);
 	n->details[3] = gi->gr_name ? ft_strdup(gi->gr_name) : ft_itoa(gi->gr_gid);
 	n->details[4] = (S_ISCHR(stated.st_mode) || S_ISBLK(stated.st_mode)) ?
-		ft_strjoin(ft_itoa(major(stated.st_rdev)),
-				ft_strjoin(", ", ft_itoa(minor(stated.st_rdev))))
+		maj_min(stated)
 		: ft_itoa(stated.st_size);
 	if (S_ISLNK(stated.st_mode))
-	{
-		tmp = ft_strnew(255);
-		tmp[readlink(n->name, tmp, 255)] = 0;
-		slash = ft_strjoin(slash, ft_strjoin(" -> ", tmp));
-		free(tmp);
-	}
+		slash = lnk_name(slash, n->name);
 	n->details[5] = fts_date(&stated.st_mtime);
 	n->details[6] = slash;
 	cols_iter(n);

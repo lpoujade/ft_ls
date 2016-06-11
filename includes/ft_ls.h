@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 12:29:29 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/10 16:43:03 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/11 12:44:14 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int					pfile_infos(t_files *node, char *fname, t_params opts);
 int					s_pfileinfo(struct stat stated, t_files *n, char *slash);
 char				*fts_date(time_t const *clock);
 t_list				*fts_new(char *fname, t_params opts);
+char				*maj_min(struct stat stated);
+char				*lnk_name(char *fname, char *full_name);
 void				fts_delnode(void *node);
 t_files				*lastnode(t_files *list);
 void				recurse_out(t_files *root, t_params opts);

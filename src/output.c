@@ -6,7 +6,7 @@
 /*   By: lpoujade <lpoujade@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/01 14:01:11 by lpoujade          #+#    #+#             */
-/*   Updated: 2016/06/11 11:15:42 by lpoujade         ###   ########.fr       */
+/*   Updated: 2016/06/11 12:26:47 by lpoujade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,9 @@ static inline void	print_dirname(t_files *dir, t_params opts)
 	int static nb = 0;
 
 	if (nb)
-	{
 		ft_putchar('\n');
-		ft_putstr(dir->name);
-		ft_putstr(":\n");
-	}
+	ft_putstr(dir->name);
+	ft_putstr(":\n");
 	nb++;
 	if (opts & LONG_FORMAT && dir->subfiles)
 	{
